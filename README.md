@@ -44,12 +44,12 @@ Using this information, along with the general rules, the computer will determin
 
 ## Functionality & MVP
 Within this simulator, users will be able to:
-[ ] Start, pause/step, and reset the game board.
-[ ] Set different parameters for the rules listed above.
+- [ ] Start, pause/step, and reset the game board.
+- [ ] Set different parameters for the rules listed above.
 
 In addition, this project will include:
-[ ] Stats displayed on the page
-[ ] A production Readme
+- [ ] Stats displayed on the page
+- [ ] A production Readme
 
 ## Wireframes
 
@@ -102,7 +102,7 @@ The scripts in the app will consist of:
 - If time: Add graph, toggle color scheme.
 
 ## Bonus Features
-[ ] Set different colors for the various actors.
-[ ] A population graph that changes as the game runs.
-[ ] Add options for game board size
-[ ] Allow options for different types of consumers and producers.
+- [ ] Set different colors for the various actors.
+- [ ] A population graph that changes as the game runs.
+- [ ] Add options for game board size
+- [ ] Allow options for different types of consumers and producers.
