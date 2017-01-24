@@ -1,0 +1,36 @@
+/* external style sheet "victor.css" */
+/* Victor Matveev, DMS, NJIT         */
+/* Sep 6, 2003                       */
+
+   BODY  { font-size:8pt; font-family:sans-serif; }
+   SMALL { font-family:sans-serif; font-size:8pt; }
+   TD    { font-size:8pt; font-family:sans-serif; }
+   A     { font-size:8pt; text-decoration:none; }
+   A:hover { font-size:8pt; text-decoration:underline; }
+
+   BIG {font-family:sans-serif; font-size:12pt; }
+   .debug {color: red; text-align:center; background-color:#9A6AAA; }
+/*   TD.TCALC {  font-size:8pt; text-align:center; background-color:#46C3A0; padding-left:1em; padding-right:1em; } */
+/*   TD.TMENU {  font-size:8pt; text-align:center; background-color:#46B0D3; padding-left:1em; padding-right:1em; } */
+/*   TD.TNJIT {  font-size:8pt; text-align:center; background-color:#46B0D3; padding-left:1em; padding-right:1em; } */
+/*   TD.TITLE { text-align:center; background-color:#AD3A90; font-size:13pt; font-weight:bold; font-style:italic; color:white; padding-left:1em; padding-right:1em; } */
+/* TD.TITLE { text-align:center; background-color:#40A0C0; font-size:12pt; padding-left:1em; padding-right:1em; } */
+   TD.NJITMENU {  font-size:8pt; text-align:center; background-color:#AA0000; padding-left:1em; padding-right:1em; }
+
+   TD.TITLE { font-family: sans-serif, text-align:center; background-color:#AD3A90; font-size:14pt; font-weight:bold; color:white; padding-left:1em; padding-right:1em; }
+   TD.TMENU {  font-size:8pt; text-align:center; background-color:#CD8BE0; padding-left:1em; padding-right:1em; }
+   TD.TCALC {  font-size:8pt; text-align:center; background-color:#ED7BD0; padding-left:1em; padding-right:1em; }
+
+   A.TMENU:link {font-family: sans-serif; text-decoration:none;  font-size:8pt; font-weight:bold; color: white; }
+   A.TMENU:visited {font-family: sans-serif; text-decoration:none;  font-size:8pt; font-weight:bold; color: #FFFFEE; }
+   A.TMENU:active {font-family: sans-serif; text-decoration:none;  font-size:8pt; font-weight:bold; color: #FFFFF0; }
+   A.TMENU:hover {font-family: sans-serif; text-decoration:underline;  font-size:8pt; font-weight:bold; color: #FFFFF0; }
+
+   H4 {font-family: sans-serif; }
+
+   TD.MAIN {  font-size:8pt; background-color:#fff2f7; }
+   TABLE.MAIN {  font-size:8pt;  background-color:#fff2f7; }
+
+   div {  font-size:9pt; font-color:#AD3A90; }
+
+/* end of file */
