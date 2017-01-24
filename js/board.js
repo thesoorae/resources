@@ -1,72 +1,57 @@
 const Cell = require('./cell');
 
-const gridWidth = 140;
-const gridHeight = 70;
-const gridSquareWidth = 10;
 
-class Board {
+class Board{
   constructor(ctx){
     this.ctx = ctx;
+    this.width = 10;
+    this.canvasWidth = 40;
+
+    this.grid = [];
+    this.nextGrid = [];
+
+    this.draw = this.draw.bind(this);
+    this.setupGrid = this.setupGrid.bind(this);
+    this.start = this.start.bind(this);
   }
-
-
+  start(){
+    this.setupGrid();
+    this.draw();
+    console.log(this.grid);
+  }
   setupGrid(){
-    console.log("in setup");
-
-    this.ctx.width = gridWidth * gridSquareWidth;
-    this.ctx.height = gridHeight * gridSquareWidth;
-    this.ctx.style.width = this.ctx.width;
-    this.ctx.style.height = this.ctx.height;
-
-    let grid = [];
-    let grid2 = [];
-
-    for(let x=0; x < gridWidth; x++){
-      grid[x] = [];
-      grid2[x] =  [];
-      for( let y = 0; y< gridHeight; y++ ){
-        grid[x][y] = [];
-        grid2[x][y] = [];
+    for(let x=0; x < this.canvasWidth; x++){
+      this.grid[x] = [];
+      this.nextGrid[x] =  [];
+      for( let y = 0; y< this.canvasWidth; y++ ){
+        this.grid[x][y] = [];
+        this.nextGrid[x][y] = [];
 
   //EDIT
 
         let rand = Math.random()*100;
-        if(rand > 90){
-          grid[x][y] = new Cell("rabbit", x,y);
-        } else if(rand > 98 ){
-          grid[x][y] = new Cell("wolf", x,y);
+        if(rand > 98){
+          this.grid[x][y] = new Cell("wolf", x,y);
+        } else if(rand > 90 ){
+          this.grid[x][y] = new Cell("rabbit", x,y);
         } else {
-          grid[x][y] = new Cell("grass", x,y);
+          this.grid[x][y] = new Cell("grass", x,y);
         }
       }
     }
-
-    }
-
-  update(dt) {
-    console.log("in update");
-  	// iterate simulation rules
-  	// this.run();
-
-  	// draw result
-  	this.draw();
   }
 
+  draw(){
+    let ctx = this.ctx;
+    let gridSquareWidth = this.width;
 
-  draw() {
-    const ctx = this.ctx;
-    console.log("in draw");
-  // clear canvas
-  	ctx.fillStyle = '#fee';
-  	ctx.fillRect(0, 0, ctx.width, ctx.height);
+    for (let x = 0; x < this.canvasWidth; x++) {
+  		for (let y = 0; y < this.canvasWidth; y++) {
 
-  	for (var x = 0; x < gridWidth; x++) {
-  		for (var y = 0; y < gridHeight; y++) {
-
-  			if (grid[x][y].type == "rabbit") {
+  			if (this.grid[x][y].type == "rabbit") {
   				ctx.fillStyle = "#ee66aa";
   				ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
-  			} else if (grid[x][y].type == "wolf") {
+  			} else if (this.grid[x][y].type == "wolf"){
   				ctx.fillStyle = "#383838";
   				ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
   			} else {
@@ -77,18 +62,6 @@ class Board {
   	}
   }
 
-  gameLoop() {
-      let lastTime = 0;
-      let now = Date.now();
-      let dt = (now - lastTime) / 1000.0;
-
-      this.update(dt);
-
-      lastTime = now;
-  	window.setTimeout(this.gameLoop, 50);
-  }
-
-  //calling gameLoop will start the game
-
 }
+
 module.exports = Board;
