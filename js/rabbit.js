@@ -1,12 +1,12 @@
 class Rabbit{
-  constructor(cell){
+  constructor(cell, board){
     this.food = 0;
     this.age = 0;
     this.dead = false;
     this.name = "rabbit";
     // this.currentX = x;
     // this.currentY = y;
-    // this.board = board;
+    this.board = board;
     this.cell = cell;
 
 
@@ -40,26 +40,26 @@ class Rabbit{
 
   openSpaces(){
     let spaces = [];
-    console.log("this.cell", this.cell);
+    let neighbors = this.cell.neighbors();
     for(let g = 5; g > 0; g ++){
       if(spaces.length > 0){
         return spaces;
       } else {
-    this.cell.neighbors("grass").forEach((patch) => {
-          if(patch.grassLength === g && patch.animal == null){
-            spaces.push(patch);
+        neighbors.forEach((patch) => {
+          if(patch.type === "grass" && patch.grassLength === g){
+            spaces.push([patch.currentX, patch.currentY]);
           }
         });
       }
     }
-    console.log(spaces);
     return spaces;
   }
 
   move(){
+    
    let openSpaces = this.openSpaces();
    let idx = Math.random() * openSpaces.length;
-   this.cell.board.moveAnimal(openSpaces[idx][0], openSpaces[idx][1], this);
+   this.board.moveAnimal(openSpaces[idx][0], openSpaces[idx][1], this);
   }
 
 

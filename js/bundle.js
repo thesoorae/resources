@@ -168,32 +168,33 @@
 	  }
 	
 	  moveAnimal(x,y, animal){
-	    this.rabbitList.push([x,y,animal]);
+	    this.nextGrid[x][y].addAnimal(animal);
 	  }
 	  //updates grid with newGrid
 	  step(){
 	    for( let x = 0; x < this.canvasWidth; x++){
 	      for( let y = 0; y < this.canvasWidth; y++){
-	        this.nextGrid[x][y] = this.grid[x][y].update();
+	        this.nextGrid[x][y] = this.grid[x][y].updateGrass();
+	        this.nextGrid[x][y] = this.grid[x][y].moveAnimal();
+	
 	      }
 	    }
-	    console.log("rabbits", this.rabbitList);
 	
 	
-	    this.rabbitList.forEach((coords) => {
-	      let a = coords[0];
-	      let b = coords[1];
-	      let animal = coords[3];
-	      if((a > 0) && (a < this.canvasWidth) && ( b > 0) && (b < this.canvasWidth)){
-	        console.log(a, b);
-	      this.nextGrid[a][b].addAnimal(animal);
-	      }
-	
-	    });
+	    // this.rabbitList.forEach((coords) => {
+	    //   let a = coords[0];
+	    //   let b = coords[1];
+	    //   let animal = coords[3];
+	    //   if((a > 0) && (a < this.canvasWidth) && ( b > 0) && (b < this.canvasWidth)){
+	    //     console.log(a, b);
+	    //   this.nextGrid[a][b].addAnimal(animal);
+	    //   }
+	    //
+	    // });
+	    console.log("next grid", this.nextGrid);
 	
 	    this.grid = this.nextGrid;
 	    this.draw();
-	    console.log("next grid", this.nextGrid);
 	  }
 	
 	}
@@ -223,14 +224,15 @@
 	    // }
 	
 	
-	    this.update = this.update.bind(this);
+	    this.updateGrass = this.updateGrass.bind(this);
 	    this.addAnimal = this.addAnimal.bind(this);
 	    this.neighbors = this.neighbors.bind(this);
 	    this.addNewRabbit = this.addNewRabbit.bind(this);
 	    this.addNewWolf = this.addNewWolf.bind(this);
+	    this.moveAnimal = this.moveAnimal.bind(this);
 	  }
 	
-	neighbors(type){
+	neighbors(){
 	  let neighbors = [];
 	  let x = this.currentX;
 	  let y = this.currentY;
@@ -248,10 +250,9 @@
 	    if(coord[0] > 0 && coord[1] > 0 ){
 	    let a = coord[0] % this.board.canvasWidth;
 	    let b = coord[1] % this.board.canvasWidth;
-	    if(this.board.grid[a][b].type === type){
-	      neighbors.push(this.board.grid[a,b]);
+	    neighbors.push(this.board.grid[a][b]);
 	    }
-	  }});
+	  });
 	  return neighbors;
 	  }
 	
@@ -259,8 +260,9 @@
 	  this.animal = animal;
 	  this.type = animal.name;
 	}
+	
 	addNewRabbit(){
-	  this.animal = new Rabbit(this.cell);
+	  this.animal = new Rabbit(this.cell, this.board);
 	  this.type = "rabbit";
 	}
 	
@@ -268,17 +270,15 @@
 	  this.animal = new Wolf(this.cell);
 	  this.type = "wolf";
 	}
-	  update(){
-	    console.log("in update");
-	    if(this.animal !== null){
-	        this.animal.update();
-	        if(this.animal.dead){
-	          this.animal = null;
-	          this.type = "grass";
+	
+	
+	updateGrass(){
+	    console.log("updating grass");
+	//decreases grass level if there is a rabbit
+	    if(this.type === "rabbit"){
+	        this.grassLevel -= 3
 	        }
-	        this.grassLevel --;
-	    } else
-	    if(this.grassLevel < 5){
+	        else if(this.grassLevel < 5){
 	      this.grassLevel ++;
 	    }
 	
@@ -290,12 +290,17 @@
 	      this.grassLevel = 5;
 	    }
 	
-	    return this;
+	    return this.cell;
+	  }
+	
+	
+	moveAnimal(){
+	  if(this.animal !== null){
+	  this.animal.move();
 	  }
 	}
 	
-	
-	
+	}
 	
 	module.exports = Cell;
 
@@ -305,14 +310,14 @@
 /***/ function(module, exports) {
 
 	class Rabbit{
-	  constructor(cell){
+	  constructor(cell, board){
 	    this.food = 0;
 	    this.age = 0;
 	    this.dead = false;
 	    this.name = "rabbit";
 	    // this.currentX = x;
 	    // this.currentY = y;
-	    // this.board = board;
+	    this.board = board;
 	    this.cell = cell;
 	
 	
@@ -346,26 +351,26 @@
 	
 	  openSpaces(){
 	    let spaces = [];
-	    console.log("this.cell", this.cell);
+	    let neighbors = this.cell.neighbors();
 	    for(let g = 5; g > 0; g ++){
 	      if(spaces.length > 0){
 	        return spaces;
 	      } else {
-	    this.cell.neighbors("grass").forEach((patch) => {
-	          if(patch.grassLength === g && patch.animal == null){
-	            spaces.push(patch);
+	        neighbors.forEach((patch) => {
+	          if(patch.type === "grass" && patch.grassLength === g){
+	            spaces.push([patch.currentX, patch.currentY]);
 	          }
 	        });
 	      }
 	    }
-	    console.log(spaces);
 	    return spaces;
 	  }
 	
 	  move(){
+	    
 	   let openSpaces = this.openSpaces();
 	   let idx = Math.random() * openSpaces.length;
-	   this.cell.board.moveAnimal(openSpaces[idx][0], openSpaces[idx][1], this);
+	   this.board.moveAnimal(openSpaces[idx][0], openSpaces[idx][1], this);
 	  }
 	
 	

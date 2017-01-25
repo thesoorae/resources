@@ -100,32 +100,33 @@ class Board{
   }
 
   moveAnimal(x,y, animal){
-    this.rabbitList.push([x,y,animal]);
+    this.nextGrid[x][y].addAnimal(animal);
   }
   //updates grid with newGrid
   step(){
     for( let x = 0; x < this.canvasWidth; x++){
       for( let y = 0; y < this.canvasWidth; y++){
-        this.nextGrid[x][y] = this.grid[x][y].update();
+        this.nextGrid[x][y] = this.grid[x][y].updateGrass();
+        this.nextGrid[x][y] = this.grid[x][y].moveAnimal();
+
       }
     }
-    console.log("rabbits", this.rabbitList);
 
 
-    this.rabbitList.forEach((coords) => {
-      let a = coords[0];
-      let b = coords[1];
-      let animal = coords[3];
-      if((a > 0) && (a < this.canvasWidth) && ( b > 0) && (b < this.canvasWidth)){
-        console.log(a, b);
-      this.nextGrid[a][b].addAnimal(animal);
-      }
-
-    });
+    // this.rabbitList.forEach((coords) => {
+    //   let a = coords[0];
+    //   let b = coords[1];
+    //   let animal = coords[3];
+    //   if((a > 0) && (a < this.canvasWidth) && ( b > 0) && (b < this.canvasWidth)){
+    //     console.log(a, b);
+    //   this.nextGrid[a][b].addAnimal(animal);
+    //   }
+    //
+    // });
+    console.log("next grid", this.nextGrid);
 
     this.grid = this.nextGrid;
     this.draw();
-    console.log("next grid", this.nextGrid);
   }
 
 }

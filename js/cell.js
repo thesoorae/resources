@@ -16,14 +16,15 @@ class Cell {
     // }
 
 
-    this.update = this.update.bind(this);
+    this.updateGrass = this.updateGrass.bind(this);
     this.addAnimal = this.addAnimal.bind(this);
     this.neighbors = this.neighbors.bind(this);
     this.addNewRabbit = this.addNewRabbit.bind(this);
     this.addNewWolf = this.addNewWolf.bind(this);
+    this.moveAnimal = this.moveAnimal.bind(this);
   }
 
-neighbors(type){
+neighbors(){
   let neighbors = [];
   let x = this.currentX;
   let y = this.currentY;
@@ -41,10 +42,9 @@ neighbors(type){
     if(coord[0] > 0 && coord[1] > 0 ){
     let a = coord[0] % this.board.canvasWidth;
     let b = coord[1] % this.board.canvasWidth;
-    if(this.board.grid[a][b].type === type){
-      neighbors.push(this.board.grid[a,b]);
+    neighbors.push(this.board.grid[a][b]);
     }
-  }});
+  });
   return neighbors;
   }
 
@@ -52,8 +52,9 @@ addAnimal(animal){
   this.animal = animal;
   this.type = animal.name;
 }
+
 addNewRabbit(){
-  this.animal = new Rabbit(this.cell);
+  this.animal = new Rabbit(this.cell, this.board);
   this.type = "rabbit";
 }
 
@@ -61,17 +62,15 @@ addNewWolf(){
   this.animal = new Wolf(this.cell);
   this.type = "wolf";
 }
-  update(){
-    console.log("in update");
-    if(this.animal !== null){
-        this.animal.update();
-        if(this.animal.dead){
-          this.animal = null;
-          this.type = "grass";
+
+
+updateGrass(){
+    console.log("updating grass");
+//decreases grass level if there is a rabbit
+    if(this.type === "rabbit"){
+        this.grassLevel -= 3
         }
-        this.grassLevel --;
-    } else
-    if(this.grassLevel < 5){
+        else if(this.grassLevel < 5){
       this.grassLevel ++;
     }
 
@@ -83,11 +82,16 @@ addNewWolf(){
       this.grassLevel = 5;
     }
 
-    return this;
+    return this.cell;
+  }
+
+
+moveAnimal(){
+  if(this.animal !== null){
+  this.animal.move();
   }
 }
 
-
-
+}
 
 module.exports = Cell;
