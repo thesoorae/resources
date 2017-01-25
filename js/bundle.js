@@ -54,12 +54,12 @@
 	  canvas.height = 10 * 40;
 	  canvas.style.width = canvas.width;
 	  canvas.style.height = canvas.height;
-	  let board = new Board(ctx)
+	  let board = new Board(ctx);
 	  board.start();
 	  canvas.onclick = function fun() {
 	        board.step();
-	
-	}});
+	      };
+	    });
 
 
 /***/ },
@@ -86,7 +86,7 @@
 	    this.setupGrid = this.setupGrid.bind(this);
 	    this.start = this.start.bind(this);
 	    this.patch = this.patch.bind(this);
-	    this.addRabbit = this.addRabbit.bind(this);
+	    this.moveAnimal = this.moveAnimal.bind(this);
 	    this.step = this.step.bind(this);
 	
 	  }
@@ -111,11 +111,13 @@
 	
 	        let rand = Math.random()*100;
 	        if(rand > 98){
-	          this.grid[x][y] = new Cell(x,y, "wolf", new Wolf(x, y, this.board));
+	          this.grid[x][y] = new Cell(this.board, x,y);
+	          this.grid[x][y].addNewWolf();
 	        } else if(rand > 90 ){
-	          this.grid[x][y] = new Cell(x,y, "rabbit", new Rabbit(x, y, this.board));
+	          this.grid[x][y] = new Cell(this.board, x,y);
+	          this.grid[x][y].addNewRabbit();
 	        } else {
-	          this.grid[x][y] = new Cell(x,y, "grass");
+	          this.grid[x][y] = new Cell(this.board, x,y, "grass");
 	        }
 	      }
 	    }
@@ -165,8 +167,8 @@
 	  	}
 	  }
 	
-	  addRabbit(x,y,z){
-	    this.rabbitList.push([x,y,z]);
+	  moveAnimal(x,y, animal){
+	    this.rabbitList.push([x,y,animal]);
 	  }
 	  //updates grid with newGrid
 	  step(){
@@ -181,13 +183,13 @@
 	    this.rabbitList.forEach((coords) => {
 	      let a = coords[0];
 	      let b = coords[1];
-	      console.log("patch", this.nextGrid[a][b]);
+	      let animal = coords[3];
 	      if((a > 0) && (a < this.canvasWidth) && ( b > 0) && (b < this.canvasWidth)){
 	        console.log(a, b);
-	      this.nextGrid[a][b].addAnimal(new Rabbit(a, b, this.board));
+	      this.nextGrid[a][b].addAnimal(animal);
 	      }
 	
-	    })
+	    });
 	
 	    this.grid = this.nextGrid;
 	    this.draw();
@@ -207,26 +209,64 @@
 	const Wolf = __webpack_require__(4);
 	
 	class Cell {
-	  constructor(x, y, type="grass", animal=null){
+	  constructor(board, x, y){
 	    this.type = "grass";
 	    this.currentX = x;
 	    this.currentY = y;
 	    this.grassLevel = 3;
-	    this.animal = animal;
+	    // this.animal = animal;
+	    this.board = board;
+	    this.animal = null;
+	    this.cell = this;
+	    // if(animal !== null){
+	    //   this.type = animal.name;
+	    // }
 	
-	    if(animal !== null){
-	      this.type = animal.name;
-	    }
-	    
 	
 	    this.update = this.update.bind(this);
 	    this.addAnimal = this.addAnimal.bind(this);
+	    this.neighbors = this.neighbors.bind(this);
+	    this.addNewRabbit = this.addNewRabbit.bind(this);
+	    this.addNewWolf = this.addNewWolf.bind(this);
+	  }
 	
+	neighbors(type){
+	  let neighbors = [];
+	  let x = this.currentX;
+	  let y = this.currentY;
+	  const spots = [
+	    [x-1 , y-1],
+	    [x-1 , y],
+	    [x-1 , y + 1 ],
+	    [x, y - 1],
+	    [x, y + 1],
+	    [x + 1 , y - 1],
+	    [x + 1 , y ],
+	    [x + 1 , y + 1]
+	  ];
+	  spots.forEach((coord) => {
+	    if(coord[0] > 0 && coord[1] > 0 ){
+	    let a = coord[0] % this.board.canvasWidth;
+	    let b = coord[1] % this.board.canvasWidth;
+	    if(this.board.grid[a][b].type === type){
+	      neighbors.push(this.board.grid[a,b]);
+	    }
+	  }});
+	  return neighbors;
 	  }
 	
 	addAnimal(animal){
 	  this.animal = animal;
 	  this.type = animal.name;
+	}
+	addNewRabbit(){
+	  this.animal = new Rabbit(this.cell);
+	  this.type = "rabbit";
+	}
+	
+	addNewWolf(){
+	  this.animal = new Wolf(this.cell);
+	  this.type = "wolf";
 	}
 	  update(){
 	    console.log("in update");
@@ -265,23 +305,27 @@
 /***/ function(module, exports) {
 
 	class Rabbit{
-	  constructor(x, y, board){
+	  constructor(cell){
 	    this.food = 0;
 	    this.age = 0;
 	    this.dead = false;
 	    this.name = "rabbit";
-	    this.currentX = x;
-	    this.currentY = y;
-	    this.board = board;
+	    // this.currentX = x;
+	    // this.currentY = y;
+	    // this.board = board;
+	    this.cell = cell;
 	
 	
 	    this.eat = this.eat.bind(this);
 	    this.update = this.update.bind(this);
 	    this.increaseAge = this.increaseAge.bind(this);
+	    this.openSpaces = this.openSpaces.bind(this);
+	    this.move = this.move.bind(this);
 	  }
 	
 	  eat(){
-	    let currentPatch = this.board.grid[this.currentX][this.currentY];
+	    let currentPatch = this.cell;
+	
 	    if(this.food < 45){
 	    this.food += currentPatch.grassLevel;
 	    currentPatch.grassLevel -= 1;
@@ -294,15 +338,42 @@
 	  increaseAge(){
 	    this.age ++;
 	  //change parameters for reproduction
-	    if(this.age > 3 && (Math.random()*10) > 9 ){
-	      this.board.addRabbit(this.currentX + 1, this.currentY + 1, this.currentX)
-	    }
+	    // if(this.age > 3 && (Math.random()*10) > 9 ){
+	    //   this.move(new Rabbit()));
+	    // }
 	
 	  }
+	
+	  openSpaces(){
+	    let spaces = [];
+	    console.log("this.cell", this.cell);
+	    for(let g = 5; g > 0; g ++){
+	      if(spaces.length > 0){
+	        return spaces;
+	      } else {
+	    this.cell.neighbors("grass").forEach((patch) => {
+	          if(patch.grassLength === g && patch.animal == null){
+	            spaces.push(patch);
+	          }
+	        });
+	      }
+	    }
+	    console.log(spaces);
+	    return spaces;
+	  }
+	
+	  move(){
+	   let openSpaces = this.openSpaces();
+	   let idx = Math.random() * openSpaces.length;
+	   this.cell.board.moveAnimal(openSpaces[idx][0], openSpaces[idx][1], this);
+	  }
+	
+	
 	
 	  update(){
 	    this.eat();
 	    this.increaseAge();
+	    this.move();
 	  }
 	
 	    }
