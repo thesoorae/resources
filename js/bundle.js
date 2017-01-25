@@ -57,7 +57,7 @@
 	  let board = new Board(ctx);
 	  board.start();
 	  canvas.onclick = function fun() {
-	        board.step();
+	        board.gameLoop();
 	      };
 	    });
 
@@ -80,7 +80,9 @@
 	
 	    this.grid = [];
 	    this.nextGrid = [];
-	    this.rabbitList = [];
+	    this.rabbitCount = 0;
+	
+	    this.lastTime = 0;
 	
 	    this.draw = this.draw.bind(this);
 	    this.setupGrid = this.setupGrid.bind(this);
@@ -88,6 +90,7 @@
 	    this.patch = this.patch.bind(this);
 	    this.moveAnimal = this.moveAnimal.bind(this);
 	    this.step = this.step.bind(this);
+	    this.gameLoop = this.gameLoop.bind(this);
 	
 	  }
 	  patch(x,y){
@@ -105,7 +108,7 @@
 	      this.nextGrid[x] =  [];
 	      for( let y = 0; y< this.canvasWidth; y++ ){
 	        this.grid[x][y] = [];
-	        this.nextGrid[x][y] = [];
+	        this.nextGrid[x][y] = new Cell(this.board, x,y, "grass");
 	
 	  //EDIT
 	
@@ -132,6 +135,7 @@
 	  		for (let y = 0; y < this.canvasWidth; y++) {
 	        let patch = this.patch(x,y);
 	  			if (patch.type == "rabbit") {
+	          this.rabbitCount ++;
 	  				ctx.fillStyle = "#ee66aa";
 	  				ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
 	  			} else if (patch.type == "wolf"){
@@ -140,7 +144,7 @@
 	  			} else {
 	          switch(patch.grassLevel){
 	            case 0:
-	            grassColor = "#F4A460";
+	            grassColor = "#654321";
 	            break;
 	            case 1:
 	            grassColor = "#C5E3BF";
@@ -162,9 +166,11 @@
 	          }
 	          ctx.fillStyle = grassColor;
 	          ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
+	
 	        }
 	  		}
 	  	}
+	    console.log("rabbit count", this.rabbitCount);
 	  }
 	
 	  moveAnimal(x,y, animal){
@@ -176,14 +182,23 @@
 	    for( let x = 0; x < this.canvasWidth; x++){
 	      for( let y = 0; y < this.canvasWidth; y++){
 	        this.nextGrid[x][y] = this.grid[x][y].updateGrass();
-	        let animal = this.grid[x][y].animal;
-	        if(animal !== null){
-	        let newCoords = animal.move();
-	        this.nextGrid[newCoords[0]][newCoords[1]].addAnimal(animal);
-	        this.nextGrid[x][y].empty();}
+	        let animal = this.grid[x][y].previousAnimal;
+	        if(animal instanceof Rabbit){
 	
+	        let newCoords = animal.move();
+	        let newX = newCoords[0];
+	        let newY = newCoords[1];
+	//check nothing in newCoords
+	        // if(this.nextGrid[newX][newY].type == "grass"){
+	          let newCell = this.nextGrid[newCoords[0]][newCoords[1]];
+	          // debugger
+	          newCell.addAnimal(animal);
+	          }
+	        // }
+	
+	        }
 	      }
-	    }
+	
 	
 	
 	    // this.rabbitList.forEach((coords) => {
@@ -199,9 +214,19 @@
 	    console.log("next grid", this.nextGrid);
 	
 	    this.grid = this.nextGrid;
+	    this.rabbitCount = 0;
 	    this.draw();
 	  }
 	
+	  gameLoop(){
+	      let now = Date.now();
+	      let dt = (now - this.lastTime) / 1000.0;
+	
+	      this.step(dt);
+	
+	      this.lastTime = now;
+	  	window.setTimeout(this.gameLoop, 20);
+	  }
 	}
 	
 	module.exports = Board;
@@ -224,6 +249,7 @@
 	    this.board = board;
 	    this.animal = null;
 	    this.cell = this;
+	    this.previousAnimal = null;
 	    // if(animal !== null){
 	    //   this.type = animal.name;
 	    // }
@@ -269,6 +295,7 @@
 	addAnimal(animal){
 	  this.animal = animal;
 	  this.type = animal.name;
+	  this.animal.newCell(this.cell);
 	}
 	
 	addNewRabbit(){
@@ -302,7 +329,9 @@
 	    if(this.grassLevel > 5) {
 	      this.grassLevel = 5;
 	    }
-	
+	    this.previousAnimal = this.animal;
+	    this.animal = null;
+	    this.type = "grass";
 	    return this.cell;
 	  }
 	
@@ -342,6 +371,9 @@
 	    this.openSpaces = this.openSpaces.bind(this);
 	    this.move = this.move.bind(this);
 	  }
+	  newCell(cell){
+	    this.cell = cell;
+	  }
 	
 	  eat(){
 	    let neededFood = 45 - this.food;
@@ -369,7 +401,7 @@
 	  openSpaces(){
 	
 	    let spaces = [];
-	    debugger
+	    // debugger
 	    let neighbors = this.cell.neighbors();
 	
 	    for(let g = 5; g > 0; g --){
@@ -377,7 +409,7 @@
 	        return spaces;
 	      } else {
 	        neighbors.forEach((neighbor) => {
-	          if(neighbor.type === "grass" && neighbor.grassLength === g){
+	          if(neighbor.type === "grass" && neighbor.grassLevel === g){
 	            spaces.push([neighbor.currentX, neighbor.currentY]);
 	          }
 	        });
@@ -388,10 +420,14 @@
 	  }
 	
 	  move(){
-	    debugger
+	
 	   let openSpaces = this.openSpaces();
-	   let idx = Math.random() * openSpaces.length;
-	   return [openSpaces[idx][0], openSpaces[idx][1]];
+	   let idx = Math.floor(Math.random() * openSpaces.length);
+	   let result = [this.cell.currentX, this.cell.currentY];
+	   if(openSpaces[idx] !== undefined){
+	     result = [openSpaces[idx][0], openSpaces[idx][1]];
+	  }
+	    return result;
 	  }
 	
 	

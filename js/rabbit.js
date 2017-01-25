@@ -16,6 +16,9 @@ class Rabbit{
     this.openSpaces = this.openSpaces.bind(this);
     this.move = this.move.bind(this);
   }
+  newCell(cell){
+    this.cell = cell;
+  }
 
   eat(){
     let neededFood = 45 - this.food;
@@ -43,7 +46,7 @@ class Rabbit{
   openSpaces(){
 
     let spaces = [];
-    debugger
+    // debugger
     let neighbors = this.cell.neighbors();
 
     for(let g = 5; g > 0; g --){
@@ -51,7 +54,7 @@ class Rabbit{
         return spaces;
       } else {
         neighbors.forEach((neighbor) => {
-          if(neighbor.type === "grass" && neighbor.grassLength === g){
+          if(neighbor.type === "grass" && neighbor.grassLevel === g){
             spaces.push([neighbor.currentX, neighbor.currentY]);
           }
         });
@@ -62,10 +65,14 @@ class Rabbit{
   }
 
   move(){
-    debugger
+
    let openSpaces = this.openSpaces();
-   let idx = Math.random() * openSpaces.length;
-   return [openSpaces[idx][0], openSpaces[idx][1]];
+   let idx = Math.floor(Math.random() * openSpaces.length);
+   let result = [this.cell.currentX, this.cell.currentY];
+   if(openSpaces[idx] !== undefined){
+     result = [openSpaces[idx][0], openSpaces[idx][1]];
+  }
+    return result;
   }
 
 

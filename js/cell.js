@@ -11,6 +11,7 @@ class Cell {
     this.board = board;
     this.animal = null;
     this.cell = this;
+    this.previousAnimal = null;
     // if(animal !== null){
     //   this.type = animal.name;
     // }
@@ -56,6 +57,7 @@ neighbors(){
 addAnimal(animal){
   this.animal = animal;
   this.type = animal.name;
+  this.animal.newCell(this.cell);
 }
 
 addNewRabbit(){
@@ -89,7 +91,9 @@ updateGrass(){
     if(this.grassLevel > 5) {
       this.grassLevel = 5;
     }
-
+    this.previousAnimal = this.animal;
+    this.animal = null;
+    this.type = "grass";
     return this.cell;
   }
 

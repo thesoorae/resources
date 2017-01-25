@@ -11,6 +11,6 @@ document.addEventListener("DOMContentLoaded", function(){
   let board = new Board(ctx);
   board.start();
   canvas.onclick = function fun() {
-        board.step();
+        board.gameLoop();
       };
     });
