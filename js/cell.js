@@ -9,16 +9,20 @@ class Cell {
     this.grassLevel = 3;
     this.animal = animal;
 
-    if(animal instanceof Rabbit){
-      this.type = "rabbit";
-    } else if(animal instanceof Wolf){
-      this.type = "wolf";
+    if(animal !== null){
+      this.type = animal.name;
     }
+    
 
     this.update = this.update.bind(this);
+    this.addAnimal = this.addAnimal.bind(this);
+
   }
 
-
+addAnimal(animal){
+  this.animal = animal;
+  this.type = animal.name;
+}
   update(){
     console.log("in update");
     if(this.animal !== null){

@@ -8,14 +8,18 @@ class Board{
     this.width = 10;
     this.canvasWidth = 40;
 
+    this.board = this;
+
     this.grid = [];
     this.nextGrid = [];
+    this.rabbitList = [];
 
     this.draw = this.draw.bind(this);
     this.setupGrid = this.setupGrid.bind(this);
     this.start = this.start.bind(this);
     this.patch = this.patch.bind(this);
-
+    this.addRabbit = this.addRabbit.bind(this);
+    this.step = this.step.bind(this);
 
   }
   patch(x,y){
@@ -39,9 +43,9 @@ class Board{
 
         let rand = Math.random()*100;
         if(rand > 98){
-          this.grid[x][y] = new Cell(x,y, "wolf", new Wolf(x, y, this.grid, this.nextGrid));
+          this.grid[x][y] = new Cell(x,y, "wolf", new Wolf(x, y, this.board));
         } else if(rand > 90 ){
-          this.grid[x][y] = new Cell(x,y, "rabbit", new Rabbit(x, y, this.grid, this.nextGrid));
+          this.grid[x][y] = new Cell(x,y, "rabbit", new Rabbit(x, y, this.board));
         } else {
           this.grid[x][y] = new Cell(x,y, "grass");
         }
@@ -93,6 +97,9 @@ class Board{
   	}
   }
 
+  addRabbit(x,y,z){
+    this.rabbitList.push([x,y,z]);
+  }
   //updates grid with newGrid
   step(){
     for( let x = 0; x < this.canvasWidth; x++){
@@ -100,6 +107,20 @@ class Board{
         this.nextGrid[x][y] = this.grid[x][y].update();
       }
     }
+    console.log("rabbits", this.rabbitList);
+
+
+    this.rabbitList.forEach((coords) => {
+      let a = coords[0];
+      let b = coords[1];
+      console.log("patch", this.nextGrid[a][b]);
+      if((a > 0) && (a < this.canvasWidth) && ( b > 0) && (b < this.canvasWidth)){
+        console.log(a, b);
+      this.nextGrid[a][b].addAnimal(new Rabbit(a, b, this.board));
+      }
+
+    })
+
     this.grid = this.nextGrid;
     this.draw();
     console.log("next grid", this.nextGrid);
