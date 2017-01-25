@@ -1,43 +1,58 @@
-class Rabbit{
-  constructor(cell, board){
-    this.food = 0;
+const Animal = require('./animal.js');
+
+class Rabbit extends Animal{
+  constructor(cell){
+    super(cell);
+    this.food = 1;
     this.age = 0;
-    this.dead = false;
+    this.alive = true;
     this.name = "rabbit";
+
+    this.maxFood = 45;
+    this.metabolicRate = 3;
+    this.maxAge = 10;
+    this.reproductiveAge = 5;
+    this.reproductiveFoodRequirement = 5;
+
     // this.currentX = x;
     // this.currentY = y;
-    this.board = board;
     this.cell = cell;
 
 
     this.eat = this.eat.bind(this);
-    this.update = this.update.bind(this);
-    this.increaseAge = this.increaseAge.bind(this);
     this.openSpaces = this.openSpaces.bind(this);
-    this.move = this.move.bind(this);
+    this.newSpace = this.newSpace.bind(this);
+    this.mortality = this.mortality.bind(this);
+    this.shouldReproduce = this.shouldReproduce.bind(this);
   }
   newCell(cell){
     this.cell = cell;
   }
 
   eat(){
-    let neededFood = 45 - this.food;
+    console.log("in eat");
+    let neededFood = this.maxFood - this.food;
     if(this.cell.grassLevel < neededFood){
     this.food += this.cell.grassLevel;
     this.cell.eatGrass(this.cell.grassLevel);
-    this.food -= 3;
+    this.food -= this.metabolicRate;
   } else{
     this.food += neededFood;
     this.cell.eatGrass(neededFood);
-    this.food -= 3;
+    this.food -= this.metabolicRate;
   }
+  this.mortality();
 
   }
 
-  increaseAge(){
+  mortality(){
     this.age ++;
+    if(this.maxAge > 20 || this.food < 1){
+      this.alive = false;
+    }
+
   //change parameters for reproduction
-    // if(this.age > 3 && (Math.random()*10) > 9 ){
+    // if(this.age > this.metabolicRate && (Math.random()*10) > 9 ){
     //   this.move(new Rabbit()));
     // }
 
@@ -60,11 +75,10 @@ class Rabbit{
         });
       }
     }
-    console.log("open spaces", spaces);
     return spaces;
   }
 
-  move(){
+  newSpace(){
 
    let openSpaces = this.openSpaces();
    let idx = Math.floor(Math.random() * openSpaces.length);
@@ -75,14 +89,10 @@ class Rabbit{
     return result;
   }
 
+  shouldReproduce(){
+  return this.age > this.reproductiveAge && this.food > this.reproductiveFoodRequirement
 
-
-  update(){
-    this.eat();
-    this.increaseAge();
-    this.move();
   }
-
     }
 
 module.exports = Rabbit;

@@ -57,11 +57,11 @@ neighbors(){
 addAnimal(animal){
   this.animal = animal;
   this.type = animal.name;
-  this.animal.newCell(this.cell);
+  this.animal.updateCell(this.cell);
 }
 
 addNewRabbit(){
-  this.animal = new Rabbit(this.cell, this.board);
+  this.animal = new Rabbit(this.cell);
   this.type = "rabbit";
 }
 
@@ -75,7 +75,6 @@ eatGrass(amt){
 }
 
 updateGrass(){
-    console.log("updating grass");
 //decreases grass level if there is a rabbit
     if(this.type === "rabbit"){
         this.animal.eat();

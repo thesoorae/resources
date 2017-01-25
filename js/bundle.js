@@ -50,14 +50,14 @@
 	document.addEventListener("DOMContentLoaded", function(){
 	  const canvas = document.getElementById('gameCanvas');
 	  const ctx = canvas.getContext('2d');
-	  canvas.width = 10 * 40;
-	  canvas.height = 10 * 40;
+	  canvas.width = 10 * 50;
+	  canvas.height = 10 * 50;
 	  canvas.style.width = canvas.width;
 	  canvas.style.height = canvas.height;
 	  let board = new Board(ctx);
 	  board.start();
 	  canvas.onclick = function fun() {
-	        board.gameLoop();
+	        board.toggleGame();
 	      };
 	    });
 
@@ -74,14 +74,20 @@
 	  constructor(ctx){
 	    this.ctx = ctx;
 	    this.width = 10;
-	    this.canvasWidth = 40;
+	    this.canvasWidth = 50;
 	
 	    this.board = this;
 	
 	    this.grid = [];
 	    this.nextGrid = [];
-	    this.rabbitCount = 0;
 	
+	
+	    this.rabbitCount = 0;
+	    this.deadRabbits = 0;
+	    this.steps = 0;
+	    this.birthedRabbits = 0;
+	
+	    this.play = false;
 	    this.lastTime = 0;
 	
 	    this.draw = this.draw.bind(this);
@@ -91,6 +97,8 @@
 	    this.moveAnimal = this.moveAnimal.bind(this);
 	    this.step = this.step.bind(this);
 	    this.gameLoop = this.gameLoop.bind(this);
+	    this.updateCell = this.updateCell.bind(this);
+	    this.toggleGame = this.toggleGame.bind(this);
 	
 	  }
 	  patch(x,y){
@@ -171,6 +179,9 @@
 	  		}
 	  	}
 	    console.log("rabbit count", this.rabbitCount);
+	    console.log("dead rabbits", this.deadRabbits);
+	    console.log("birthed rabbits", this.birthedRabbits);
+	    console.log("steps", this.steps);
 	  }
 	
 	  moveAnimal(x,y, animal){
@@ -178,14 +189,21 @@
 	    cell.addAnimal(animal);
 	  }
 	  //updates grid with newGrid
+	
+	  updateCell(x,y){
+	     let updatedCell = this.grid[x][y].updateGrass();
+	     let nextGridCell = this.nextGrid[x][y];
+	     nextGridCell.grassLevel = updatedCell.grassLevel;
+	  }
+	
 	  step(){
 	    for( let x = 0; x < this.canvasWidth; x++){
 	      for( let y = 0; y < this.canvasWidth; y++){
-	        this.nextGrid[x][y] = this.grid[x][y].updateGrass();
+	        this.updateCell(x,y);
 	        let animal = this.grid[x][y].previousAnimal;
-	        if(animal instanceof Rabbit){
+	        if(animal instanceof Rabbit && animal.alive){
 	
-	        let newCoords = animal.move();
+	        let newCoords = animal.newSpace();
 	        let newX = newCoords[0];
 	        let newY = newCoords[1];
 	//check nothing in newCoords
@@ -193,39 +211,50 @@
 	          let newCell = this.nextGrid[newCoords[0]][newCoords[1]];
 	          // debugger
 	          newCell.addAnimal(animal);
+	
+	          if(animal.shouldReproduce()){
+	
+	
+	            let currentCell = this.nextGrid[x][y];
+	            currentCell.addNewRabbit();
+	            this.birthedRabbits ++;
 	          }
+	        } else if(animal instanceof Rabbit && !animal.alive){
+	          this.deadRabbits ++;
+	        }
 	        // }
 	
 	        }
 	      }
+	    if(this.rabbitCount < 8){
+	      console.log("next grid", this.nextGrid);
+	      debugger
+	    }
 	
-	
-	
-	    // this.rabbitList.forEach((coords) => {
-	    //   let a = coords[0];
-	    //   let b = coords[1];
-	    //   let animal = coords[3];
-	    //   if((a > 0) && (a < this.canvasWidth) && ( b > 0) && (b < this.canvasWidth)){
-	    //     console.log(a, b);
-	    //   this.nextGrid[a][b].addAnimal(animal);
-	    //   }
-	    //
-	    // });
-	    console.log("next grid", this.nextGrid);
 	
 	    this.grid = this.nextGrid;
 	    this.rabbitCount = 0;
+	    this.steps ++;
+	
 	    this.draw();
 	  }
 	
 	  gameLoop(){
+	    if(this.play){
 	      let now = Date.now();
 	      let dt = (now - this.lastTime) / 1000.0;
 	
 	      this.step(dt);
 	
 	      this.lastTime = now;
-	  	window.setTimeout(this.gameLoop, 20);
+	  	window.setTimeout(this.gameLoop, 100);
+	  }}
+	
+	  toggleGame(){
+	    this.play = !this.play;
+	    if(this.play){
+	      this.gameLoop();
+	    }
 	  }
 	}
 	
@@ -295,11 +324,11 @@
 	addAnimal(animal){
 	  this.animal = animal;
 	  this.type = animal.name;
-	  this.animal.newCell(this.cell);
+	  this.animal.updateCell(this.cell);
 	}
 	
 	addNewRabbit(){
-	  this.animal = new Rabbit(this.cell, this.board);
+	  this.animal = new Rabbit(this.cell);
 	  this.type = "rabbit";
 	}
 	
@@ -313,7 +342,6 @@
 	}
 	
 	updateGrass(){
-	    console.log("updating grass");
 	//decreases grass level if there is a rabbit
 	    if(this.type === "rabbit"){
 	        this.animal.eat();
@@ -351,48 +379,63 @@
 
 /***/ },
 /* 3 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	class Rabbit{
-	  constructor(cell, board){
-	    this.food = 0;
+	const Animal = __webpack_require__(5);
+	
+	class Rabbit extends Animal{
+	  constructor(cell){
+	    super(cell);
+	    this.food = 1;
 	    this.age = 0;
-	    this.dead = false;
+	    this.alive = true;
 	    this.name = "rabbit";
+	
+	    this.maxFood = 45;
+	    this.metabolicRate = 3;
+	    this.maxAge = 10;
+	    this.reproductiveAge = 5;
+	    this.reproductiveFoodRequirement = 5;
+	
 	    // this.currentX = x;
 	    // this.currentY = y;
-	    this.board = board;
 	    this.cell = cell;
 	
 	
 	    this.eat = this.eat.bind(this);
-	    this.update = this.update.bind(this);
-	    this.increaseAge = this.increaseAge.bind(this);
 	    this.openSpaces = this.openSpaces.bind(this);
-	    this.move = this.move.bind(this);
+	    this.newSpace = this.newSpace.bind(this);
+	    this.mortality = this.mortality.bind(this);
+	    this.shouldReproduce = this.shouldReproduce.bind(this);
 	  }
 	  newCell(cell){
 	    this.cell = cell;
 	  }
 	
 	  eat(){
-	    let neededFood = 45 - this.food;
+	    console.log("in eat");
+	    let neededFood = this.maxFood - this.food;
 	    if(this.cell.grassLevel < neededFood){
 	    this.food += this.cell.grassLevel;
 	    this.cell.eatGrass(this.cell.grassLevel);
-	    this.food -= 3;
+	    this.food -= this.metabolicRate;
 	  } else{
 	    this.food += neededFood;
 	    this.cell.eatGrass(neededFood);
-	    this.food -= 3;
+	    this.food -= this.metabolicRate;
 	  }
+	  this.mortality();
 	
 	  }
 	
-	  increaseAge(){
+	  mortality(){
 	    this.age ++;
+	    if(this.maxAge > 20 || this.food < 1){
+	      this.alive = false;
+	    }
+	
 	  //change parameters for reproduction
-	    // if(this.age > 3 && (Math.random()*10) > 9 ){
+	    // if(this.age > this.metabolicRate && (Math.random()*10) > 9 ){
 	    //   this.move(new Rabbit()));
 	    // }
 	
@@ -415,11 +458,10 @@
 	        });
 	      }
 	    }
-	    console.log("open spaces", spaces);
 	    return spaces;
 	  }
 	
-	  move(){
+	  newSpace(){
 	
 	   let openSpaces = this.openSpaces();
 	   let idx = Math.floor(Math.random() * openSpaces.length);
@@ -430,14 +472,10 @@
 	    return result;
 	  }
 	
+	  shouldReproduce(){
+	  return this.age > this.reproductiveAge && this.food > this.reproductiveFoodRequirement
 	
-	
-	  update(){
-	    this.eat();
-	    this.increaseAge();
-	    this.move();
 	  }
-	
 	    }
 	
 	module.exports = Rabbit;
@@ -445,22 +483,48 @@
 
 /***/ },
 /* 4 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	class Wolf{
-	constructor(){
+	const Animal = __webpack_require__(5);
+	
+	class Wolf extends Animal{
+	constructor(cell){
+	  super(cell);
 	  this.food = 0;
 	  this.age = 0;
 	  this.name = "wolf";
+	
 	}
+	
+	
 	update(){
 	}
 	move(){
-	  
+	
 	}
 	}
 	
 	module.exports = Wolf;
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	class Animal{
+	  constructor(cell){
+	    this.cell = cell;
+	    
+	    this.updateCell = this.updateCell.bind(this);
+	  }
+	
+	updateCell(cell){
+	  this.cell = cell;
+	}
+	
+	}
+	
+	module.exports = Animal;
 
 
 /***/ }

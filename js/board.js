@@ -6,14 +6,20 @@ class Board{
   constructor(ctx){
     this.ctx = ctx;
     this.width = 10;
-    this.canvasWidth = 40;
+    this.canvasWidth = 50;
 
     this.board = this;
 
     this.grid = [];
     this.nextGrid = [];
-    this.rabbitCount = 0;
 
+
+    this.rabbitCount = 0;
+    this.deadRabbits = 0;
+    this.steps = 0;
+    this.birthedRabbits = 0;
+
+    this.play = false;
     this.lastTime = 0;
 
     this.draw = this.draw.bind(this);
@@ -23,6 +29,8 @@ class Board{
     this.moveAnimal = this.moveAnimal.bind(this);
     this.step = this.step.bind(this);
     this.gameLoop = this.gameLoop.bind(this);
+    this.updateCell = this.updateCell.bind(this);
+    this.toggleGame = this.toggleGame.bind(this);
 
   }
   patch(x,y){
@@ -103,6 +111,9 @@ class Board{
   		}
   	}
     console.log("rabbit count", this.rabbitCount);
+    console.log("dead rabbits", this.deadRabbits);
+    console.log("birthed rabbits", this.birthedRabbits);
+    console.log("steps", this.steps);
   }
 
   moveAnimal(x,y, animal){
@@ -110,14 +121,21 @@ class Board{
     cell.addAnimal(animal);
   }
   //updates grid with newGrid
+
+  updateCell(x,y){
+     let updatedCell = this.grid[x][y].updateGrass();
+     let nextGridCell = this.nextGrid[x][y];
+     nextGridCell.grassLevel = updatedCell.grassLevel;
+  }
+
   step(){
     for( let x = 0; x < this.canvasWidth; x++){
       for( let y = 0; y < this.canvasWidth; y++){
-        this.nextGrid[x][y] = this.grid[x][y].updateGrass();
+        this.updateCell(x,y);
         let animal = this.grid[x][y].previousAnimal;
-        if(animal instanceof Rabbit){
+        if(animal instanceof Rabbit && animal.alive){
 
-        let newCoords = animal.move();
+        let newCoords = animal.newSpace();
         let newX = newCoords[0];
         let newY = newCoords[1];
 //check nothing in newCoords
@@ -125,39 +143,50 @@ class Board{
           let newCell = this.nextGrid[newCoords[0]][newCoords[1]];
           // debugger
           newCell.addAnimal(animal);
+
+          if(animal.shouldReproduce()){
+
+
+            let currentCell = this.nextGrid[x][y];
+            currentCell.addNewRabbit();
+            this.birthedRabbits ++;
           }
+        } else if(animal instanceof Rabbit && !animal.alive){
+          this.deadRabbits ++;
+        }
         // }
 
         }
       }
+    if(this.rabbitCount < 8){
+      console.log("next grid", this.nextGrid);
+      debugger
+    }
 
-
-
-    // this.rabbitList.forEach((coords) => {
-    //   let a = coords[0];
-    //   let b = coords[1];
-    //   let animal = coords[3];
-    //   if((a > 0) && (a < this.canvasWidth) && ( b > 0) && (b < this.canvasWidth)){
-    //     console.log(a, b);
-    //   this.nextGrid[a][b].addAnimal(animal);
-    //   }
-    //
-    // });
-    console.log("next grid", this.nextGrid);
 
     this.grid = this.nextGrid;
     this.rabbitCount = 0;
+    this.steps ++;
+
     this.draw();
   }
 
   gameLoop(){
+    if(this.play){
       let now = Date.now();
       let dt = (now - this.lastTime) / 1000.0;
 
       this.step(dt);
 
       this.lastTime = now;
-  	window.setTimeout(this.gameLoop, 20);
+  	window.setTimeout(this.gameLoop, 100);
+  }}
+
+  toggleGame(){
+    this.play = !this.play;
+    if(this.play){
+      this.gameLoop();
+    }
   }
 }
 
