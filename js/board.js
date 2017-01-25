@@ -1,6 +1,7 @@
 const Cell = require('./cell');
 const Rabbit = require('./rabbit');
 const Wolf = require('./wolf');
+const Animal = require('./animal');
 
 class Board{
   constructor(ctx){
@@ -133,9 +134,9 @@ class Board{
       for( let y = 0; y < this.canvasWidth; y++){
         this.updateCell(x,y);
         let animal = this.grid[x][y].previousAnimal;
-        if(animal instanceof Rabbit && animal.alive){
+        if(animal instanceof Animal && animal.alive){
 
-        let newCoords = animal.newSpace();
+        let newCoords = animal.randomNeighbor();
         let newX = newCoords[0];
         let newY = newCoords[1];
 //check nothing in newCoords
@@ -160,7 +161,7 @@ class Board{
       }
     if(this.rabbitCount < 8){
       console.log("next grid", this.nextGrid);
-      debugger
+
     }
 
 

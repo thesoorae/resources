@@ -68,7 +68,8 @@
 
 	const Cell = __webpack_require__(2);
 	const Rabbit = __webpack_require__(3);
-	const Wolf = __webpack_require__(4);
+	const Wolf = __webpack_require__(5);
+	const Animal = __webpack_require__(4);
 	
 	class Board{
 	  constructor(ctx){
@@ -201,9 +202,9 @@
 	      for( let y = 0; y < this.canvasWidth; y++){
 	        this.updateCell(x,y);
 	        let animal = this.grid[x][y].previousAnimal;
-	        if(animal instanceof Rabbit && animal.alive){
+	        if(animal instanceof Animal && animal.alive){
 	
-	        let newCoords = animal.newSpace();
+	        let newCoords = animal.randomNeighbor();
 	        let newX = newCoords[0];
 	        let newY = newCoords[1];
 	//check nothing in newCoords
@@ -228,7 +229,7 @@
 	      }
 	    if(this.rabbitCount < 8){
 	      console.log("next grid", this.nextGrid);
-	      debugger
+	
 	    }
 	
 	
@@ -266,7 +267,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	const Rabbit = __webpack_require__(3);
-	const Wolf = __webpack_require__(4);
+	const Wolf = __webpack_require__(5);
 	
 	class Cell {
 	  constructor(board, x, y){
@@ -381,7 +382,7 @@
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const Animal = __webpack_require__(5);
+	const Animal = __webpack_require__(4);
 	
 	class Rabbit extends Animal{
 	  constructor(cell){
@@ -404,9 +405,10 @@
 	
 	    this.eat = this.eat.bind(this);
 	    this.openSpaces = this.openSpaces.bind(this);
-	    this.newSpace = this.newSpace.bind(this);
+	    this.randomNeighbor = this.randomNeighbor.bind(this);
 	    this.mortality = this.mortality.bind(this);
 	    this.shouldReproduce = this.shouldReproduce.bind(this);
+	    this.kill = this.kill.bind(this);
 	  }
 	  newCell(cell){
 	    this.cell = cell;
@@ -428,10 +430,14 @@
 	
 	  }
 	
+	  kill(){
+	    this.alive = false;
+	  }
+	
 	  mortality(){
 	    this.age ++;
 	    if(this.maxAge > 20 || this.food < 1){
-	      this.alive = false;
+	      this.kill();
 	    }
 	
 	  //change parameters for reproduction
@@ -461,7 +467,7 @@
 	    return spaces;
 	  }
 	
-	  newSpace(){
+	  randomNeighbor(){
 	
 	   let openSpaces = this.openSpaces();
 	   let idx = Math.floor(Math.random() * openSpaces.length);
@@ -483,32 +489,6 @@
 
 /***/ },
 /* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	const Animal = __webpack_require__(5);
-	
-	class Wolf extends Animal{
-	constructor(cell){
-	  super(cell);
-	  this.food = 0;
-	  this.age = 0;
-	  this.name = "wolf";
-	
-	}
-	
-	
-	update(){
-	}
-	move(){
-	
-	}
-	}
-	
-	module.exports = Wolf;
-
-
-/***/ },
-/* 5 */
 /***/ function(module, exports) {
 
 	class Animal{
@@ -525,6 +505,66 @@
 	}
 	
 	module.exports = Animal;
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	const Animal = __webpack_require__(4);
+	
+	class Wolf extends Animal{
+	constructor(cell){
+	  super(cell);
+	  this.food = 0;
+	  this.age = 0;
+	  this.name = "wolf";
+	
+	  this.randomNeighbor = this.randomNeighbor.bind(this);
+	  this.openSpaces = this.openSpaces.bind(this);
+	  this.eat = this.eat.bind(this);
+	  this.shouldReproduce = this.shouldReproduce.bind(this);
+	}
+	
+	openSpaces(){
+	  let neighbors = this.cell.neighbors();
+	  let spaces = [];
+	  neighbors.forEach((neighbor) => {
+	    if(neighbor.type == "rabbit"){
+	      spaces.push(neighbor);
+	    }
+	  });
+	  return spaces;
+	}
+	
+	randomNeighbor(){
+	
+	 let openSpaces = this.openSpaces();
+	 let idx = Math.floor(Math.random() * openSpaces.length);
+	 let result = [this.cell.currentX, this.cell.currentY];
+	 if(openSpaces[idx] !== undefined){
+	   let neighbor = openSpaces[idx];
+	   this.eat(neighbor.animmal);
+	   result = [neighbor.currentX, neighbor.currentY];
+	}
+	  return result;
+	}
+	
+	eat(rabbit){
+	  if(this.food < 200){
+	    this.food += rabbit.food;
+	    rabbit.kill();
+	  }
+	
+	}
+	
+	shouldReproduce(){
+	  return false;
+	}
+	
+	}
+	
+	module.exports = Wolf;
 
 
 /***/ }

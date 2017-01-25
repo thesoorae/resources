@@ -21,9 +21,10 @@ class Rabbit extends Animal{
 
     this.eat = this.eat.bind(this);
     this.openSpaces = this.openSpaces.bind(this);
-    this.newSpace = this.newSpace.bind(this);
+    this.randomNeighbor = this.randomNeighbor.bind(this);
     this.mortality = this.mortality.bind(this);
     this.shouldReproduce = this.shouldReproduce.bind(this);
+    this.kill = this.kill.bind(this);
   }
   newCell(cell){
     this.cell = cell;
@@ -45,10 +46,14 @@ class Rabbit extends Animal{
 
   }
 
+  kill(){
+    this.alive = false;
+  }
+
   mortality(){
     this.age ++;
     if(this.maxAge > 20 || this.food < 1){
-      this.alive = false;
+      this.kill();
     }
 
   //change parameters for reproduction
@@ -78,7 +83,7 @@ class Rabbit extends Animal{
     return spaces;
   }
 
-  newSpace(){
+  randomNeighbor(){
 
    let openSpaces = this.openSpaces();
    let idx = Math.floor(Math.random() * openSpaces.length);
