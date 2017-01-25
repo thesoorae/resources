@@ -100,14 +100,19 @@ class Board{
   }
 
   moveAnimal(x,y, animal){
-    this.nextGrid[x][y].addAnimal(animal);
+    let cell = this.nextGrid[x][y];
+    cell.addAnimal(animal);
   }
   //updates grid with newGrid
   step(){
     for( let x = 0; x < this.canvasWidth; x++){
       for( let y = 0; y < this.canvasWidth; y++){
         this.nextGrid[x][y] = this.grid[x][y].updateGrass();
-        this.nextGrid[x][y] = this.grid[x][y].moveAnimal();
+        let animal = this.grid[x][y].animal;
+        if(animal !== null){
+        let newCoords = animal.move();
+        this.nextGrid[newCoords[0]][newCoords[1]].addAnimal(animal);
+        this.nextGrid[x][y].empty();}
 
       }
     }

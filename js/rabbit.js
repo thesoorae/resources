@@ -18,16 +18,18 @@ class Rabbit{
   }
 
   eat(){
-    let currentPatch = this.cell;
-
-    if(this.food < 45){
-    this.food += currentPatch.grassLevel;
-    currentPatch.grassLevel -= 1;
+    let neededFood = 45 - this.food;
+    if(this.cell.grassLevel < neededFood){
+    this.food += this.cell.grassLevel;
+    this.cell.eatGrass(this.cell.grassLevel);
+    this.food -= 3;
+  } else{
+    this.food += neededFood;
+    this.cell.eatGrass(neededFood);
     this.food -= 3;
   }
-    else{
-    this.food -= 3;
-  }}
+
+  }
 
   increaseAge(){
     this.age ++;
@@ -39,27 +41,31 @@ class Rabbit{
   }
 
   openSpaces(){
+
     let spaces = [];
+    debugger
     let neighbors = this.cell.neighbors();
-    for(let g = 5; g > 0; g ++){
+
+    for(let g = 5; g > 0; g --){
       if(spaces.length > 0){
         return spaces;
       } else {
-        neighbors.forEach((patch) => {
-          if(patch.type === "grass" && patch.grassLength === g){
-            spaces.push([patch.currentX, patch.currentY]);
+        neighbors.forEach((neighbor) => {
+          if(neighbor.type === "grass" && neighbor.grassLength === g){
+            spaces.push([neighbor.currentX, neighbor.currentY]);
           }
         });
       }
     }
+    console.log("open spaces", spaces);
     return spaces;
   }
 
   move(){
-    
+    debugger
    let openSpaces = this.openSpaces();
    let idx = Math.random() * openSpaces.length;
-   this.board.moveAnimal(openSpaces[idx][0], openSpaces[idx][1], this);
+   return [openSpaces[idx][0], openSpaces[idx][1]];
   }
 
 

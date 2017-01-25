@@ -168,14 +168,19 @@
 	  }
 	
 	  moveAnimal(x,y, animal){
-	    this.nextGrid[x][y].addAnimal(animal);
+	    let cell = this.nextGrid[x][y];
+	    cell.addAnimal(animal);
 	  }
 	  //updates grid with newGrid
 	  step(){
 	    for( let x = 0; x < this.canvasWidth; x++){
 	      for( let y = 0; y < this.canvasWidth; y++){
 	        this.nextGrid[x][y] = this.grid[x][y].updateGrass();
-	        this.nextGrid[x][y] = this.grid[x][y].moveAnimal();
+	        let animal = this.grid[x][y].animal;
+	        if(animal !== null){
+	        let newCoords = animal.move();
+	        this.nextGrid[newCoords[0]][newCoords[1]].addAnimal(animal);
+	        this.nextGrid[x][y].empty();}
 	
 	      }
 	    }
@@ -230,8 +235,13 @@
 	    this.addNewRabbit = this.addNewRabbit.bind(this);
 	    this.addNewWolf = this.addNewWolf.bind(this);
 	    this.moveAnimal = this.moveAnimal.bind(this);
+	    this.eatGrass = this.eatGrass.bind(this);
+	    this.empty = this.empty.bind(this);
 	  }
-	
+	empty(){
+	  this.animal = null;
+	  this.type = "grass";
+	}
 	neighbors(){
 	  let neighbors = [];
 	  let x = this.currentX;
@@ -271,12 +281,15 @@
 	  this.type = "wolf";
 	}
 	
+	eatGrass(amt){
+	  this.grassLevel -= amt;
+	}
 	
 	updateGrass(){
 	    console.log("updating grass");
 	//decreases grass level if there is a rabbit
 	    if(this.type === "rabbit"){
-	        this.grassLevel -= 3
+	        this.animal.eat();
 	        }
 	        else if(this.grassLevel < 5){
 	      this.grassLevel ++;
@@ -295,8 +308,10 @@
 	
 	
 	moveAnimal(){
-	  if(this.animal !== null){
-	  this.animal.move();
+	  console.log("in move animal");
+	  if(this.type === "rabbit"){
+	debugger
+	  return this.animal.move();
 	  }
 	}
 	
@@ -329,16 +344,18 @@
 	  }
 	
 	  eat(){
-	    let currentPatch = this.cell;
-	
-	    if(this.food < 45){
-	    this.food += currentPatch.grassLevel;
-	    currentPatch.grassLevel -= 1;
+	    let neededFood = 45 - this.food;
+	    if(this.cell.grassLevel < neededFood){
+	    this.food += this.cell.grassLevel;
+	    this.cell.eatGrass(this.cell.grassLevel);
+	    this.food -= 3;
+	  } else{
+	    this.food += neededFood;
+	    this.cell.eatGrass(neededFood);
 	    this.food -= 3;
 	  }
-	    else{
-	    this.food -= 3;
-	  }}
+	
+	  }
 	
 	  increaseAge(){
 	    this.age ++;
@@ -350,27 +367,31 @@
 	  }
 	
 	  openSpaces(){
+	
 	    let spaces = [];
+	    debugger
 	    let neighbors = this.cell.neighbors();
-	    for(let g = 5; g > 0; g ++){
+	
+	    for(let g = 5; g > 0; g --){
 	      if(spaces.length > 0){
 	        return spaces;
 	      } else {
-	        neighbors.forEach((patch) => {
-	          if(patch.type === "grass" && patch.grassLength === g){
-	            spaces.push([patch.currentX, patch.currentY]);
+	        neighbors.forEach((neighbor) => {
+	          if(neighbor.type === "grass" && neighbor.grassLength === g){
+	            spaces.push([neighbor.currentX, neighbor.currentY]);
 	          }
 	        });
 	      }
 	    }
+	    console.log("open spaces", spaces);
 	    return spaces;
 	  }
 	
 	  move(){
-	    
+	    debugger
 	   let openSpaces = this.openSpaces();
 	   let idx = Math.random() * openSpaces.length;
-	   this.board.moveAnimal(openSpaces[idx][0], openSpaces[idx][1], this);
+	   return [openSpaces[idx][0], openSpaces[idx][1]];
 	  }
 	
 	
@@ -397,6 +418,9 @@
 	  this.name = "wolf";
 	}
 	update(){
+	}
+	move(){
+	  
 	}
 	}
 	

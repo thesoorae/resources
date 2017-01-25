@@ -22,8 +22,13 @@ class Cell {
     this.addNewRabbit = this.addNewRabbit.bind(this);
     this.addNewWolf = this.addNewWolf.bind(this);
     this.moveAnimal = this.moveAnimal.bind(this);
+    this.eatGrass = this.eatGrass.bind(this);
+    this.empty = this.empty.bind(this);
   }
-
+empty(){
+  this.animal = null;
+  this.type = "grass";
+}
 neighbors(){
   let neighbors = [];
   let x = this.currentX;
@@ -63,12 +68,15 @@ addNewWolf(){
   this.type = "wolf";
 }
 
+eatGrass(amt){
+  this.grassLevel -= amt;
+}
 
 updateGrass(){
     console.log("updating grass");
 //decreases grass level if there is a rabbit
     if(this.type === "rabbit"){
-        this.grassLevel -= 3
+        this.animal.eat();
         }
         else if(this.grassLevel < 5){
       this.grassLevel ++;
@@ -87,8 +95,10 @@ updateGrass(){
 
 
 moveAnimal(){
-  if(this.animal !== null){
-  this.animal.move();
+  console.log("in move animal");
+  if(this.type === "rabbit"){
+debugger
+  return this.animal.move();
   }
 }
 

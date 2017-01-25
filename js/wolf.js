@@ -6,6 +6,9 @@ constructor(){
 }
 update(){
 }
+move(){
+  
+}
 }
 
 module.exports = Wolf;
