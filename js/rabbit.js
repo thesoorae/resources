@@ -9,6 +9,7 @@ class Rabbit{
     this.newGrid = newGrid;
 
     this.eat = this.eat.bind(this);
+    this.update = this.update.bind(this);
   }
 
   eat(){
@@ -21,6 +22,15 @@ class Rabbit{
     else{
     this.food -= 3;
   }}
+
+  increaseAge(){
+    
+  }
+
+  update(){
+    console.log("in rabbit update");
+    this.eat();
+  }
 
     }
 

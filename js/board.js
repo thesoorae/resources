@@ -14,7 +14,14 @@ class Board{
     this.draw = this.draw.bind(this);
     this.setupGrid = this.setupGrid.bind(this);
     this.start = this.start.bind(this);
+    this.patch = this.patch.bind(this);
+
+
   }
+  patch(x,y){
+    return this.grid[x][y];
+  }
+
   start(){
     this.setupGrid();
     this.draw();
@@ -45,22 +52,57 @@ class Board{
   draw(){
     let ctx = this.ctx;
     let gridSquareWidth = this.width;
+    let grassColor = "#009900";
 
     for (let x = 0; x < this.canvasWidth; x++) {
   		for (let y = 0; y < this.canvasWidth; y++) {
-
-  			if (this.grid[x][y].type == "rabbit") {
+        let patch = this.patch(x,y);
+  			if (patch.type == "rabbit") {
   				ctx.fillStyle = "#ee66aa";
   				ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
-  			} else if (this.grid[x][y].type == "wolf"){
+  			} else if (patch.type == "wolf"){
   				ctx.fillStyle = "#383838";
   				ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
   			} else {
-          ctx.fillStyle = "#009900";
+          switch(patch.grassLevel){
+            case 0:
+            grassColor = "#F4A460";
+            break;
+            case 1:
+            grassColor = "#C5E3BF";
+            break;
+            case 2:
+            grassColor = "#86C67C";
+            break;
+            case 3:
+            grassColor = "#7BBF6A";
+            break;
+            case 4:
+            grassColor = "#308014";
+            break;
+            case 5:
+            grassColor = "#3B5E2B";
+            break;
+            default:
+            grassColor = "#009900";
+          }
+          ctx.fillStyle = grassColor;
           ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
         }
   		}
   	}
+  }
+
+  //updates grid with newGrid
+  step(){
+    for( let x = 0; x < this.canvasWidth; x++){
+      for( let y = 0; y < this.canvasWidth; y++){
+        this.nextGrid[x][y] = this.grid[x][y].update();
+      }
+    }
+    this.grid = this.nextGrid;
+    this.draw();
+    console.log("next grid", this.nextGrid);
   }
 
 }

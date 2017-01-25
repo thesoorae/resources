@@ -8,5 +8,9 @@ document.addEventListener("DOMContentLoaded", function(){
   canvas.height = 10 * 40;
   canvas.style.width = canvas.width;
   canvas.style.height = canvas.height;
-  new Board(ctx).start();
-});
+  let board = new Board(ctx)
+  board.start();
+  canvas.onclick = function fun() {
+        board.step();
+
+}});

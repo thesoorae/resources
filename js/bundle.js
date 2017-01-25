@@ -54,8 +54,12 @@
 	  canvas.height = 10 * 40;
 	  canvas.style.width = canvas.width;
 	  canvas.style.height = canvas.height;
-	  new Board(ctx).start();
-	});
+	  let board = new Board(ctx)
+	  board.start();
+	  canvas.onclick = function fun() {
+	        board.step();
+	
+	}});
 
 
 /***/ },
@@ -78,7 +82,14 @@
 	    this.draw = this.draw.bind(this);
 	    this.setupGrid = this.setupGrid.bind(this);
 	    this.start = this.start.bind(this);
+	    this.patch = this.patch.bind(this);
+	
+	
 	  }
+	  patch(x,y){
+	    return this.grid[x][y];
+	  }
+	
 	  start(){
 	    this.setupGrid();
 	    this.draw();
@@ -96,9 +107,9 @@
 	
 	        let rand = Math.random()*100;
 	        if(rand > 98){
-	          this.grid[x][y] = new Cell(x,y, "wolf", new Wolf());
+	          this.grid[x][y] = new Cell(x,y, "wolf", new Wolf(x, y, this.grid, this.nextGrid));
 	        } else if(rand > 90 ){
-	          this.grid[x][y] = new Cell(x,y, "rabbit", new Rabbit());
+	          this.grid[x][y] = new Cell(x,y, "rabbit", new Rabbit(x, y, this.grid, this.nextGrid));
 	        } else {
 	          this.grid[x][y] = new Cell(x,y, "grass");
 	        }
@@ -109,22 +120,57 @@
 	  draw(){
 	    let ctx = this.ctx;
 	    let gridSquareWidth = this.width;
+	    let grassColor = "#009900";
 	
 	    for (let x = 0; x < this.canvasWidth; x++) {
 	  		for (let y = 0; y < this.canvasWidth; y++) {
-	
-	  			if (this.grid[x][y].type == "rabbit") {
+	        let patch = this.patch(x,y);
+	  			if (patch.type == "rabbit") {
 	  				ctx.fillStyle = "#ee66aa";
 	  				ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
-	  			} else if (this.grid[x][y].type == "wolf"){
+	  			} else if (patch.type == "wolf"){
 	  				ctx.fillStyle = "#383838";
 	  				ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
 	  			} else {
-	          ctx.fillStyle = "#009900";
+	          switch(patch.grassLevel){
+	            case 0:
+	            grassColor = "#F4A460";
+	            break;
+	            case 1:
+	            grassColor = "#C5E3BF";
+	            break;
+	            case 2:
+	            grassColor = "#86C67C";
+	            break;
+	            case 3:
+	            grassColor = "#7BBF6A";
+	            break;
+	            case 4:
+	            grassColor = "#308014";
+	            break;
+	            case 5:
+	            grassColor = "#3B5E2B";
+	            break;
+	            default:
+	            grassColor = "#009900";
+	          }
+	          ctx.fillStyle = grassColor;
 	          ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
 	        }
 	  		}
 	  	}
+	  }
+	
+	  //updates grid with newGrid
+	  step(){
+	    for( let x = 0; x < this.canvasWidth; x++){
+	      for( let y = 0; y < this.canvasWidth; y++){
+	        this.nextGrid[x][y] = this.grid[x][y].update();
+	      }
+	    }
+	    this.grid = this.nextGrid;
+	    this.draw();
+	    console.log("next grid", this.nextGrid);
 	  }
 	
 	}
@@ -156,7 +202,9 @@
 	    this.update = this.update.bind(this);
 	  }
 	
+	
 	  update(){
+	    console.log("in update");
 	    if(this.animal !== null){
 	        this.animal.update();
 	        if(this.animal.dead){
@@ -164,9 +212,20 @@
 	          this.type = "grass";
 	        }
 	        this.grassLevel --;
-	    } else if(this.grassLevel < 5){
+	    } else
+	    if(this.grassLevel < 5){
 	      this.grassLevel ++;
 	    }
+	
+	    if(this.grassLevel < 0) {
+	      this.grassLevel = 0;
+	    }
+	
+	    if(this.grassLevel > 5) {
+	      this.grassLevel = 5;
+	    }
+	
+	    return this;
 	  }
 	}
 	
@@ -181,11 +240,40 @@
 /***/ function(module, exports) {
 
 	class Rabbit{
-	  constructor(){
+	  constructor(x, y, currentGrid, newGrid){
 	    this.food = 0;
 	    this.age = 0;
+	    this.dead = false;
+	    this.currentX = x;
+	    this.currentY = y;
+	    this.currentGrid = currentGrid;
+	    this.newGrid = newGrid;
+	
+	    this.eat = this.eat.bind(this);
+	    this.update = this.update.bind(this);
 	  }
-	}
+	
+	  eat(){
+	    let currentPatch = this.currentGrid[this.currentX][this.currentY];
+	    if(this.food < 45){
+	    this.food += currentPatch.grassLevel;
+	    currentPatch.grassLevel -= 1;
+	    this.food -= 3;
+	  }
+	    else{
+	    this.food -= 3;
+	  }}
+	
+	  increaseAge(){
+	    
+	  }
+	
+	  update(){
+	    console.log("in rabbit update");
+	    this.eat();
+	  }
+	
+	    }
 	
 	module.exports = Rabbit;
 
@@ -198,6 +286,9 @@
 	constructor(){
 	  this.food = 0;
 	  this.age = 0;
+	}
+	update(){
+	  console.log("in wolf update");
 	}
 	}
 	

@@ -18,8 +18,9 @@ class Cell {
     this.update = this.update.bind(this);
   }
 
-  
+
   update(){
+    console.log("in update");
     if(this.animal !== null){
         this.animal.update();
         if(this.animal.dead){
@@ -27,9 +28,20 @@ class Cell {
           this.type = "grass";
         }
         this.grassLevel --;
-    } else if(this.grassLevel < 5){
+    } else
+    if(this.grassLevel < 5){
       this.grassLevel ++;
     }
+
+    if(this.grassLevel < 0) {
+      this.grassLevel = 0;
+    }
+
+    if(this.grassLevel > 5) {
+      this.grassLevel = 5;
+    }
+
+    return this;
   }
 }
 
