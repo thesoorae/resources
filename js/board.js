@@ -1,5 +1,6 @@
 const Cell = require('./cell');
-
+const Rabbit = require('./rabbit');
+const Wolf = require('./wolf');
 
 class Board{
   constructor(ctx){
@@ -31,11 +32,11 @@ class Board{
 
         let rand = Math.random()*100;
         if(rand > 98){
-          this.grid[x][y] = new Cell("wolf", x,y);
+          this.grid[x][y] = new Cell(x,y, "wolf", new Wolf(x, y, this.grid, this.nextGrid));
         } else if(rand > 90 ){
-          this.grid[x][y] = new Cell("rabbit", x,y);
+          this.grid[x][y] = new Cell(x,y, "rabbit", new Rabbit(x, y, this.grid, this.nextGrid));
         } else {
-          this.grid[x][y] = new Cell("grass", x,y);
+          this.grid[x][y] = new Cell(x,y, "grass");
         }
       }
     }

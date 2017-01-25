@@ -63,7 +63,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	const Cell = __webpack_require__(2);
-	
+	const Rabbit = __webpack_require__(3);
+	const Wolf = __webpack_require__(4);
 	
 	class Board{
 	  constructor(ctx){
@@ -95,11 +96,11 @@
 	
 	        let rand = Math.random()*100;
 	        if(rand > 98){
-	          this.grid[x][y] = new Cell("wolf", x,y);
+	          this.grid[x][y] = new Cell(x,y, "wolf", new Wolf());
 	        } else if(rand > 90 ){
-	          this.grid[x][y] = new Cell("rabbit", x,y);
+	          this.grid[x][y] = new Cell(x,y, "rabbit", new Rabbit());
 	        } else {
-	          this.grid[x][y] = new Cell("grass", x,y);
+	          this.grid[x][y] = new Cell(x,y, "grass");
 	        }
 	      }
 	    }
@@ -133,17 +134,74 @@
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
+	const Rabbit = __webpack_require__(3);
+	const Wolf = __webpack_require__(4);
+	
 	class Cell {
-	  constructor(type, x, y){
-	    this.type = type;
+	  constructor(x, y, type="grass", animal=null){
+	    this.type = "grass";
 	    this.currentX = x;
 	    this.currentY = y;
+	    this.grassLevel = 3;
+	    this.animal = animal;
+	
+	    if(animal instanceof Rabbit){
+	      this.type = "rabbit";
+	    } else if(animal instanceof Wolf){
+	      this.type = "wolf";
+	    }
+	
+	    this.update = this.update.bind(this);
+	  }
+	
+	  update(){
+	    if(this.animal !== null){
+	        this.animal.update();
+	        if(this.animal.dead){
+	          this.animal = null;
+	          this.type = "grass";
+	        }
+	        this.grassLevel --;
+	    } else if(this.grassLevel < 5){
+	      this.grassLevel ++;
+	    }
 	  }
 	}
 	
+	
+	
+	
 	module.exports = Cell;
+
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	class Rabbit{
+	  constructor(){
+	    this.food = 0;
+	    this.age = 0;
+	  }
+	}
+	
+	module.exports = Rabbit;
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	class Wolf{
+	constructor(){
+	  this.food = 0;
+	  this.age = 0;
+	}
+	}
+	
+	module.exports = Wolf;
 
 
 /***/ }
