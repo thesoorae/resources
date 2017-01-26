@@ -10,9 +10,9 @@ class Rabbit extends Animal{
 
     this.maxFood = 45;
     this.metabolicRate = 2;
-    this.maxAge = 14;
+    this.maxAge = 17;
     this.reproductiveAge = 5;
-    this.reproductiveFoodRequirement = 15;
+    this.reproductiveFoodRequirement = 25;
 
     // this.currentX = x;
     // this.currentY = y;

@@ -51,7 +51,7 @@
 	  const canvas = document.getElementById('gameCanvas');
 	  const ctx = canvas.getContext('2d');
 	  const frame = document.getElementById('frame');
-	  canvas.width = 10 * 50;
+	  canvas.width = 10 * 70;
 	  // 10 * 50;
 	  canvas.height = 10* 50;
 	  frame.style.width = 1400;
@@ -80,7 +80,8 @@
 	    this.frame = frame;
 	    this.ctx = ctx;
 	    this.width = 10;
-	    this.canvasWidth = 50;
+	    this.canvasWidth = 70;
+	    this.canvasHeight = 50;
 	
 	    this.board = this;
 	
@@ -160,7 +161,7 @@
 	    for(let x=0; x < this.canvasWidth; x++){
 	      this.grid[x] = [];
 	      this.nextGrid[x] =  [];
-	      for( let y = 0; y< this.canvasWidth; y++ ){
+	      for( let y = 0; y< this.canvasHeight; y++ ){
 	        this.grid[x][y] = [];
 	        this.nextGrid[x][y] = new Cell(this.board, x,y, "grass");
 	
@@ -186,45 +187,58 @@
 	    let gridSquareWidth = this.width;
 	    let grassColor = "#009900";
 	    let start_x = 30;
+	    let rad = 5;
+	    let gaps = rad * 2;
 	    for (let x =0; x < this.canvasWidth; x++) {
-	  		for (let y = 0; y < this.canvasWidth; y++) {
+	  		for (let y = 0; y < this.canvasHeight; y++) {
 	        let patch = this.patch(x,y);
-	  			if (patch.type == "rabbit") {
-	          this.rabbitCount ++;
-	  				ctx.fillStyle = "#ee66aa";
-	  				ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
-	  			} else if (patch.type == "wolf"){
-	  				ctx.fillStyle = "#383838";
-	  				ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
-	  			} else {
+	
 	          switch(patch.grassLevel){
 	            case 0:
-	            grassColor = "#654321";
+	            grassColor = "#D5CBB8";
 	            break;
 	            case 1:
-	            grassColor = "#C5E3BF";
+	            grassColor = "#C9DAAB";
 	            break;
 	            case 2:
-	            grassColor = "#86C67C";
+	            grassColor = "#C2D6A1";
 	            break;
 	            case 3:
-	            grassColor = "#7BBF6A";
+	            grassColor = "#91B454";
 	            break;
 	            case 4:
-	            grassColor = "#308014";
+	            grassColor = "#6E8B3D";
 	            break;
 	            case 5:
-	            grassColor = "#3B5E2B";
+	            grassColor = "#556B2F";
 	            break;
 	            default:
-	            grassColor = "#009900";
+	            grassColor = "#556B2F";
 	          }
 	          ctx.fillStyle = grassColor;
 	          ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
 	
+	
+	        if (patch.type == "rabbit") {
+	          this.rabbitCount ++;
+	          ctx.fillStyle = "#ee66aa";
+	          ctx.beginPath();
+	          ctx.arc(rad+gaps*x,rad+ gaps*y, rad, 0, Math.PI*2, true);
+	          ctx.closePath();
+	          ctx.fill();
+	
+	          // ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
+	        } else if (patch.type == "wolf"){
+	          ctx.fillStyle = "#383838";
+	          ctx.beginPath();
+	          ctx.arc(rad+gaps*x,rad+ gaps*y, rad, 0, Math.PI*2, true);
+	          ctx.closePath();
+	          ctx.fill();
+	          // ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
 	        }
 	  		}
 	  	}
+	
 	    this.transitionBG();
 	
 	    console.log("rabbit count", this.rabbitCount);
@@ -247,7 +261,7 @@
 	
 	  step(){
 	    for( let x = 0; x < this.canvasWidth; x++){
-	      for( let y = 0; y < this.canvasWidth; y++){
+	      for( let y = 0; y < this.canvasHeight; y++){
 	        this.updateCell(x,y);
 	        let animal = this.grid[x][y].previousAnimal;
 	        if(animal instanceof Animal && animal.alive){
@@ -268,8 +282,13 @@
 	
 	
 	            let currentCell = this.nextGrid[x][y];
-	            currentCell.addNewRabbit();
-	            this.birthedRabbits ++;
+	            if(animal instanceof Rabbit){
+	              currentCell.addNewRabbit();
+	              this.birthedRabbits ++;
+	            } else{
+	              currentCell.addNewWolf();
+	            }
+	
 	          }
 	        } else if(animal instanceof Rabbit && !animal.alive){
 	          this.deadRabbits ++;
@@ -327,7 +346,7 @@
 	    this.type = "grass";
 	    this.currentX = x;
 	    this.currentY = y;
-	    this.grassLevel = 3;
+	    this.grassLevel = 4;
 	    // this.animal = animal;
 	    this.board = board;
 	    this.animal = null;
@@ -368,7 +387,7 @@
 	  spots.forEach((coord) => {
 	    if(coord[0] >= 0 && coord[1] >= 0 ){
 	    let a = coord[0] % this.board.canvasWidth;
-	    let b = coord[1] % this.board.canvasWidth;
+	    let b = coord[1] % this.board.canvasHeight;
 	    neighbors.push(this.board.grid[a][b]);
 	    }
 	  });
@@ -450,9 +469,9 @@
 	
 	    this.maxFood = 45;
 	    this.metabolicRate = 2;
-	    this.maxAge = 14;
+	    this.maxAge = 17;
 	    this.reproductiveAge = 5;
-	    this.reproductiveFoodRequirement = 15;
+	    this.reproductiveFoodRequirement = 25;
 	
 	    // this.currentX = x;
 	    // this.currentY = y;
@@ -578,9 +597,11 @@
 	  this.alive = true;
 	
 	
-	  this.maxAge = 3000;
+	  this.maxAge = 50;
 	  this.maxFood = 200;
-	  this.metabolicRate = 7;
+	  this.metabolicRate = 4;
+	  this.reproductiveAge = 10;
+	  this.reproductiveFoodRequirement = 20;
 	
 	  this.randomNeighbor = this.randomNeighbor.bind(this);
 	  this.openSpaces = this.openSpaces.bind(this);
@@ -643,7 +664,7 @@
 	}
 	
 	shouldReproduce(){
-	  return false;
+	  return this.age > this.reproductiveAge && this.food > this.reproductiveFoodRequirement
 	}
 	
 	}

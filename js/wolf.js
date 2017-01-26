@@ -9,9 +9,11 @@ constructor(cell){
   this.alive = true;
 
 
-  this.maxAge = 3000;
+  this.maxAge = 50;
   this.maxFood = 200;
-  this.metabolicRate = 7;
+  this.metabolicRate = 4;
+  this.reproductiveAge = 10;
+  this.reproductiveFoodRequirement = 20;
 
   this.randomNeighbor = this.randomNeighbor.bind(this);
   this.openSpaces = this.openSpaces.bind(this);
@@ -74,7 +76,7 @@ eat(rabbit){
 }
 
 shouldReproduce(){
-  return false;
+  return this.age > this.reproductiveAge && this.food > this.reproductiveFoodRequirement
 }
 
 }

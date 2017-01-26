@@ -8,7 +8,7 @@ class Cell {
     this.type = "grass";
     this.currentX = x;
     this.currentY = y;
-    this.grassLevel = 3;
+    this.grassLevel = 4;
     // this.animal = animal;
     this.board = board;
     this.animal = null;
@@ -49,7 +49,7 @@ neighbors(){
   spots.forEach((coord) => {
     if(coord[0] >= 0 && coord[1] >= 0 ){
     let a = coord[0] % this.board.canvasWidth;
-    let b = coord[1] % this.board.canvasWidth;
+    let b = coord[1] % this.board.canvasHeight;
     neighbors.push(this.board.grid[a][b]);
     }
   });
