@@ -4,7 +4,7 @@ const Wolf = require('./wolf');
 const Animal = require('./animal');
 
 class Board{
-  constructor(frame, ctx){
+  constructor(frame, ctx, prey, predator, grass){
     this.frame = frame;
     this.ctx = ctx;
     this.width = 12;
@@ -25,9 +25,9 @@ class Board{
     this.play = false;
     this.lastTime = 0;
 
-    this.preyParams = {};
-    this.predatorParams = {};
-    this.grassParams = {};
+    this.preyParams = prey;
+    this.predatorParams = predator;
+    this.grassParams = grass;
 
     this.draw = this.draw.bind(this);
     this.setupGrid = this.setupGrid.bind(this);
@@ -39,16 +39,9 @@ class Board{
     this.updateCell = this.updateCell.bind(this);
     this.toggleGame = this.toggleGame.bind(this);
     this.transitionBG = this.transitionBG.bind(this);
-    this.getParamsStart = this.getParamsStart.bind(this);
 
   }
 
-getParamsStart(prey, predator, grass){
-  this.preyParams = prey;
-  this.predatorParams = predator;
-  this.grassParams = grass;
-  this.toggleGame();
-}
 
   transitionBG(){
     let bg_images = this.frame.childNodes;

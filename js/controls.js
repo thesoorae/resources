@@ -1,3 +1,11 @@
+class Controls {
+
+  constructor(frame, ctx){
+
+    
+  }
+}
+
 const createControls = (board) => {
   let prey_params = {
     'init-food': 1,
