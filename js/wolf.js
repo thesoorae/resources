@@ -16,13 +16,21 @@ constructor(cell){
 
 openSpaces(){
   let neighbors = this.cell.neighbors();
-  let spaces = [];
-  neighbors.forEach((neighbor) => {
+
+  let rabbitSpaces = [];
+  let emptySpaces = [];
+    neighbors.forEach((neighbor) => {
+      
     if(neighbor.type == "rabbit"){
-      spaces.push(neighbor);
+      rabbitSpaces.push(neighbor);
+    } else if(neighbor.type == "grass"){
+      emptySpaces.push(neighbor);
     }
   });
-  return spaces;
+  if(rabbitSpaces.length > 0){
+  emptySpaces = rabbitSpaces;
+  }
+  return emptySpaces;
 }
 
 randomNeighbor(){
@@ -40,10 +48,13 @@ randomNeighbor(){
 }
 
 eat(rabbit){
-  if(this.food < 200){
-    this.food += rabbit.food;
-    rabbit.kill();
+  if(rabbit !== null){
+    if(this.food < 200){
+      this.food += rabbit.food;
+      rabbit.kill();
+    }
   }
+
 }
 
 shouldReproduce(){

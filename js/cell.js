@@ -45,7 +45,7 @@ neighbors(){
     [x + 1 , y + 1]
   ];
   spots.forEach((coord) => {
-    if(coord[0] > 0 && coord[1] > 0 ){
+    if(coord[0] >= 0 && coord[1] >= 0 ){
     let a = coord[0] % this.board.canvasWidth;
     let b = coord[1] % this.board.canvasWidth;
     neighbors.push(this.board.grid[a][b]);

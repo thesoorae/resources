@@ -316,7 +316,7 @@
 	    [x + 1 , y + 1]
 	  ];
 	  spots.forEach((coord) => {
-	    if(coord[0] > 0 && coord[1] > 0 ){
+	    if(coord[0] >= 0 && coord[1] >= 0 ){
 	    let a = coord[0] % this.board.canvasWidth;
 	    let b = coord[1] % this.board.canvasWidth;
 	    neighbors.push(this.board.grid[a][b]);
@@ -533,13 +533,21 @@
 	
 	openSpaces(){
 	  let neighbors = this.cell.neighbors();
-	  let spaces = [];
-	  neighbors.forEach((neighbor) => {
+	
+	  let rabbitSpaces = [];
+	  let emptySpaces = [];
+	    neighbors.forEach((neighbor) => {
+	      
 	    if(neighbor.type == "rabbit"){
-	      spaces.push(neighbor);
+	      rabbitSpaces.push(neighbor);
+	    } else if(neighbor.type == "grass"){
+	      emptySpaces.push(neighbor);
 	    }
 	  });
-	  return spaces;
+	  if(rabbitSpaces.length > 0){
+	  emptySpaces = rabbitSpaces;
+	  }
+	  return emptySpaces;
 	}
 	
 	randomNeighbor(){
@@ -557,10 +565,13 @@
 	}
 	
 	eat(rabbit){
-	  if(this.food < 200){
-	    this.food += rabbit.food;
-	    rabbit.kill();
+	  if(rabbit !== null){
+	    if(this.food < 200){
+	      this.food += rabbit.food;
+	      rabbit.kill();
+	    }
 	  }
+	
 	}
 	
 	shouldReproduce(){
