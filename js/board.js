@@ -7,7 +7,7 @@ class Board{
   constructor(frame, ctx){
     this.frame = frame;
     this.ctx = ctx;
-    this.width = 10;
+    this.width = 12;
     this.canvasWidth = 70;
     this.canvasHeight = 50;
 
@@ -38,17 +38,7 @@ class Board{
 
   }
 
-  transitionBackground(){
-    if(this.steps > 60){
-      this.frame.style.backgroundImage = "url('http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485406390/other/overgrazed2.jpg')";
-    } else if(this.steps > 30){
-      this.frame.style.backgroundImage = "url('http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485406391/other/dying_forest.jpg')";
-    }
-    else {
-      this.frame.style.backgroundImage = "url('http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485406391/other/forest-07.jpg')";
-    }
-    this.frame.style.backgroundSize="cover";
-  }
+
 
   transitionBG(){
     let bg_images = this.frame.childNodes;
@@ -116,7 +106,8 @@ class Board{
     let grassColor = "#009900";
     let start_x = 30;
     let rad = 5;
-    let gaps = rad * 2;
+    let wolfrad = 6;
+    let gaps = this.width;
     for (let x =0; x < this.canvasWidth; x++) {
   		for (let y = 0; y < this.canvasHeight; y++) {
         let patch = this.patch(x,y);
@@ -159,7 +150,7 @@ class Board{
         } else if (patch.type == "wolf"){
           ctx.fillStyle = "#383838";
           ctx.beginPath();
-          ctx.arc(rad+gaps*x,rad+ gaps*y, rad, 0, Math.PI*2, true);
+          ctx.arc(wolfrad+gaps*x,wolfrad+ gaps*y, wolfrad, 0, Math.PI*2, true);
           ctx.closePath();
           ctx.fill();
           // ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
