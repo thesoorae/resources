@@ -125,12 +125,12 @@
 	  transitionBG(){
 	    let bg_images = this.frame.childNodes;
 	
-	    if(this.rabbitCount > 300){
+	    if(this.rabbitCount > 400){
 	      bg_images[1].className = "visible";
 	      bg_images[3].className = "transparent";
 	      bg_images[5].className = "transparent";
 	      bg_images[7].className = "transparent";
-	    } else if(this.rabbitCount > 200){
+	    } else if(this.rabbitCount > 300){
 	      bg_images[1].className = "transparent";
 	      bg_images[3].className = "visible";
 	      bg_images[5].className = "transparent";
@@ -318,7 +318,7 @@
 	      this.step(dt);
 	
 	      this.lastTime = now;
-	  	window.setTimeout(this.gameLoop, 200);
+	  	window.setTimeout(this.gameLoop, 50);
 	  }}
 	
 	  toggleGame(){

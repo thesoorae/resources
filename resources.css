@@ -13,10 +13,17 @@ div.frame {
   position:absolute;
   left:0;
   width: 100%;
-  -webkit-transition: opacity 3s ease-out;
-  -moz-transition: opacity 3s ease-out;
-  -o-transition: opacity 3s ease-out;
-  transition: opacity 3s ease-out;
+  -webkit-transition: opacity 3s ease-in;
+  -moz-transition: opacity 3s ease-in;
+  -o-transition: opacity 3s ease-in;
+  transition: opacity 3s ease-in;
+  animation-duration: 1.5s;
+/*animation-timing-function: ease-out;
+animation-delay: 0;
+animation-direction: alternate;
+animation-iteration-count: infinite;
+animation-fill-mode: none;
+animation-play-state: running;*/
 }
 
 #frame img.visible {
