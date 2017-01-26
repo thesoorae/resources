@@ -30,6 +30,7 @@ class Rabbit extends Animal{
     this.cell = cell;
   }
 
+
   eat(){
     console.log("in eat");
     let neededFood = this.maxFood - this.food;

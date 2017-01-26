@@ -203,12 +203,15 @@
 	        this.updateCell(x,y);
 	        let animal = this.grid[x][y].previousAnimal;
 	        if(animal instanceof Animal && animal.alive){
-	
+	          if(animal instanceof Wolf){
+	            // debugger
+	          }
 	        let newCoords = animal.randomNeighbor();
 	        let newX = newCoords[0];
 	        let newY = newCoords[1];
-	//check nothing in newCoords
-	        // if(this.nextGrid[newX][newY].type == "grass"){
+	
+	
+	
 	          let newCell = this.nextGrid[newCoords[0]][newCoords[1]];
 	          // debugger
 	          newCell.addAnimal(animal);
@@ -414,6 +417,7 @@
 	    this.cell = cell;
 	  }
 	
+	
 	  eat(){
 	    console.log("in eat");
 	    let neededFood = this.maxFood - this.food;
@@ -519,6 +523,7 @@
 	  this.food = 0;
 	  this.age = 0;
 	  this.name = "wolf";
+	  this.alive = true;
 	
 	  this.randomNeighbor = this.randomNeighbor.bind(this);
 	  this.openSpaces = this.openSpaces.bind(this);
@@ -543,8 +548,9 @@
 	 let idx = Math.floor(Math.random() * openSpaces.length);
 	 let result = [this.cell.currentX, this.cell.currentY];
 	 if(openSpaces[idx] !== undefined){
+	  //  debugger
 	   let neighbor = openSpaces[idx];
-	   this.eat(neighbor.animmal);
+	   this.eat(neighbor.animal);
 	   result = [neighbor.currentX, neighbor.currentY];
 	}
 	  return result;
@@ -555,7 +561,6 @@
 	    this.food += rabbit.food;
 	    rabbit.kill();
 	  }
-	
 	}
 	
 	shouldReproduce(){

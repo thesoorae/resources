@@ -6,6 +6,7 @@ constructor(cell){
   this.food = 0;
   this.age = 0;
   this.name = "wolf";
+  this.alive = true;
 
   this.randomNeighbor = this.randomNeighbor.bind(this);
   this.openSpaces = this.openSpaces.bind(this);
@@ -30,8 +31,9 @@ randomNeighbor(){
  let idx = Math.floor(Math.random() * openSpaces.length);
  let result = [this.cell.currentX, this.cell.currentY];
  if(openSpaces[idx] !== undefined){
+  //  debugger
    let neighbor = openSpaces[idx];
-   this.eat(neighbor.animmal);
+   this.eat(neighbor.animal);
    result = [neighbor.currentX, neighbor.currentY];
 }
   return result;
@@ -42,7 +44,6 @@ eat(rabbit){
     this.food += rabbit.food;
     rabbit.kill();
   }
-
 }
 
 shouldReproduce(){

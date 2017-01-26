@@ -135,12 +135,15 @@ class Board{
         this.updateCell(x,y);
         let animal = this.grid[x][y].previousAnimal;
         if(animal instanceof Animal && animal.alive){
-
+          if(animal instanceof Wolf){
+            // debugger
+          }
         let newCoords = animal.randomNeighbor();
         let newX = newCoords[0];
         let newY = newCoords[1];
-//check nothing in newCoords
-        // if(this.nextGrid[newX][newY].type == "grass"){
+
+
+
           let newCell = this.nextGrid[newCoords[0]][newCoords[1]];
           // debugger
           newCell.addAnimal(animal);
