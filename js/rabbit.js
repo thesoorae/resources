@@ -20,8 +20,8 @@ class Rabbit extends Animal{
 
 
     this.eat = this.eat.bind(this);
-    this.openSpaces = this.openSpaces.bind(this);
-    this.randomNeighbor = this.randomNeighbor.bind(this);
+    this.availableSpaces = this.availableSpaces.bind(this);
+    // this.randomNeighbor = this.randomNeighbor.bind(this);
     this.mortality = this.mortality.bind(this);
     this.shouldReproduce = this.shouldReproduce.bind(this);
   }
@@ -60,15 +60,15 @@ class Rabbit extends Animal{
 
   }
 
-  openSpaces(){
+  availableSpaces(){
 
     let spaces = [];
-    // debugger
+    
     let neighbors = this.cell.neighbors();
 
     for(let g = 5; g > 0; g --){
       if(spaces.length > 0){
-        return spaces;
+        break;
       } else {
         neighbors.forEach((neighbor) => {
           if(neighbor.type === "grass" && neighbor.grassLevel === g){
@@ -77,19 +77,24 @@ class Rabbit extends Animal{
         });
       }
     }
+
+      spaces = this.shuffle(spaces);
+
+      spaces.push([this.cell.currentX, this.cell.currentY]);
+
     return spaces;
   }
 
-  randomNeighbor(){
-
-   let openSpaces = this.openSpaces();
-   let idx = Math.floor(Math.random() * openSpaces.length);
-   let result = [this.cell.currentX, this.cell.currentY];
-   if(openSpaces[idx] !== undefined){
-     result = [openSpaces[idx][0], openSpaces[idx][1]];
-  }
-    return result;
-  }
+  // randomNeighbor(){
+  //
+  //  let openSpaces = this.openSpaces();
+  //  let idx = Math.floor(Math.random() * openSpaces.length);
+  //  let result = [this.cell.currentX, this.cell.currentY];
+  //  if(openSpaces[idx] !== undefined){
+  //    result = [openSpaces[idx][0], openSpaces[idx][1]];
+  // }
+  //   return result;
+  // }
 
   shouldReproduce(){
   return this.age > this.reproductiveAge && this.food > this.reproductiveFoodRequirement

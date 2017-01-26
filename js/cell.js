@@ -4,11 +4,13 @@ const Animal = require('./animal.js');
 
 
 class Cell {
-  constructor(board, x, y){
+  constructor(params, board, x, y){
     this.type = "grass";
     this.currentX = x;
     this.currentY = y;
-    this.grassLevel = 4;
+    this.grassLevel = parseInt(params['grass-start']);
+    this.grassGrowRate = parseInt(params['grass-rate']);
+    this.grassMax = parseInt(params['grass-max'])
     // this.animal = animal;
     this.board = board;
     this.animal = null;
@@ -84,8 +86,8 @@ updateGrass(){
       if(this.type === "rabbit"){
         this.animal.eat();
       }
-        else if(this.grassLevel < 5){
-      this.grassLevel ++;
+        else if(this.grassLevel < this.grassMax){
+      this.grassLevel += this.grassGrowRate;
     }
 
     if(this.grassLevel < 0) {

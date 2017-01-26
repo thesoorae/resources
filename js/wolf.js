@@ -16,7 +16,7 @@ constructor(cell){
   this.reproductiveFoodRequirement = 20;
 
   this.randomNeighbor = this.randomNeighbor.bind(this);
-  this.openSpaces = this.openSpaces.bind(this);
+  this.availableSpaces = this.availableSpaces.bind(this);
   this.eat = this.eat.bind(this);
   this.shouldReproduce = this.shouldReproduce.bind(this);
   this.mortality = this.mortality.bind(this);
@@ -32,7 +32,7 @@ mortality(){
   }
 
 }
-openSpaces(){
+availableSpaces(){
   let neighbors = this.cell.neighbors();
 
   let rabbitSpaces = [];
@@ -53,7 +53,7 @@ openSpaces(){
 
 randomNeighbor(){
 
- let openSpaces = this.openSpaces();
+ let openSpaces = this.availableSpaces();
  let idx = Math.floor(Math.random() * openSpaces.length);
  let result = [this.cell.currentX, this.cell.currentY];
  if(openSpaces[idx] !== undefined){

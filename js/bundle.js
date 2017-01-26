@@ -45,6 +45,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	const Board = __webpack_require__(1);
+	const Controls = __webpack_require__(6);
 	
 	
 	document.addEventListener("DOMContentLoaded", function(){
@@ -58,12 +59,124 @@
 	  frame.style.height = 700;
 	  canvas.style.width = canvas.width;
 	  canvas.style.height = canvas.height;
+	
+	
 	  let board = new Board(frame, ctx);
 	  board.start();
+	
+	  createControls(board);
+	
 	  canvas.onclick = function fun() {
 	        board.toggleGame();
 	      };
 	    });
+	const createControls = (board) => {
+	  let prey_params = {
+	    'init-food': 1,
+	      'm-rate': 2,
+	      'm-age': 17,
+	      'r-age': 5,
+	      'r-food': 25,
+	      'max-food':25
+	    };
+	  let predator_params = {
+	      'pred-init-food': 50,
+	      'pred-m-rate': 4,
+	      'pred-m-age': 50,
+	      'pred-r-age': 10,
+	      'pred-r-food': 20,
+	      'pred-max-food':200
+	    };
+	  let grass_params = {
+	      'grass-rate': 1,
+	      'grass-start': 3,
+	      'grass-max':5,
+	    };
+	//prey hard code controls
+	
+	  const initial_food = document.getElementById('initial-food-slider');
+	  const metabolism = document.getElementById('metabolism-slider');
+	  const max_age = document.getElementById('max-age-slider');
+	  const repro_age = document.getElementById('repro-age-slider');
+	  const repro_food = document.getElementById('repro-food-slider');
+	  const max_food = document.getElementById('max-food-slider');
+	
+	  initial_food.oninput = () => {
+	    outputUpdate('init-food', initial_food.value);}
+	
+	  metabolism.oninput = () => {
+	    outputUpdate('m-rate', metabolism.value);}
+	
+	  max_age.oninput = () => {
+	    outputUpdate('m-age', max_age.value);}
+	
+	  repro_age.oninput = () => {
+	    outputUpdate('r-age', repro_age.value);}
+	
+	  repro_food.oninput = () => {
+	    outputUpdate('r-food', repro_food.value);}
+	
+	  max_food.oninput = () => {
+	    outputUpdate('max-food', max_food.value);}
+	
+	    const outputUpdate = (output_id, val) => {
+	      prey_params[output_id] = val;
+	      document.querySelector(`#${output_id}`).value = val;
+	    }
+	
+	    const pred_initial_food = document.getElementById('pred-initial-food-slider');
+	    const pred_metabolism = document.getElementById('pred-metabolism-slider');
+	    const pred_max_age = document.getElementById('pred-max-age-slider');
+	    const pred_repro_age = document.getElementById('pred-repro-age-slider');
+	    const pred_repro_food = document.getElementById('pred-repro-food-slider');
+	    const pred_max_food = document.getElementById('pred-max-food-slider');
+	
+	
+	    pred_initial_food.oninput = () => {
+	      predOutputUpdate('pred-init-food', pred_initial_food.value);}
+	
+	    pred_metabolism.oninput = () => {
+	      predOutputUpdate('pred-m-rate', pred_metabolism.value);}
+	
+	    pred_max_age.oninput = () => {
+	      predOutputUpdate('pred-m-age', pred_max_age.value);}
+	
+	    pred_repro_age.oninput = () => {
+	      predOutputUpdate('pred-r-age', pred_repro_age.value);}
+	
+	    pred_repro_food.oninput = () => {
+	      predOutputUpdate('pred-r-food', pred_repro_food.value);}
+	
+	    pred_max_food.oninput = () => {
+	      predOutputUpdate('pred-max-food', pred_max_food.value);}
+	
+	  const predOutputUpdate = (output_id, val) => {
+	    predator_params[output_id] = val;
+	    document.querySelector(`#${output_id}`).value = val;}
+	
+	  const grass_rate = document.getElementById('grass-slider');
+	    grass_rate.oninput = () => {
+	      grassUpdate('grass-rate', grass_rate.value);}
+	
+	  const grass_start = document.getElementById('grass-start-slider');
+	    grass_start.oninput = () => {
+	      grassUpdate('grass-start', grass_start.value);}
+	
+	  const grass_max = document.getElementById('grass-max-slider');
+	    grass_max.oninput = () => {
+	      grassUpdate('grass-max', grass_max.value);}
+	
+	  const grassUpdate = (output_id, val) => {
+	    grass_params['output_id'] = val;
+	    document.querySelector(`#${output_id}`).value = val;
+	}
+	
+	const startButton = document.getElementById('start-game');
+	startButton.onclick = () => {
+	  console.log(prey_params, predator_params, grass_params);
+	  board.getParamsStart(prey_params, predator_params, grass_params);
+	}
+	}
 
 
 /***/ },
@@ -97,6 +210,10 @@
 	    this.play = false;
 	    this.lastTime = 0;
 	
+	    this.preyParams = {};
+	    this.predatorParams = {};
+	    this.grassParams = {};
+	
 	    this.draw = this.draw.bind(this);
 	    this.setupGrid = this.setupGrid.bind(this);
 	    this.start = this.start.bind(this);
@@ -107,15 +224,21 @@
 	    this.updateCell = this.updateCell.bind(this);
 	    this.toggleGame = this.toggleGame.bind(this);
 	    this.transitionBG = this.transitionBG.bind(this);
+	    this.getParamsStart = this.getParamsStart.bind(this);
 	
 	  }
 	
-	
+	getParamsStart(prey, predator, grass){
+	  this.preyParams = prey;
+	  this.predatorParams = predator;
+	  this.grassParams = grass;
+	  this.toggleGame();
+	}
 	
 	  transitionBG(){
 	    let bg_images = this.frame.childNodes;
 	
-	    if(this.rabbitCount > 400){
+	    if(this.rabbitCount > 350){
 	      bg_images[1].className = "visible";
 	      bg_images[3].className = "transparent";
 	      bg_images[5].className = "transparent";
@@ -153,19 +276,19 @@
 	      this.nextGrid[x] =  [];
 	      for( let y = 0; y< this.canvasHeight; y++ ){
 	        this.grid[x][y] = [];
-	        this.nextGrid[x][y] = new Cell(this.board, x,y, "grass");
+	        this.nextGrid[x][y] = new Cell(this.grassParams, this.board, x,y, "grass");
 	
 	  //EDIT
 	
 	        let rand = Math.random()*100;
 	        if(rand > 98){
-	          this.grid[x][y] = new Cell(this.board, x,y);
+	          this.grid[x][y] = new Cell(this.grassParams, this.board, x,y);
 	          this.grid[x][y].addNewWolf();
 	        } else if(rand > 90 ){
-	          this.grid[x][y] = new Cell(this.board, x,y);
+	          this.grid[x][y] = new Cell(this.grassParams, this.board, x,y);
 	          this.grid[x][y].addNewRabbit();
 	        } else {
-	          this.grid[x][y] = new Cell(this.board, x,y, "grass");
+	          this.grid[x][y] = new Cell(this.grassParams, this.board, x,y, "grass");
 	        }
 	      }
 	    }
@@ -255,19 +378,32 @@
 	      for( let y = 0; y < this.canvasHeight; y++){
 	        this.updateCell(x,y);
 	        let animal = this.grid[x][y].previousAnimal;
+	
+	
+	
+	
 	        if(animal instanceof Animal && animal.alive){
-	          if(animal instanceof Wolf){
-	            // debugger
-	          }
-	        let newCoords = animal.randomNeighbor();
-	        let newX = newCoords[0];
-	        let newY = newCoords[1];
+	          if(animal instanceof Rabbit){
+	            let availableSpaces = animal.availableSpaces();
 	
-	
-	
-	          let newCell = this.nextGrid[newCoords[0]][newCoords[1]];
+	            for(let i = 0; i < availableSpaces.length ; i++){
+	              let newCoords = availableSpaces[i]
+	              let newX = newCoords[0];
+	              let newY = newCoords[1];
+	              let newCell = this.nextGrid[newX][newY];
+	              if(newCell.animal == null){
+	                newCell.addAnimal(animal);
+	                break;
+	              }
+	            }
+	          } else if(animal instanceof Wolf){
+	            let newCoords = animal.randomNeighbor();
+	            let newX = newCoords[0];
+	            let newY = newCoords[1];
+	            let newCell = this.nextGrid[newCoords[0]][newCoords[1]];
 	          // debugger
 	          newCell.addAnimal(animal);
+	          }
 	
 	          if(animal.shouldReproduce()){
 	
@@ -333,11 +469,13 @@
 	
 	
 	class Cell {
-	  constructor(board, x, y){
+	  constructor(params, board, x, y){
 	    this.type = "grass";
 	    this.currentX = x;
 	    this.currentY = y;
-	    this.grassLevel = 4;
+	    this.grassLevel = parseInt(params['grass-start']);
+	    this.grassGrowRate = parseInt(params['grass-rate']);
+	    this.grassMax = parseInt(params['grass-max'])
 	    // this.animal = animal;
 	    this.board = board;
 	    this.animal = null;
@@ -413,8 +551,8 @@
 	      if(this.type === "rabbit"){
 	        this.animal.eat();
 	      }
-	        else if(this.grassLevel < 5){
-	      this.grassLevel ++;
+	        else if(this.grassLevel < this.grassMax){
+	      this.grassLevel += this.grassGrowRate;
 	    }
 	
 	    if(this.grassLevel < 0) {
@@ -470,8 +608,8 @@
 	
 	
 	    this.eat = this.eat.bind(this);
-	    this.openSpaces = this.openSpaces.bind(this);
-	    this.randomNeighbor = this.randomNeighbor.bind(this);
+	    this.availableSpaces = this.availableSpaces.bind(this);
+	    // this.randomNeighbor = this.randomNeighbor.bind(this);
 	    this.mortality = this.mortality.bind(this);
 	    this.shouldReproduce = this.shouldReproduce.bind(this);
 	  }
@@ -510,15 +648,15 @@
 	
 	  }
 	
-	  openSpaces(){
+	  availableSpaces(){
 	
 	    let spaces = [];
-	    // debugger
+	    
 	    let neighbors = this.cell.neighbors();
 	
 	    for(let g = 5; g > 0; g --){
 	      if(spaces.length > 0){
-	        return spaces;
+	        break;
 	      } else {
 	        neighbors.forEach((neighbor) => {
 	          if(neighbor.type === "grass" && neighbor.grassLevel === g){
@@ -527,19 +665,24 @@
 	        });
 	      }
 	    }
+	
+	      spaces = this.shuffle(spaces);
+	
+	      spaces.push([this.cell.currentX, this.cell.currentY]);
+	
 	    return spaces;
 	  }
 	
-	  randomNeighbor(){
-	
-	   let openSpaces = this.openSpaces();
-	   let idx = Math.floor(Math.random() * openSpaces.length);
-	   let result = [this.cell.currentX, this.cell.currentY];
-	   if(openSpaces[idx] !== undefined){
-	     result = [openSpaces[idx][0], openSpaces[idx][1]];
-	  }
-	    return result;
-	  }
+	  // randomNeighbor(){
+	  //
+	  //  let openSpaces = this.openSpaces();
+	  //  let idx = Math.floor(Math.random() * openSpaces.length);
+	  //  let result = [this.cell.currentX, this.cell.currentY];
+	  //  if(openSpaces[idx] !== undefined){
+	  //    result = [openSpaces[idx][0], openSpaces[idx][1]];
+	  // }
+	  //   return result;
+	  // }
 	
 	  shouldReproduce(){
 	  return this.age > this.reproductiveAge && this.food > this.reproductiveFoodRequirement
@@ -560,6 +703,7 @@
 	    this.alive = true;
 	    this.updateCell = this.updateCell.bind(this);
 	    this.kill = this.kill.bind(this);
+	    this.shuffle = this.shuffle.bind(this);
 	  }
 	
 	updateCell(cell){
@@ -568,6 +712,16 @@
 	kill(){
 	  this.alive = false;
 	}
+	
+	shuffle(a) {
+	    for (let i = a.length; i; i--) {
+	        let j = Math.floor(Math.random() * i);
+	        [a[i - 1], a[j]] = [a[j], a[i - 1]];
+	    }
+	    return a;
+	}
+	
+	
 	}
 	
 	module.exports = Animal;
@@ -595,7 +749,7 @@
 	  this.reproductiveFoodRequirement = 20;
 	
 	  this.randomNeighbor = this.randomNeighbor.bind(this);
-	  this.openSpaces = this.openSpaces.bind(this);
+	  this.availableSpaces = this.availableSpaces.bind(this);
 	  this.eat = this.eat.bind(this);
 	  this.shouldReproduce = this.shouldReproduce.bind(this);
 	  this.mortality = this.mortality.bind(this);
@@ -611,7 +765,7 @@
 	  }
 	
 	}
-	openSpaces(){
+	availableSpaces(){
 	  let neighbors = this.cell.neighbors();
 	
 	  let rabbitSpaces = [];
@@ -632,7 +786,7 @@
 	
 	randomNeighbor(){
 	
-	 let openSpaces = this.openSpaces();
+	 let openSpaces = this.availableSpaces();
 	 let idx = Math.floor(Math.random() * openSpaces.length);
 	 let result = [this.cell.currentX, this.cell.currentY];
 	 if(openSpaces[idx] !== undefined){
@@ -661,6 +815,119 @@
 	}
 	
 	module.exports = Wolf;
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	const createControls = (board) => {
+	  let prey_params = {
+	    'init-food': 1,
+	      'm-rate': 2,
+	      'm-age': 17,
+	      'r-age': 5,
+	      'r-food': 25,
+	      'max-food':25
+	    };
+	  let predator_params = {
+	      'pred-init-food': 50,
+	      'pred-m-rate': 4,
+	      'pred-m-age': 50,
+	      'pred-r-age': 10,
+	      'pred-r-food': 20,
+	      'pred-max-food':200
+	    };
+	  let grass_params = {
+	      'grass-rate': 1,
+	      'grass-start': 3,
+	      'grass-max':5,
+	    };
+	//prey hard code controls
+	
+	  const initial_food = document.getElementById('initial-food-slider');
+	  const metabolism = document.getElementById('metabolism-slider');
+	  const max_age = document.getElementById('max-age-slider');
+	  const repro_age = document.getElementById('repro-age-slider');
+	  const repro_food = document.getElementById('repro-food-slider');
+	  const max_food = document.getElementById('max-food-slider');
+	
+	  initial_food.oninput = () => {
+	    outputUpdate('init-food', initial_food.value);}
+	
+	  metabolism.oninput = () => {
+	    outputUpdate('m-rate', metabolism.value);}
+	
+	  max_age.oninput = () => {
+	    outputUpdate('m-age', max_age.value);}
+	
+	  repro_age.oninput = () => {
+	    outputUpdate('r-age', repro_age.value);}
+	
+	  repro_food.oninput = () => {
+	    outputUpdate('r-food', repro_food.value);}
+	
+	  max_food.oninput = () => {
+	    outputUpdate('max-food', max_food.value);}
+	
+	    const outputUpdate = (output_id, val) => {
+	      prey_params[output_id] = val;
+	      document.querySelector(`#${output_id}`).value = val;
+	    }
+	
+	    const pred_initial_food = document.getElementById('pred-initial-food-slider');
+	    const pred_metabolism = document.getElementById('pred-metabolism-slider');
+	    const pred_max_age = document.getElementById('pred-max-age-slider');
+	    const pred_repro_age = document.getElementById('pred-repro-age-slider');
+	    const pred_repro_food = document.getElementById('pred-repro-food-slider');
+	    const pred_max_food = document.getElementById('pred-max-food-slider');
+	
+	
+	    pred_initial_food.oninput = () => {
+	      predOutputUpdate('pred-init-food', pred_initial_food.value);}
+	
+	    pred_metabolism.oninput = () => {
+	      predOutputUpdate('pred-m-rate', pred_metabolism.value);}
+	
+	    pred_max_age.oninput = () => {
+	      predOutputUpdate('pred-m-age', pred_max_age.value);}
+	
+	    pred_repro_age.oninput = () => {
+	      predOutputUpdate('pred-r-age', pred_repro_age.value);}
+	
+	    pred_repro_food.oninput = () => {
+	      predOutputUpdate('pred-r-food', pred_repro_food.value);}
+	
+	    pred_max_food.oninput = () => {
+	      predOutputUpdate('pred-max-food', pred_max_food.value);}
+	
+	  const predOutputUpdate = (output_id, val) => {
+	    predator_params[output_id] = val;
+	    document.querySelector(`#${output_id}`).value = val;}
+	
+	  const grass_rate = document.getElementById('grass-slider');
+	    grass_rate.oninput = () => {
+	      grassUpdate('grass-rate', grass_rate.value);}
+	
+	  const grass_start = document.getElementById('grass-start-slider');
+	    grass_start.oninput = () => {
+	      grassUpdate('grass-start', grass_start.value);}
+	
+	  const grass_max = document.getElementById('grass-max-slider');
+	    grass_max.oninput = () => {
+	      grassUpdate('grass-max', grass_max.value);}
+	
+	  const grassUpdate = (output_id, val) => {
+	    grass_params['output_id'] = val;
+	    document.querySelector(`#${output_id}`).value = val;
+	}
+	
+	const startButton = document.getElementById('start-game');
+	startButton.onclick = () => {
+	  console.log(prey_params, predator_params, grass_params);
+	  board.getParamsStart(prey_params, predator_params, grass_params);
+	}
+	}
 
 
 /***/ }

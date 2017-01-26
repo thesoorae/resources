@@ -7,6 +7,7 @@ canvas{
 div.frame {
   position:relative;
   background-size: cover;
+
 }
 #frame img {
   z-index: -100;
@@ -34,4 +35,27 @@ opacity:0;
 }
 
 input[type=range]{
+}
+
+div.game-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  vertical-align: middle;
+}
+
+div.controls{
+  margin: 30px;
+  background-color: white;
+}
+
+.controls {
+  padding: 20px;
+}
+
+div#prey-controls, #predator-controls, #grass-controls{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }

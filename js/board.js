@@ -25,6 +25,10 @@ class Board{
     this.play = false;
     this.lastTime = 0;
 
+    this.preyParams = {};
+    this.predatorParams = {};
+    this.grassParams = {};
+
     this.draw = this.draw.bind(this);
     this.setupGrid = this.setupGrid.bind(this);
     this.start = this.start.bind(this);
@@ -35,15 +39,21 @@ class Board{
     this.updateCell = this.updateCell.bind(this);
     this.toggleGame = this.toggleGame.bind(this);
     this.transitionBG = this.transitionBG.bind(this);
+    this.getParamsStart = this.getParamsStart.bind(this);
 
   }
 
-
+getParamsStart(prey, predator, grass){
+  this.preyParams = prey;
+  this.predatorParams = predator;
+  this.grassParams = grass;
+  this.toggleGame();
+}
 
   transitionBG(){
     let bg_images = this.frame.childNodes;
 
-    if(this.rabbitCount > 400){
+    if(this.rabbitCount > 350){
       bg_images[1].className = "visible";
       bg_images[3].className = "transparent";
       bg_images[5].className = "transparent";
@@ -81,19 +91,19 @@ class Board{
       this.nextGrid[x] =  [];
       for( let y = 0; y< this.canvasHeight; y++ ){
         this.grid[x][y] = [];
-        this.nextGrid[x][y] = new Cell(this.board, x,y, "grass");
+        this.nextGrid[x][y] = new Cell(this.grassParams, this.board, x,y, "grass");
 
   //EDIT
 
         let rand = Math.random()*100;
         if(rand > 98){
-          this.grid[x][y] = new Cell(this.board, x,y);
+          this.grid[x][y] = new Cell(this.grassParams, this.board, x,y);
           this.grid[x][y].addNewWolf();
         } else if(rand > 90 ){
-          this.grid[x][y] = new Cell(this.board, x,y);
+          this.grid[x][y] = new Cell(this.grassParams, this.board, x,y);
           this.grid[x][y].addNewRabbit();
         } else {
-          this.grid[x][y] = new Cell(this.board, x,y, "grass");
+          this.grid[x][y] = new Cell(this.grassParams, this.board, x,y, "grass");
         }
       }
     }
@@ -183,19 +193,32 @@ class Board{
       for( let y = 0; y < this.canvasHeight; y++){
         this.updateCell(x,y);
         let animal = this.grid[x][y].previousAnimal;
+
+
+
+
         if(animal instanceof Animal && animal.alive){
-          if(animal instanceof Wolf){
-            // debugger
-          }
-        let newCoords = animal.randomNeighbor();
-        let newX = newCoords[0];
-        let newY = newCoords[1];
+          if(animal instanceof Rabbit){
+            let availableSpaces = animal.availableSpaces();
 
-
-
-          let newCell = this.nextGrid[newCoords[0]][newCoords[1]];
+            for(let i = 0; i < availableSpaces.length ; i++){
+              let newCoords = availableSpaces[i]
+              let newX = newCoords[0];
+              let newY = newCoords[1];
+              let newCell = this.nextGrid[newX][newY];
+              if(newCell.animal == null){
+                newCell.addAnimal(animal);
+                break;
+              }
+            }
+          } else if(animal instanceof Wolf){
+            let newCoords = animal.randomNeighbor();
+            let newX = newCoords[0];
+            let newY = newCoords[1];
+            let newCell = this.nextGrid[newCoords[0]][newCoords[1]];
           // debugger
           newCell.addAnimal(animal);
+          }
 
           if(animal.shouldReproduce()){
 
