@@ -24,7 +24,6 @@ class Rabbit extends Animal{
     this.randomNeighbor = this.randomNeighbor.bind(this);
     this.mortality = this.mortality.bind(this);
     this.shouldReproduce = this.shouldReproduce.bind(this);
-    this.kill = this.kill.bind(this);
   }
   newCell(cell){
     this.cell = cell;
@@ -43,17 +42,14 @@ class Rabbit extends Animal{
     this.cell.eatGrass(neededFood);
     this.food -= this.metabolicRate;
   }
-  this.mortality();
 
   }
 
-  kill(){
-    this.alive = false;
-  }
+
 
   mortality(){
     this.age ++;
-    if(this.maxAge > 20 || this.food < 1){
+    if(this.age > this.maxAge || this.food < 1){
       this.kill();
     }
 

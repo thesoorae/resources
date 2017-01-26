@@ -3,24 +3,40 @@ const Animal = require('./animal.js');
 class Wolf extends Animal{
 constructor(cell){
   super(cell);
-  this.food = 0;
+  this.food = 50;
   this.age = 0;
   this.name = "wolf";
   this.alive = true;
+
+
+  this.maxAge = 20;
+  this.maxFood = 200;
+  this.metabolicRate = 15;
 
   this.randomNeighbor = this.randomNeighbor.bind(this);
   this.openSpaces = this.openSpaces.bind(this);
   this.eat = this.eat.bind(this);
   this.shouldReproduce = this.shouldReproduce.bind(this);
+  this.mortality = this.mortality.bind(this);
 }
 
+
+
+mortality(){
+  this.age ++;
+  this.food -= this.metabolicRate;
+  if(this.age > this.maxAge || this.food < 1){
+    this.kill();
+  }
+
+}
 openSpaces(){
   let neighbors = this.cell.neighbors();
 
   let rabbitSpaces = [];
   let emptySpaces = [];
     neighbors.forEach((neighbor) => {
-      
+
     if(neighbor.type == "rabbit"){
       rabbitSpaces.push(neighbor);
     } else if(neighbor.type == "grass"){
@@ -49,7 +65,7 @@ randomNeighbor(){
 
 eat(rabbit){
   if(rabbit !== null){
-    if(this.food < 200){
+    if(this.food < this.maxFood){
       this.food += rabbit.food;
       rabbit.kill();
     }

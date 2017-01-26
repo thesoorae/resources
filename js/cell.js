@@ -1,5 +1,7 @@
 const Rabbit = require('./rabbit');
 const Wolf = require('./wolf');
+const Animal = require('./animal.js');
+
 
 class Cell {
   constructor(board, x, y){
@@ -76,9 +78,12 @@ eatGrass(amt){
 
 updateGrass(){
 //decreases grass level if there is a rabbit
-    if(this.type === "rabbit"){
+    if(this.animal instanceof Animal){
+      this.animal.mortality();}
+
+      if(this.type === "rabbit"){
         this.animal.eat();
-        }
+      }
         else if(this.grassLevel < 5){
       this.grassLevel ++;
     }

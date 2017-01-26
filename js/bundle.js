@@ -271,6 +271,8 @@
 
 	const Rabbit = __webpack_require__(3);
 	const Wolf = __webpack_require__(5);
+	const Animal = __webpack_require__(4);
+	
 	
 	class Cell {
 	  constructor(board, x, y){
@@ -347,9 +349,12 @@
 	
 	updateGrass(){
 	//decreases grass level if there is a rabbit
-	    if(this.type === "rabbit"){
+	    if(this.animal instanceof Animal){
+	      this.animal.mortality();}
+	
+	      if(this.type === "rabbit"){
 	        this.animal.eat();
-	        }
+	      }
 	        else if(this.grassLevel < 5){
 	      this.grassLevel ++;
 	    }
@@ -411,7 +416,6 @@
 	    this.randomNeighbor = this.randomNeighbor.bind(this);
 	    this.mortality = this.mortality.bind(this);
 	    this.shouldReproduce = this.shouldReproduce.bind(this);
-	    this.kill = this.kill.bind(this);
 	  }
 	  newCell(cell){
 	    this.cell = cell;
@@ -430,17 +434,14 @@
 	    this.cell.eatGrass(neededFood);
 	    this.food -= this.metabolicRate;
 	  }
-	  this.mortality();
 	
 	  }
 	
-	  kill(){
-	    this.alive = false;
-	  }
+	
 	
 	  mortality(){
 	    this.age ++;
-	    if(this.maxAge > 20 || this.food < 1){
+	    if(this.age > this.maxAge || this.food < 1){
 	      this.kill();
 	    }
 	
@@ -498,14 +499,17 @@
 	class Animal{
 	  constructor(cell){
 	    this.cell = cell;
-	    
+	    this.alive = true;
 	    this.updateCell = this.updateCell.bind(this);
+	    this.kill = this.kill.bind(this);
 	  }
 	
 	updateCell(cell){
 	  this.cell = cell;
 	}
-	
+	kill(){
+	  this.alive = false;
+	}
 	}
 	
 	module.exports = Animal;
@@ -520,24 +524,40 @@
 	class Wolf extends Animal{
 	constructor(cell){
 	  super(cell);
-	  this.food = 0;
+	  this.food = 50;
 	  this.age = 0;
 	  this.name = "wolf";
 	  this.alive = true;
+	
+	
+	  this.maxAge = 20;
+	  this.maxFood = 200;
+	  this.metabolicRate = 15;
 	
 	  this.randomNeighbor = this.randomNeighbor.bind(this);
 	  this.openSpaces = this.openSpaces.bind(this);
 	  this.eat = this.eat.bind(this);
 	  this.shouldReproduce = this.shouldReproduce.bind(this);
+	  this.mortality = this.mortality.bind(this);
 	}
 	
+	
+	
+	mortality(){
+	  this.age ++;
+	  this.food -= this.metabolicRate;
+	  if(this.age > this.maxAge || this.food < 1){
+	    this.kill();
+	  }
+	
+	}
 	openSpaces(){
 	  let neighbors = this.cell.neighbors();
 	
 	  let rabbitSpaces = [];
 	  let emptySpaces = [];
 	    neighbors.forEach((neighbor) => {
-	      
+	
 	    if(neighbor.type == "rabbit"){
 	      rabbitSpaces.push(neighbor);
 	    } else if(neighbor.type == "grass"){
@@ -566,7 +586,7 @@
 	
 	eat(rabbit){
 	  if(rabbit !== null){
-	    if(this.food < 200){
+	    if(this.food < this.maxFood){
 	      this.food += rabbit.food;
 	      rabbit.kill();
 	    }
