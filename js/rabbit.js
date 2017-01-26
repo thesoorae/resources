@@ -9,10 +9,10 @@ class Rabbit extends Animal{
     this.name = "rabbit";
 
     this.maxFood = 45;
-    this.metabolicRate = 3;
-    this.maxAge = 10;
+    this.metabolicRate = 2;
+    this.maxAge = 14;
     this.reproductiveAge = 5;
-    this.reproductiveFoodRequirement = 5;
+    this.reproductiveFoodRequirement = 15;
 
     // this.currentX = x;
     // this.currentY = y;

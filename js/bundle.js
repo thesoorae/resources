@@ -50,11 +50,15 @@
 	document.addEventListener("DOMContentLoaded", function(){
 	  const canvas = document.getElementById('gameCanvas');
 	  const ctx = canvas.getContext('2d');
+	  const frame = document.getElementById('frame');
 	  canvas.width = 10 * 50;
-	  canvas.height = 10 * 50;
+	  // 10 * 50;
+	  canvas.height = 10* 50;
+	  frame.style.width = 1400;
+	  frame.style.height = 700;
 	  canvas.style.width = canvas.width;
 	  canvas.style.height = canvas.height;
-	  let board = new Board(ctx);
+	  let board = new Board(frame, ctx);
 	  board.start();
 	  canvas.onclick = function fun() {
 	        board.toggleGame();
@@ -72,7 +76,8 @@
 	const Animal = __webpack_require__(4);
 	
 	class Board{
-	  constructor(ctx){
+	  constructor(frame, ctx){
+	    this.frame = frame;
 	    this.ctx = ctx;
 	    this.width = 10;
 	    this.canvasWidth = 50;
@@ -100,8 +105,48 @@
 	    this.gameLoop = this.gameLoop.bind(this);
 	    this.updateCell = this.updateCell.bind(this);
 	    this.toggleGame = this.toggleGame.bind(this);
+	    this.transitionBG = this.transitionBG.bind(this);
 	
 	  }
+	
+	  transitionBackground(){
+	    if(this.steps > 60){
+	      this.frame.style.backgroundImage = "url('http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485406390/other/overgrazed2.jpg')";
+	    } else if(this.steps > 30){
+	      this.frame.style.backgroundImage = "url('http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485406391/other/dying_forest.jpg')";
+	    }
+	    else {
+	      this.frame.style.backgroundImage = "url('http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485406391/other/forest-07.jpg')";
+	    }
+	    this.frame.style.backgroundSize="cover";
+	  }
+	
+	  transitionBG(){
+	    let bg_images = this.frame.childNodes;
+	
+	    if(this.rabbitCount > 300){
+	      bg_images[1].className = "visible";
+	      bg_images[3].className = "transparent";
+	      bg_images[5].className = "transparent";
+	      bg_images[7].className = "transparent";
+	    } else if(this.rabbitCount > 200){
+	      bg_images[1].className = "transparent";
+	      bg_images[3].className = "visible";
+	      bg_images[5].className = "transparent";
+	      bg_images[7].className = "transparent";
+	    } else if(this.rabbitCount > 10){
+	      bg_images[1].className = "transparent";
+	      bg_images[3].className = "transparent";
+	      bg_images[5].className = "visible";
+	      bg_images[7].className = "transparent";
+	    } else {
+	      bg_images[1].className = "transparent";
+	      bg_images[3].className = "transparent";
+	      bg_images[5].className = "transparent";
+	      bg_images[7].className = "visible";
+	    }
+	  }
+	
 	  patch(x,y){
 	    return this.grid[x][y];
 	  }
@@ -136,11 +181,12 @@
 	  }
 	
 	  draw(){
+	
 	    let ctx = this.ctx;
 	    let gridSquareWidth = this.width;
 	    let grassColor = "#009900";
-	
-	    for (let x = 0; x < this.canvasWidth; x++) {
+	    let start_x = 30;
+	    for (let x =0; x < this.canvasWidth; x++) {
 	  		for (let y = 0; y < this.canvasWidth; y++) {
 	        let patch = this.patch(x,y);
 	  			if (patch.type == "rabbit") {
@@ -179,6 +225,8 @@
 	        }
 	  		}
 	  	}
+	    this.transitionBG();
+	
 	    console.log("rabbit count", this.rabbitCount);
 	    console.log("dead rabbits", this.deadRabbits);
 	    console.log("birthed rabbits", this.birthedRabbits);
@@ -251,7 +299,7 @@
 	      this.step(dt);
 	
 	      this.lastTime = now;
-	  	window.setTimeout(this.gameLoop, 100);
+	  	window.setTimeout(this.gameLoop, 200);
 	  }}
 	
 	  toggleGame(){
@@ -376,7 +424,7 @@
 	moveAnimal(){
 	  console.log("in move animal");
 	  if(this.type === "rabbit"){
-	debugger
+	
 	  return this.animal.move();
 	  }
 	}
@@ -401,10 +449,10 @@
 	    this.name = "rabbit";
 	
 	    this.maxFood = 45;
-	    this.metabolicRate = 3;
-	    this.maxAge = 10;
+	    this.metabolicRate = 2;
+	    this.maxAge = 14;
 	    this.reproductiveAge = 5;
-	    this.reproductiveFoodRequirement = 5;
+	    this.reproductiveFoodRequirement = 15;
 	
 	    // this.currentX = x;
 	    // this.currentY = y;
@@ -530,9 +578,9 @@
 	  this.alive = true;
 	
 	
-	  this.maxAge = 20;
+	  this.maxAge = 3000;
 	  this.maxFood = 200;
-	  this.metabolicRate = 15;
+	  this.metabolicRate = 7;
 	
 	  this.randomNeighbor = this.randomNeighbor.bind(this);
 	  this.openSpaces = this.openSpaces.bind(this);

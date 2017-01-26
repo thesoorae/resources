@@ -105,7 +105,7 @@ updateGrass(){
 moveAnimal(){
   console.log("in move animal");
   if(this.type === "rabbit"){
-debugger
+
   return this.animal.move();
   }
 }

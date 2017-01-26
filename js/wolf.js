@@ -9,9 +9,9 @@ constructor(cell){
   this.alive = true;
 
 
-  this.maxAge = 20;
+  this.maxAge = 3000;
   this.maxFood = 200;
-  this.metabolicRate = 15;
+  this.metabolicRate = 7;
 
   this.randomNeighbor = this.randomNeighbor.bind(this);
   this.openSpaces = this.openSpaces.bind(this);

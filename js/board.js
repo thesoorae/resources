@@ -4,7 +4,8 @@ const Wolf = require('./wolf');
 const Animal = require('./animal');
 
 class Board{
-  constructor(ctx){
+  constructor(frame, ctx){
+    this.frame = frame;
     this.ctx = ctx;
     this.width = 10;
     this.canvasWidth = 50;
@@ -32,8 +33,48 @@ class Board{
     this.gameLoop = this.gameLoop.bind(this);
     this.updateCell = this.updateCell.bind(this);
     this.toggleGame = this.toggleGame.bind(this);
+    this.transitionBG = this.transitionBG.bind(this);
 
   }
+
+  transitionBackground(){
+    if(this.steps > 60){
+      this.frame.style.backgroundImage = "url('http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485406390/other/overgrazed2.jpg')";
+    } else if(this.steps > 30){
+      this.frame.style.backgroundImage = "url('http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485406391/other/dying_forest.jpg')";
+    }
+    else {
+      this.frame.style.backgroundImage = "url('http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485406391/other/forest-07.jpg')";
+    }
+    this.frame.style.backgroundSize="cover";
+  }
+
+  transitionBG(){
+    let bg_images = this.frame.childNodes;
+
+    if(this.rabbitCount > 300){
+      bg_images[1].className = "visible";
+      bg_images[3].className = "transparent";
+      bg_images[5].className = "transparent";
+      bg_images[7].className = "transparent";
+    } else if(this.rabbitCount > 200){
+      bg_images[1].className = "transparent";
+      bg_images[3].className = "visible";
+      bg_images[5].className = "transparent";
+      bg_images[7].className = "transparent";
+    } else if(this.rabbitCount > 10){
+      bg_images[1].className = "transparent";
+      bg_images[3].className = "transparent";
+      bg_images[5].className = "visible";
+      bg_images[7].className = "transparent";
+    } else {
+      bg_images[1].className = "transparent";
+      bg_images[3].className = "transparent";
+      bg_images[5].className = "transparent";
+      bg_images[7].className = "visible";
+    }
+  }
+
   patch(x,y){
     return this.grid[x][y];
   }
@@ -68,11 +109,12 @@ class Board{
   }
 
   draw(){
+
     let ctx = this.ctx;
     let gridSquareWidth = this.width;
     let grassColor = "#009900";
-
-    for (let x = 0; x < this.canvasWidth; x++) {
+    let start_x = 30;
+    for (let x =0; x < this.canvasWidth; x++) {
   		for (let y = 0; y < this.canvasWidth; y++) {
         let patch = this.patch(x,y);
   			if (patch.type == "rabbit") {
@@ -111,6 +153,8 @@ class Board{
         }
   		}
   	}
+    this.transitionBG();
+
     console.log("rabbit count", this.rabbitCount);
     console.log("dead rabbits", this.deadRabbits);
     console.log("birthed rabbits", this.birthedRabbits);
@@ -183,7 +227,7 @@ class Board{
       this.step(dt);
 
       this.lastTime = now;
-  	window.setTimeout(this.gameLoop, 100);
+  	window.setTimeout(this.gameLoop, 200);
   }}
 
   toggleGame(){

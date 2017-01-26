@@ -1,0 +1,25 @@
+canvas{
+  margin:auto;
+  z-index: 300;
+  position: relative;
+}
+div.frame {
+  position:relative;
+  background-size: cover;
+}
+#frame img {
+  position:absolute;
+  left:0;
+  width: 100%;
+  -webkit-transition: opacity 3s ease-out;
+  -moz-transition: opacity 3s ease-out;
+  -o-transition: opacity 3s ease-out;
+  transition: opacity 3s ease-out;
+}
+
+#frame img.visible {
+  opacity: 1;
+}
+#frame img.transparent {
+opacity:0;
+}
