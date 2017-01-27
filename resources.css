@@ -106,9 +106,22 @@ div.game-and-stats {
 }
 
 #stats-panel div{
-  background-color: rgba(255, 255, 255, 0.7);
+  color: white;
   border-radius: 5px;
+  margin: 20px;
+  padding: 10px;
 }
+
+div#prey-stats{
+  background-color: rgba(243, 84, 120,  0.7);
+}
+div#predator-stats{
+  background-color: rgba(0, 0, 0, 0.7);
+}
+div#grass-stats{
+  background-color: rgba(159, 217, 138, 0.7);
+}
+
 
 #stats-panel span{
   font-size: 18px;
