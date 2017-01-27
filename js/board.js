@@ -128,12 +128,12 @@ avgGrass(){
 
         if(rand > (1000 - this.ratio)){
           this.grid[x][y] = new Cell(this.grassParams, this.board, x,y);
-          this.grid[x][y].addNewWolf(this.predatorParams, this.rabbitId);
-          this.rabbitId ++;
+          this.grid[x][y].addNewWolf(this.predatorParams, this.wolfId);
+          this.wolfId ++;
         } else if(rand > 900 ){
           this.grid[x][y] = new Cell(this.grassParams, this.board, x,y);
-          this.grid[x][y].addNewRabbit(this.preyParams, this.wolfId);
-          this.wolfId ++;
+          this.grid[x][y].addNewRabbit(this.preyParams, this.rabbitId);
+          this.rabbitId ++;
         } else {
           this.grid[x][y] = new Cell(this.grassParams, this.board, x,y, "grass");
         }
@@ -212,7 +212,7 @@ avgGrass(){
 
     this.transitionBG();
     //TESTING
-    // console.log("one rabbit", this.oneRabbit);
+    console.log("one rabbit", this.oneRabbit);
     // console.log("one wolf", this.oneWolf);
     this.updateStats();
 
@@ -270,12 +270,13 @@ avgGrass(){
 
           if(animal.shouldReproduce()){
 
+            const chance = Math.random()*2 > 1;
 
             let currentCell = this.nextGrid[x][y];
-            if(animal instanceof Rabbit){
+            if(animal instanceof Rabbit && chance){
               currentCell.addNewRabbit(this.preyParams);
               this.birthedRabbits ++;
-            } else {
+            } else if(animal instanceof Wolf && chance){
 
               currentCell.addNewWolf(this.predatorParams);
               this.birthedWolves ++;

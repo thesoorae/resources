@@ -1,13 +1,6 @@
 const Animal = require('./animal.js');
 
-const default_prey_params = {
-  'init-food': 1,
-    'm-rate': 1,
-    'm-age': 17,
-    'r-age': 3,
-    'r-food': 5,
-    'max-food':45
-  };
+
 
 class Rabbit extends Animal{
   constructor(cell, params=default_prey_params, id){
@@ -17,14 +10,7 @@ class Rabbit extends Animal{
     this.name = "rabbit";
 
 
-    // this.maxFood = params['max-food'];
-    // this.metabolicRate = params['m-rate'];
-    // this.maxAge = 17;
-    // this.reproductiveAge = 5;
-    // this.reproductiveFoodRequirement = 25;
 
-    // this.currentX = x;
-    // this.currentY = y;
     this.cell = cell;
 
 

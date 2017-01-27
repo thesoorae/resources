@@ -7,19 +7,19 @@ class Control{
     this.board = null;
     this.prey = {
       'init-food': 1,
-        'm-rate': 2,
+        'm-rate': 1,
         'm-age': 17,
-        'r-age': 5,
-        'r-food': 25,
+        'r-age': 3,
+        'r-food': 5,
         'max-food':25
       };
     this.predator = {
           'init-food': 50,
-          'm-rate': 4,
+          'm-rate': 5,
           'm-age': 50,
           'r-age': 10,
-          'r-food': 20,
-          'max-food':200
+          'r-food': 40,
+          'max-food':100
         };
     this.grass = {
       'grass-rate': 1,
