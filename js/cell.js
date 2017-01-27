@@ -53,14 +53,40 @@ neighbors(){
     [x + 1 , y + 1]
   ];
   spots.forEach((coord) => {
-    if(coord[0] >= 0 && coord[1] >= 0 ){
-    let a = coord[0] % this.board.canvasWidth;
-    let b = coord[1] % this.board.canvasHeight;
-    neighbors.push(this.board.grid[a][b]);
+    // let a = coord[0] % this.board.canvasWidth;
+    // let b = coord[1] % this.board.canvasHeight;
+
+    let a = coord[0];
+    let b = coord[1];
+
+    if(a >= this.board.canvasWidth){
+      a = a - this.board.canvasWidth;
     }
+
+    if( b >= this.board.canvasHeight){
+      b = b - this.board.canvasHeight;
+    }
+    if(a < 0){
+      a = this.board.canvasWidth + a;
+    }
+    if(
+        b < 0){
+          b = this.board.canvasHeight + b;
+        }
+    neighbors.push(this.board.grid[a][b]);
+
   });
   return neighbors;
   }
+
+  //
+  // if(coord[0] >= 0 && coord[1] >= 0 ){
+  // let a = coord[0] % this.board.canvasWidth;
+  // let b = coord[1] % this.board.canvasHeight;
+  // neighbors.push(this.board.grid[a][b]);
+  // }
+
+
 
 addAnimal(animal){
   this.animal = animal;
@@ -111,7 +137,6 @@ updateGrass(){
 
 
 moveAnimal(){
-  console.log("in move animal");
   if(this.type === "rabbit"){
 
   return this.animal.move();

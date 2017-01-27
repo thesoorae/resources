@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function(){
   const canvas = document.getElementById('gameCanvas');
   const ctx = canvas.getContext('2d');
   const frame = document.getElementById('frame');
+  const canvasContainer = document.getElementById('canvas-container');
   canvas.width = 12 * 70;
   // 10 * 50;
   canvas.height = 12* 50;

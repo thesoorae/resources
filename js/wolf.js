@@ -41,6 +41,10 @@ availableSpaces(){
 
   let rabbitSpaces = [];
   let emptySpaces = [];
+
+  //TESTING
+
+
     neighbors.forEach((neighbor) => {
 
     if(neighbor.type == "rabbit"){

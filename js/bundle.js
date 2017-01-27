@@ -52,6 +52,7 @@
 	  const canvas = document.getElementById('gameCanvas');
 	  const ctx = canvas.getContext('2d');
 	  const frame = document.getElementById('frame');
+	  const canvasContainer = document.getElementById('canvas-container');
 	  canvas.width = 12 * 70;
 	  // 10 * 50;
 	  canvas.height = 12* 50;
@@ -262,26 +263,18 @@
 	  transitionBG(){
 	    let bg_images = this.frame.childNodes;
 	
-	    if(this.avgGrass() < 2){
+	    if(this.avgGrass() < 3){
 	      bg_images[1].className = "visible";
 	      bg_images[3].className = "transparent";
 	      bg_images[5].className = "transparent";
-	      bg_images[7].className = "transparent";
-	    } else if(this.avgGrass() < 3){
+	    } else if(this.avgGrass() < 5){
 	      bg_images[1].className = "transparent";
 	      bg_images[3].className = "visible";
 	      bg_images[5].className = "transparent";
-	      bg_images[7].className = "transparent";
-	    } else if(this.avgGrass() < 4){
-	      bg_images[1].className = "transparent";
-	      bg_images[3].className = "transparent";
-	      bg_images[5].className = "visible";
-	      bg_images[7].className = "transparent";
 	    } else {
 	      bg_images[1].className = "transparent";
 	      bg_images[3].className = "transparent";
-	      bg_images[5].className = "transparent";
-	      bg_images[7].className = "visible";
+	      bg_images[5].className = "visible";
 	    }
 	  }
 	
@@ -292,7 +285,6 @@
 	  start(){
 	    this.setupGrid();
 	    this.draw();
-	    console.log(this.grid);
 	  }
 	  setupGrid(){
 	    for(let x=0; x < this.canvasWidth; x++){
@@ -305,7 +297,7 @@
 	  //EDIT
 	
 	        let rand = Math.random()*1000;
-	        
+	
 	        if(rand > (1000 - this.ratio)){
 	          this.grid[x][y] = new Cell(this.grassParams, this.board, x,y);
 	          this.grid[x][y].addNewWolf(this.predatorParams, this.rabbitId);
@@ -391,12 +383,9 @@
 	  	}
 	
 	    this.transitionBG();
-	    console.log("one rabbit", this.oneRabbit);
-	    console.log("one wolf", this.oneWolf);
-	    console.log("rabbit count", this.rabbitCount);
-	    console.log("dead rabbits", this.deadRabbits);
-	    console.log("birthed rabbits", this.birthedRabbits);
-	    console.log("steps", this.steps);
+	    //TESTING
+	    // console.log("one rabbit", this.oneRabbit);
+	    // console.log("one wolf", this.oneWolf);
 	    this.updateStats();
 	
 	  }
@@ -477,10 +466,7 @@
 	
 	        }
 	      }
-	    if(this.rabbitCount < 8){
-	      console.log("next grid", this.nextGrid);
-	
-	    }
+	  
 	
 	
 	    this.grid = this.nextGrid;
@@ -505,7 +491,9 @@
 	
 	  toggleGame(){
 	    this.play = !this.play;
+	    const gameOverText = document.querySelector('#game-over');
 	    if(this.play){
+	      gameOverText.className="invisible";
 	      this.gameLoop();
 	    }
 	  }
@@ -547,6 +535,7 @@
 	      'grass-max':5
 	    };
 	
+	
 	    this.speed = 20;
 	    this.ratio = 5;
 	
@@ -567,9 +556,8 @@
 	
 	  toggleGame(){
 	    if(this.board !== null){
-	      this.board.toggleGame();
-	
-	    }
+	        this.board.toggleGame();
+	      }
 	  }
 	  step(){
 	    if(this.board !== null){
@@ -748,14 +736,40 @@
 	    [x + 1 , y + 1]
 	  ];
 	  spots.forEach((coord) => {
-	    if(coord[0] >= 0 && coord[1] >= 0 ){
-	    let a = coord[0] % this.board.canvasWidth;
-	    let b = coord[1] % this.board.canvasHeight;
-	    neighbors.push(this.board.grid[a][b]);
+	    // let a = coord[0] % this.board.canvasWidth;
+	    // let b = coord[1] % this.board.canvasHeight;
+	
+	    let a = coord[0];
+	    let b = coord[1];
+	
+	    if(a >= this.board.canvasWidth){
+	      a = a - this.board.canvasWidth;
 	    }
+	
+	    if( b >= this.board.canvasHeight){
+	      b = b - this.board.canvasHeight;
+	    }
+	    if(a < 0){
+	      a = this.board.canvasWidth + a;
+	    }
+	    if(
+	        b < 0){
+	          b = this.board.canvasHeight + b;
+	        }
+	    neighbors.push(this.board.grid[a][b]);
+	
 	  });
 	  return neighbors;
 	  }
+	
+	  //
+	  // if(coord[0] >= 0 && coord[1] >= 0 ){
+	  // let a = coord[0] % this.board.canvasWidth;
+	  // let b = coord[1] % this.board.canvasHeight;
+	  // neighbors.push(this.board.grid[a][b]);
+	  // }
+	
+	
 	
 	addAnimal(animal){
 	  this.animal = animal;
@@ -806,7 +820,6 @@
 	
 	
 	moveAnimal(){
-	  console.log("in move animal");
 	  if(this.type === "rabbit"){
 	
 	  return this.animal.move();
@@ -865,7 +878,6 @@
 	
 	
 	  eat(){
-	    console.log("in eat");
 	
 	    let neededFood = this.maxFood - this.food;
 	    if(this.cell.grassLevel < neededFood){
@@ -900,12 +912,12 @@
 	    let spaces = [];
 	
 	    let neighbors = this.cell.neighbors();
-	
 	    for(let g = 5; g > 0; g --){
 	      if(spaces.length > 0){
 	        break;
 	      } else {
 	        neighbors.forEach((neighbor) => {
+	// TEST
 	          if(neighbor.type === "grass" && neighbor.grassLevel === g){
 	            spaces.push([neighbor.currentX, neighbor.currentY]);
 	          }
@@ -1032,6 +1044,10 @@
 	
 	  let rabbitSpaces = [];
 	  let emptySpaces = [];
+	
+	  //TESTING
+	
+	
 	    neighbors.forEach((neighbor) => {
 	
 	    if(neighbor.type == "rabbit"){

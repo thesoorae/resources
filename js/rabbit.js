@@ -41,7 +41,6 @@ class Rabbit extends Animal{
 
 
   eat(){
-    console.log("in eat");
 
     let neededFood = this.maxFood - this.food;
     if(this.cell.grassLevel < neededFood){
@@ -76,12 +75,12 @@ class Rabbit extends Animal{
     let spaces = [];
 
     let neighbors = this.cell.neighbors();
-
     for(let g = 5; g > 0; g --){
       if(spaces.length > 0){
         break;
       } else {
         neighbors.forEach((neighbor) => {
+// TEST
           if(neighbor.type === "grass" && neighbor.grassLevel === g){
             spaces.push([neighbor.currentX, neighbor.currentY]);
           }

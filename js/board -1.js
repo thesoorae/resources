@@ -21,7 +21,6 @@ start(){
   this.gameLoop();
 }
   setupGrid(){
-    console.log("in setup");
 
     this.canvas.width = gridWidth * gridSquareWidth;
     this.canvas.height = gridHeight * gridSquareWidth;
@@ -51,18 +50,13 @@ start(){
     }
 
   update(dt) {
-    console.log("in update");
-  	// iterate simulation rules
-  	// this.run();
 
-  	// draw result
   	this.draw();
   }
 
 
   draw() {
     const ctx = this.ctx;
-    console.log("ctx in draw", ctx);
   // clear canvas
   	ctx.fillStyle = '#fee';
   	ctx.fillRect(0, 0, ctx.width, ctx.height);

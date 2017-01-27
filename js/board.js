@@ -79,26 +79,18 @@ avgGrass(){
   transitionBG(){
     let bg_images = this.frame.childNodes;
 
-    if(this.avgGrass() < 2){
+    if(this.avgGrass() < 3){
       bg_images[1].className = "visible";
       bg_images[3].className = "transparent";
       bg_images[5].className = "transparent";
-      bg_images[7].className = "transparent";
-    } else if(this.avgGrass() < 3){
+    } else if(this.avgGrass() < 5){
       bg_images[1].className = "transparent";
       bg_images[3].className = "visible";
       bg_images[5].className = "transparent";
-      bg_images[7].className = "transparent";
-    } else if(this.avgGrass() < 4){
-      bg_images[1].className = "transparent";
-      bg_images[3].className = "transparent";
-      bg_images[5].className = "visible";
-      bg_images[7].className = "transparent";
     } else {
       bg_images[1].className = "transparent";
       bg_images[3].className = "transparent";
-      bg_images[5].className = "transparent";
-      bg_images[7].className = "visible";
+      bg_images[5].className = "visible";
     }
   }
 
@@ -109,7 +101,6 @@ avgGrass(){
   start(){
     this.setupGrid();
     this.draw();
-    console.log(this.grid);
   }
   setupGrid(){
     for(let x=0; x < this.canvasWidth; x++){
@@ -122,7 +113,7 @@ avgGrass(){
   //EDIT
 
         let rand = Math.random()*1000;
-        
+
         if(rand > (1000 - this.ratio)){
           this.grid[x][y] = new Cell(this.grassParams, this.board, x,y);
           this.grid[x][y].addNewWolf(this.predatorParams, this.rabbitId);
@@ -208,12 +199,9 @@ avgGrass(){
   	}
 
     this.transitionBG();
-    console.log("one rabbit", this.oneRabbit);
-    console.log("one wolf", this.oneWolf);
-    console.log("rabbit count", this.rabbitCount);
-    console.log("dead rabbits", this.deadRabbits);
-    console.log("birthed rabbits", this.birthedRabbits);
-    console.log("steps", this.steps);
+    //TESTING
+    // console.log("one rabbit", this.oneRabbit);
+    // console.log("one wolf", this.oneWolf);
     this.updateStats();
 
   }
@@ -294,10 +282,7 @@ avgGrass(){
 
         }
       }
-    if(this.rabbitCount < 8){
-      console.log("next grid", this.nextGrid);
-
-    }
+  
 
 
     this.grid = this.nextGrid;
@@ -322,7 +307,9 @@ avgGrass(){
 
   toggleGame(){
     this.play = !this.play;
+    const gameOverText = document.querySelector('#game-over');
     if(this.play){
+      gameOverText.className="invisible";
       this.gameLoop();
     }
   }

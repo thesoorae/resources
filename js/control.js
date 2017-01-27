@@ -27,6 +27,7 @@ class Control{
       'grass-max':5
     };
 
+
     this.speed = 20;
     this.ratio = 5;
 
@@ -47,9 +48,8 @@ class Control{
 
   toggleGame(){
     if(this.board !== null){
-      this.board.toggleGame();
-
-    }
+        this.board.toggleGame();
+      }
   }
   step(){
     if(this.board !== null){
