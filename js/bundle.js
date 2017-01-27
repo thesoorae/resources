@@ -550,7 +550,7 @@
 	    };
 	
 	
-	    this.speed = 20;
+	    this.speed = 15;
 	    this.ratio = 5;
 	
 	
