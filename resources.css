@@ -1,11 +1,14 @@
 html, body, ul, li, p, span, div, h1, h2, h3{
   font-family: sans-serif;
 }
-canvas{
+.canvas{
   margin: 10px;
-  z-index: 300;
   position: relative;
   margin-top: 5%;
+
+}
+canvas{
+  z-index: 300;
 
 }
 div.frame {
@@ -14,6 +17,18 @@ div.frame {
   overflow: hidden;
 
 }
+
+span#game-over{
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.7);
+  top: 20%;
+  left: 20%;
+  z-index: 500;
+  width: 500px;
+  height: 300px;
+vertical-align: middle;
+}
+
 #frame img {
   z-index: -100;
   position:absolute;
@@ -28,10 +43,10 @@ div.frame {
 
 }
 
-#frame img.visible {
+.visible {
   opacity: 1;
 }
-#frame img.transparent {
+.transparent {
 opacity:0;
 }
 
