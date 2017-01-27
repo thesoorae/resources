@@ -74,9 +74,12 @@ div.controls{
   margin-right: 3%;
   height: 100%;
   border-radius: 5px;
+  font-size: 14px;
+
   /*overflow-y: scroll;*/
 
 }
+
 
 .controls, #stats-panel div{
   padding: 20px;

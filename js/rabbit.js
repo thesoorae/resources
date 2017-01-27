@@ -2,10 +2,10 @@ const Animal = require('./animal.js');
 
 const default_prey_params = {
   'init-food': 1,
-    'm-rate': 2,
+    'm-rate': 1,
     'm-age': 17,
-    'r-age': 5,
-    'r-food': 25,
+    'r-age': 3,
+    'r-food': 5,
     'max-food':45
   };
 

@@ -1,8 +1,5 @@
 #LAGOLUPUS BALANCE
 
-[LAGOLUPUS LINK](https://thesoorae.github.io/resources_game/)
-
-
 ## Background
 
 LAGOLUPUS BALANCE is based on the real-time, multi-agent simulation "Rabbits and Wolves" and utilizes the **cellular automata** concept to illustrate the dynamics between predators (black), prey (pink), and plants (green/white) in an ecosystem. Each player on the board makes decisions based on a variety of variables and considerations, including the behavior of other players on the board, and updates its situation at every step of the "game". How it updates is determined by parameters that are set as defaults, but can also be altered by the client-side. Users have full control over almost every aspect of each player's behavior, determining their food consumption and usage, reproduction parameters, and mortality rates, as well as the growth rates for the plant-matter that feeds the prey.
@@ -70,27 +67,26 @@ This simulation was built entirely with JavaScript(ES6) and HTML5/Canvas. All DO
 
 The game utilizes JavaScript ES6 classes and Webpack to break the game components into 6 modules. They are as follows:
 
-```Control```
+###Control
 
 Handles the board creation, setup, and game toggling, as well as responsive client input controls.
 
-```Board```
+###Board
+Holds all the Cell modules, holds all current Cells in ```this.grid```, handles ```Step()``` logic to update each ```Cell``` and ```Animal```, storing each next move on ```this.nextGrid```, and calls ```draw()``` on the updated Grid object to render it to the Canvas. Also handles real-time updating of the game stats at the bottom of the board.
 
-Holds all the Cell modules, holds all current Cells in ```this.grid```, handles ```Step()``` logic to update each Cell and Animal, storing each next move on ```this.nextGrid```, and calls ```draw()``` on the updated Grid object to render it to the Canvas. Also handles real-time updating of the game stats at the bottom of the board.
+###Cell
 
-```Cell```
+Stores its grass level, neighboring cells, and ```Animal``` information. Handles update on its grass levels as well as calling ```eat()``` for the ```Rabbit``` class. Also has ability to add a new ```Animal``` to its cell.
 
-Stores its grass level, neighboring cells, and Animal information. Handles update on its grass levels as well as calling ```eat()``` for the ```Rabbit``` class. Also has ability to add a new ```Animal``` to its cell.
-
-```Animal```
+###Animal
 
 Prototype class that is extended to ```Rabbit``` and ```Wolf```, handles taking parameters to store onto each ```Animal```, updating its cell location through ```updateCell()```, and also provides ```kill()``` functions.
 
-```Rabbit```
+###Rabbit
 
 Soon to be renamed to ```Prey```, ```Rabbit``` holds the ability to ```eat()```, which also decreases the ```Cell``` grass level, ```availableSpaces()``` which assesses which of its surrounding cells would be most optimal for it to move to, and ```shouldReproduce()``` logic.
 
-```Wolf```
+###Wolf
 
 Soon to be renamed to ```Predator```, ```Wolf``` holds the ability to ```eat()```, which also kills the ```Rabbit```, ```availableSpaces()``` which assesses which of its surrounding cells has a ```Rabbit``` and if none is found, stores an array of random spaces, and ```shouldReproduce()``` logic.
 
@@ -99,4 +95,8 @@ Soon to be renamed to ```Predator```, ```Wolf``` holds the ability to ```eat()``
 
 Some testing code is available within the game to track the progress and behavior of individual players on the game board.
 
+<<<<<<< HEAD
 Within the ```Board``` class, there are lines to identify one ```Rabbit``` and one ```Wolf``` based on an ```id``` that is given to each at time of constructor call, and follow it through each step. There is also a line that will color this player to better visualize it on the board as the game progresses.
+=======
+Within the ```Board``` class, there are lines to identify one ```Rabbit``` and one ```Wolf``` based on an ```id``` that is given to each at time of constructor call, and follow it through each step by logging the player's information. There is also a line that will color this player to better visualize it on the board as the game progresses. These lines can be found on ```Board.js:20, 186, 199, 212```.
+>>>>>>> master

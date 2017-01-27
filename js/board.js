@@ -109,6 +109,8 @@ avgGrass(){
   }
 
   start(){
+    this.gameOverText.innerHTML = "Click to Start or Pause";
+
     this.setupGrid();
     this.draw();
   }
