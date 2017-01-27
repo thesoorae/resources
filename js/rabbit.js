@@ -5,7 +5,7 @@ const default_prey_params = {
     'm-rate': 2,
     'm-age': 17,
     'r-age': 5,
-    'r-food': 25,
+    'r-food': 10,
     'max-food':45
   };
 

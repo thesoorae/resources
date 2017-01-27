@@ -847,7 +847,7 @@
 	    'm-rate': 2,
 	    'm-age': 17,
 	    'r-age': 5,
-	    'r-food': 25,
+	    'r-food': 10,
 	    'max-food':45
 	  };
 	
@@ -1013,7 +1013,7 @@
 	        'm-age': 50,
 	        'r-age': 10,
 	        'r-food': 20,
-	        'max-food':200
+	        'max-food':100
 	      };
 	
 	class Wolf extends Animal{

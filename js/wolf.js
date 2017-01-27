@@ -6,7 +6,7 @@ const default_predator_params = {
         'm-age': 50,
         'r-age': 10,
         'r-food': 20,
-        'max-food':200
+        'max-food':100
       };
 
 class Wolf extends Animal{
