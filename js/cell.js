@@ -16,6 +16,7 @@ class Cell {
     this.grassLevel = parseInt(params['grass-start']);
     this.grassGrowRate = parseInt(params['grass-rate']);
     this.grassMax = parseInt(params['grass-max'])
+
     // this.animal = animal;
     this.board = board;
     this.animal = null;

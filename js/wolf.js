@@ -1,13 +1,6 @@
 const Animal = require('./animal.js');
 
-const default_predator_params = {
-        'init-food': 50,
-        'm-rate': 5,
-        'm-age': 50,
-        'r-age': 25,
-        'r-food': 40,
-        'max-food':100
-      };
+
 
 class Wolf extends Animal{
 constructor(cell, params=default_predator_params, id){

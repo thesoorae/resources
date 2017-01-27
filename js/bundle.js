@@ -312,12 +312,12 @@
 	
 	        if(rand > (1000 - this.ratio)){
 	          this.grid[x][y] = new Cell(this.grassParams, this.board, x,y);
-	          this.grid[x][y].addNewWolf(this.predatorParams, this.rabbitId);
-	          this.rabbitId ++;
+	          this.grid[x][y].addNewWolf(this.predatorParams, this.wolfId);
+	          this.wolfId ++;
 	        } else if(rand > 900 ){
 	          this.grid[x][y] = new Cell(this.grassParams, this.board, x,y);
-	          this.grid[x][y].addNewRabbit(this.preyParams, this.wolfId);
-	          this.wolfId ++;
+	          this.grid[x][y].addNewRabbit(this.preyParams, this.rabbitId);
+	          this.rabbitId ++;
 	        } else {
 	          this.grid[x][y] = new Cell(this.grassParams, this.board, x,y, "grass");
 	        }
@@ -396,7 +396,7 @@
 	
 	    this.transitionBG();
 	    //TESTING
-	    // console.log("one rabbit", this.oneRabbit);
+	    console.log("one rabbit", this.oneRabbit);
 	    // console.log("one wolf", this.oneWolf);
 	    this.updateStats();
 	
@@ -454,12 +454,13 @@
 	
 	          if(animal.shouldReproduce()){
 	
+	            const chance = Math.random()*2 > 1;
 	
 	            let currentCell = this.nextGrid[x][y];
-	            if(animal instanceof Rabbit){
+	            if(animal instanceof Rabbit && chance){
 	              currentCell.addNewRabbit(this.preyParams);
 	              this.birthedRabbits ++;
-	            } else {
+	            } else if(animal instanceof Wolf && chance){
 	
 	              currentCell.addNewWolf(this.predatorParams);
 	              this.birthedWolves ++;
@@ -528,19 +529,19 @@
 	    this.board = null;
 	    this.prey = {
 	      'init-food': 1,
-	        'm-rate': 2,
+	        'm-rate': 1,
 	        'm-age': 17,
-	        'r-age': 5,
-	        'r-food': 25,
+	        'r-age': 3,
+	        'r-food': 5,
 	        'max-food':25
 	      };
 	    this.predator = {
 	          'init-food': 50,
-	          'm-rate': 4,
+	          'm-rate': 5,
 	          'm-age': 50,
 	          'r-age': 10,
-	          'r-food': 20,
-	          'max-food':200
+	          'r-food': 40,
+	          'max-food':100
 	        };
 	    this.grass = {
 	      'grass-rate': 1,
@@ -712,6 +713,7 @@
 	    this.grassLevel = parseInt(params['grass-start']);
 	    this.grassGrowRate = parseInt(params['grass-rate']);
 	    this.grassMax = parseInt(params['grass-max'])
+	
 	    // this.animal = animal;
 	    this.board = board;
 	    this.animal = null;
@@ -844,14 +846,7 @@
 
 	const Animal = __webpack_require__(5);
 	
-	const default_prey_params = {
-	  'init-food': 1,
-	    'm-rate': 1,
-	    'm-age': 17,
-	    'r-age': 3,
-	    'r-food': 5,
-	    'max-food':45
-	  };
+	
 	
 	class Rabbit extends Animal{
 	  constructor(cell, params=default_prey_params, id){
@@ -861,14 +856,7 @@
 	    this.name = "rabbit";
 	
 	
-	    // this.maxFood = params['max-food'];
-	    // this.metabolicRate = params['m-rate'];
-	    // this.maxAge = 17;
-	    // this.reproductiveAge = 5;
-	    // this.reproductiveFoodRequirement = 25;
 	
-	    // this.currentX = x;
-	    // this.currentY = y;
 	    this.cell = cell;
 	
 	
@@ -1009,14 +997,7 @@
 
 	const Animal = __webpack_require__(5);
 	
-	const default_predator_params = {
-	        'init-food': 50,
-	        'm-rate': 5,
-	        'm-age': 50,
-	        'r-age': 25,
-	        'r-food': 40,
-	        'max-food':100
-	      };
+	
 	
 	class Wolf extends Animal{
 	constructor(cell, params=default_predator_params, id){
