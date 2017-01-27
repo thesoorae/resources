@@ -2,10 +2,10 @@ const Animal = require('./animal.js');
 
 const default_predator_params = {
         'init-food': 50,
-        'm-rate': 4,
+        'm-rate': 5,
         'm-age': 50,
-        'r-age': 10,
-        'r-food': 20,
+        'r-age': 25,
+        'r-food': 40,
         'max-food':100
       };
 
