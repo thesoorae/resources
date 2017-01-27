@@ -27,14 +27,20 @@ class Control{
       'grass-max':5
     };
 
+    this.speed = 20;
+    this.ratio = 5;
+
 
     this.createControls = this.createControls.bind(this);
     this.sendParams = this.sendParams.bind(this);
     this.toggleGame = this.toggleGame.bind(this);
+    this.step = this.step.bind(this);
   }
 
   sendParams(){
-    let board = new Board(this.frame, this.ctx, this.prey, this.predator, this.grass);
+
+    let board = new Board(this.frame, this.ctx, this.speed, this.ratio, this.prey, this.predator, this.grass);
+
     this.board = board;
     this.board.start();
   }
@@ -45,11 +51,14 @@ class Control{
 
     }
   }
+  step(){
+    if(this.board !== null){
+      this.board.step();
+    }
+  }
 
   createControls(){
-    let board = new Board(this.frame, this.ctx, this.prey, this.predator, this.grass);
-    this.board = board;
-    this.board.start();
+    this.sendParams();
   //prey hard code controls
   // debugger
       const initial_food = document.getElementById('initial-food-slider');
@@ -110,7 +119,7 @@ class Control{
 
       const predOutputUpdate = (output_id, val) => {
         this.predator[output_id] = val;
-        document.querySelector(`#${output_id}`).value = val;};
+        document.querySelector(`#pred-${output_id}`).value = val;};
 
       const grass_rate = document.getElementById('grass-slider');
         grass_rate.oninput = () => {
@@ -129,10 +138,29 @@ class Control{
         document.querySelector(`#${output_id}`).value = val;
     };
 
-    const startButton = document.getElementById('start-game');
-    startButton.onclick = () => {
+    const setParams = document.getElementById('set-game');
+    setParams.onclick = () => {
       this.sendParams(this.prey, this.predator, this.grass);
     };
+    const stepGame = document.getElementById('step-game');
+    stepGame.onclick = () => {
+      this.step();
+    };
+
+    const speedCounter = document.getElementById('speed-slider');
+      speedCounter.oninput = () => {
+        this.speed = speedCounter.value;
+        document.querySelector(`#speed-output`).value = speedCounter.value;
+
+    };
+    const populationRatio = document.getElementById('population-ratio-slider');
+      populationRatio.oninput = () => {
+        this.ratio = populationRatio.value;
+        document.querySelector(`#ratio`).value = populationRatio.value;
+
+    };
+
+
   }
 
 

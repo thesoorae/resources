@@ -4,7 +4,7 @@ const Wolf = require('./wolf');
 const Animal = require('./animal');
 
 class Board{
-  constructor(frame, ctx, prey, predator, grass){
+  constructor(frame, ctx, speed, ratio, prey, predator, grass){
     this.frame = frame;
     this.ctx = ctx;
     this.width = 12;
@@ -15,6 +15,12 @@ class Board{
 
     this.grid = [];
     this.nextGrid = [];
+//TESTING
+    this.oneRabbit = null;
+    this.oneWolf = null;
+    this.rabbitId = 0;
+    this.wolfId = 0;
+//TESTING
 
 
     this.rabbitCount = 0;
@@ -22,12 +28,21 @@ class Board{
     this.steps = 0;
     this.birthedRabbits = 0;
 
+    this.wolfCount = 0;
+    this.deadWolves = 0;
+    this.birthedWolves = 0;
+
+    this.totalGrass = 0;
+
     this.play = false;
     this.lastTime = 0;
 
     this.preyParams = prey;
     this.predatorParams = predator;
     this.grassParams = grass;
+    this.speed = speed * 20;
+    this.ratio = (1 / parseInt(ratio))*100;
+
 
     this.draw = this.draw.bind(this);
     this.setupGrid = this.setupGrid.bind(this);
@@ -39,24 +54,42 @@ class Board{
     this.updateCell = this.updateCell.bind(this);
     this.toggleGame = this.toggleGame.bind(this);
     this.transitionBG = this.transitionBG.bind(this);
+    this.updateStats = this.updateStats.bind(this);
 
   }
 
+updateStats(){
 
+document.querySelector('.rabbit-count').innerHTML = this.rabbitCount.toString();
+document.querySelector('.dead-rabbits').innerHTML = this.deadRabbits.toString();
+document.querySelector('.birthed-rabbits').innerHTML = this.birthedRabbits.toString();
+
+document.querySelector('.wolf-count').innerHTML = this.wolfCount.toString();
+document.querySelector('.dead-wolves').innerHTML = this.deadWolves.toString();
+document.querySelector('.birthed-wolves').innerHTML = this.birthedWolves.toString();
+
+document.querySelector('.avg-grass').innerHTML = this.avgGrass();
+document.querySelector('.step-count').innerHTML = this.steps.toString();
+
+};
+
+avgGrass(){
+  return (parseInt(this.totalGrass / (this.canvasWidth * this.canvasHeight))).toString();
+}
   transitionBG(){
     let bg_images = this.frame.childNodes;
 
-    if(this.rabbitCount > 350){
+    if(this.avgGrass() < 2){
       bg_images[1].className = "visible";
       bg_images[3].className = "transparent";
       bg_images[5].className = "transparent";
       bg_images[7].className = "transparent";
-    } else if(this.rabbitCount > 300){
+    } else if(this.avgGrass() < 3){
       bg_images[1].className = "transparent";
       bg_images[3].className = "visible";
       bg_images[5].className = "transparent";
       bg_images[7].className = "transparent";
-    } else if(this.rabbitCount > 10){
+    } else if(this.avgGrass() < 4){
       bg_images[1].className = "transparent";
       bg_images[3].className = "transparent";
       bg_images[5].className = "visible";
@@ -88,13 +121,16 @@ class Board{
 
   //EDIT
 
-        let rand = Math.random()*100;
-        if(rand > 98){
+        let rand = Math.random()*1000;
+        
+        if(rand > (1000 - this.ratio)){
           this.grid[x][y] = new Cell(this.grassParams, this.board, x,y);
-          this.grid[x][y].addNewWolf(this.predatorParams);
-        } else if(rand > 90 ){
+          this.grid[x][y].addNewWolf(this.predatorParams, this.rabbitId);
+          this.rabbitId ++;
+        } else if(rand > 900 ){
           this.grid[x][y] = new Cell(this.grassParams, this.board, x,y);
-          this.grid[x][y].addNewRabbit(this.preyParams);
+          this.grid[x][y].addNewRabbit(this.preyParams, this.wolfId);
+          this.wolfId ++;
         } else {
           this.grid[x][y] = new Cell(this.grassParams, this.board, x,y, "grass");
         }
@@ -103,7 +139,6 @@ class Board{
   }
 
   draw(){
-
     let ctx = this.ctx;
     let gridSquareWidth = this.width;
     let grassColor = "#009900";
@@ -114,6 +149,7 @@ class Board{
     for (let x =0; x < this.canvasWidth; x++) {
   		for (let y = 0; y < this.canvasHeight; y++) {
         let patch = this.patch(x,y);
+        this.totalGrass += patch.grassLevel;
 
           switch(patch.grassLevel){
             case 0:
@@ -142,8 +178,13 @@ class Board{
 
 
         if (patch.type == "rabbit") {
+
           this.rabbitCount ++;
           ctx.fillStyle = "#ee66aa";
+//TESTING
+          if(patch.animal.id == 1){
+            ctx.fillStyle ="#FFFF00";
+          }
           ctx.beginPath();
           ctx.arc(rad+gaps*x,rad+ gaps*y, rad, 0, Math.PI*2, true);
           ctx.closePath();
@@ -151,7 +192,12 @@ class Board{
 
           // ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
         } else if (patch.type == "wolf"){
+          this.wolfCount ++;
           ctx.fillStyle = "#383838";
+//TESTING
+      if(patch.animal.id == 1){
+          ctx.fillStyle ="#FF0000";
+            }
           ctx.beginPath();
           ctx.arc(wolfrad+gaps*x,wolfrad+ gaps*y, wolfrad, 0, Math.PI*2, true);
           ctx.closePath();
@@ -162,11 +208,14 @@ class Board{
   	}
 
     this.transitionBG();
-
+    console.log("one rabbit", this.oneRabbit);
+    console.log("one wolf", this.oneWolf);
     console.log("rabbit count", this.rabbitCount);
     console.log("dead rabbits", this.deadRabbits);
     console.log("birthed rabbits", this.birthedRabbits);
     console.log("steps", this.steps);
+    this.updateStats();
+
   }
 
   moveAnimal(x,y, animal){
@@ -192,6 +241,9 @@ class Board{
 
         if(animal instanceof Animal && animal.alive){
           if(animal instanceof Rabbit){
+            if(animal.id == 1){
+              this.oneRabbit = animal;
+            }
             let availableSpaces = animal.availableSpaces();
 
             for(let i = 0; i < availableSpaces.length ; i++){
@@ -205,6 +257,9 @@ class Board{
               }
             }
           } else if(animal instanceof Wolf){
+            if(animal.id == 1){
+              this.oneWolf = animal;
+            }
             let newCoords = animal.randomNeighbor();
             let newX = newCoords[0];
             let newY = newCoords[1];
@@ -220,13 +275,20 @@ class Board{
             if(animal instanceof Rabbit){
               currentCell.addNewRabbit(this.preyParams);
               this.birthedRabbits ++;
-            } else{
+            } else {
+
               currentCell.addNewWolf(this.predatorParams);
+              this.birthedWolves ++;
             }
 
           }
-        } else if(animal instanceof Rabbit && !animal.alive){
-          this.deadRabbits ++;
+        } else if(animal instanceof Animal && !animal.alive){
+          if(animal instanceof Rabbit){
+            this.deadRabbits ++;
+          } else if(animal instanceof Wolf){
+            this.deadWolves ++;
+          }
+
         }
         // }
 
@@ -240,6 +302,8 @@ class Board{
 
     this.grid = this.nextGrid;
     this.rabbitCount = 0;
+    this.wolfCount = 0;
+    this.totalGrass = 0;
     this.steps ++;
 
     this.draw();
@@ -253,7 +317,7 @@ class Board{
       this.step(dt);
 
       this.lastTime = now;
-  	window.setTimeout(this.gameLoop, 50);
+  	window.setTimeout(this.gameLoop, this.speed);
   }}
 
   toggleGame(){

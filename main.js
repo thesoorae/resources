@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function(){
   canvas.style.height = canvas.height;
 
   let control = new Control(frame, ctx);
-  
+
   control.createControls();
 
   canvas.onclick = function fun() {

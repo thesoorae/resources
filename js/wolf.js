@@ -1,19 +1,23 @@
 const Animal = require('./animal.js');
 
+const default_predator_params = {
+        'init-food': 50,
+        'm-rate': 4,
+        'm-age': 50,
+        'r-age': 10,
+        'r-food': 20,
+        'max-food':200
+      };
+
 class Wolf extends Animal{
-constructor(cell, params){
-  super(cell);
-  this.food = 50;
+constructor(cell, params=default_predator_params, id){
+  super(cell, params, id);
   this.age = 0;
   this.name = "wolf";
   this.alive = true;
 
 
-  this.maxAge = 50;
-  this.maxFood = 200;
-  this.metabolicRate = 4;
-  this.reproductiveAge = 10;
-  this.reproductiveFoodRequirement = 20;
+
 
   this.randomNeighbor = this.randomNeighbor.bind(this);
   this.availableSpaces = this.availableSpaces.bind(this);

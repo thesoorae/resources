@@ -1,12 +1,15 @@
 class Animal{
-  constructor(cell, params){
+  constructor(cell, params, id=200){
     this.cell = cell;
 
+//TESTING
+    this.id = id;
     this.maxFood = params['max-food'];
     this.metabolicRate = params['m-rate'];
     this.maxAge = params['m-age'];
     this.reproductiveAge = params['r-age'];
     this.reproductiveFoodRequirement = params['r-food'];
+    this.food = params['init-food'];
 
 
     this.alive = true;

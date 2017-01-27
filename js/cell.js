@@ -25,7 +25,6 @@ class Cell {
     //   this.type = animal.name;
     // }
 
-
     this.updateGrass = this.updateGrass.bind(this);
     this.addAnimal = this.addAnimal.bind(this);
     this.neighbors = this.neighbors.bind(this);
@@ -68,15 +67,17 @@ addAnimal(animal){
   this.type = animal.name;
   this.animal.updateCell(this.cell);
 }
-
-addNewRabbit(params){
-  this.animal = new Rabbit(this.cell, params);
+//TESTING
+addNewRabbit(params, id){
+  this.animal = new Rabbit(this.cell, params, id);
   this.type = "rabbit";
+  this.rabbitId ++;
 }
-
-addNewWolf(params){
-  this.animal = new Wolf(this.cell, params);
+//TESTING
+addNewWolf(params, id){
+  this.animal = new Wolf(this.cell, params, id);
   this.type = "wolf";
+  this.wolfId ++;
 }
 
 eatGrass(amt){

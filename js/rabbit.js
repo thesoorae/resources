@@ -10,9 +10,8 @@ const default_prey_params = {
   };
 
 class Rabbit extends Animal{
-  constructor(cell, params=default_prey_params){
-    super(cell);
-    this.food = params['init-food'];
+  constructor(cell, params=default_prey_params, id){
+    super(cell, params, id);
     this.age = 0;
     this.alive = true;
     this.name = "rabbit";

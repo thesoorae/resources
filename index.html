@@ -24,6 +24,21 @@
 		<img id="img_4" src='http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485413482/other/overgrown2.jpg' />
 	<div class="game-container">
 	<div class="controls">
+
+		<div id="game-controls">
+			<h2>Game Controls</h2>
+
+			<label for="speed-slider">Speed
+			<input id="speed-slider"
+			type="range" min="1" max="10" step="1" value="1">
+			<output for="speed-level" id="speed-output">1</output></label>
+
+			<label for="population-ratio-slider">Ratio Prey/Predator
+			<input id="population-ratio-slider"
+			type="range" min="0" max="20" step="1" value="5">
+			<output for="ratio" id="ratio">5</output></label>
+	</div>
+
 		<div id="prey-controls">
 			<h2>Prey</h2>
 
@@ -51,12 +66,12 @@
 			<label for="repro-food-slider">Food for Reproduction
 			<input id="repro-food-slider"
 			type="range" min="1" max="50" step="1" value="25">
-			<output for="repro-food" id="r-food">5</output></label>
+			<output for="repro-food" id="r-food">25</output></label>
 
 			<label for="max-food-slider">Maximum Food Capacity
 			<input id="max-food-slider"
 			type="range" min="1" max="50" step="1" value="25">
-			<output for="max-food" id="max-food">5</output></label>
+			<output for="max-food" id="max-food">25</output></label>
 
 		</div>
 		<div id="predator-controls">
@@ -68,29 +83,29 @@
 
 			<label for="metabolism-slider">Metabolic Rate
 			<input id="pred-metabolism-slider"
-			type="range" min="0" max="10" step="1" value="2">
-			<output for="metabolism" id="pred-m-rate">2</output></label>
+			type="range" min="0" max="20" step="1" value="4">
+			<output for="metabolism" id="pred-m-rate">4</output></label>
 
 			<label for="max-age-slider">Max Age
 			<input id="pred-max-age-slider"
-			type="range" min="0" max="30" step="1" value="17">
-			<output for="max-age" id="pred-m-age">17</output></label>
+			type="range" min="0" max="30" step="1" value="50">
+			<output for="max-age" id="pred-m-age">50</output></label>
 
 			<label for="repro-age-slider">Min. Reproductive Age
 			<input id="pred-repro-age-slider"
-			type="range" min="3" max="30" step="1" value="5">
-			<output for="repro-age" id="pred-r-age">5</output></label>
+			type="range" min="3" max="30" step="1" value="10">
+			<output for="repro-age" id="pred-r-age">10</output></label>
 
 
 			<label for="repro-food-slider">Food for Reproduction
 			<input id="pred-repro-food-slider"
-			type="range" min="1" max="50" step="1" value="25">
-			<output for="repro-food" id="pred-r-food">5</output></label>
+			type="range" min="1" max="50" step="1" value="20">
+			<output for="repro-food" id="pred-r-food">20</output></label>
 
 			<label for="max-food-slider">Maximum Food Capacity
 			<input id="pred-max-food-slider"
-			type="range" min="1" max="50" step="1" value="25">
-			<output for="max-food" id="pred-max-food">5</output></label>
+			type="range" min="1" max="300" step="1" value="200">
+			<output for="max-food" id="pred-max-food">200</output></label>
 		</div>
 
 		<div id="grass-controls">
@@ -111,9 +126,36 @@
 			<output for="grass-max-level" id="grass-max">5</output></label>
 
 		</div>
-		<button id="start-game">Set New Parameters</button>
+		<div class="button-bar">
+			<button id="step-game">One Step</button>
+			<button id="set-game">Set New Parameters</button>
+		</div>
 	</div>
+	<div class="game-and-stats" >
 	<canvas id="gameCanvas"></canvas>
+	<div id="stats-panel">
+		<div id="prey-stats">
+			<ul>
+			<li>Rabbit Count <span class="rabbit-count"></span></li>
+			<li>Dead Rabbits <span class="dead-rabbits"></span></li>
+			<li>Birthed Rabbits <span class="birthed-rabbits"></span></li>
+			</ul>
+		</div>
+		<div id="predator-stats">
+			<ul>
+			<li>Wolf Count <span class="wolf-count"></span></li>
+			<li>Dead Wolves <span class="dead-wolves"></span></li>
+			<li>Birthed Wolves <span class="birthed-wolves"></span></li>
+			</ul>
+		</div>
+		<div id="grass-stats">
+			<ul>
+			<li>Average Grass Level <span class="avg-grass"></span></li>
+			<li>Steps <span class="step-count"></span></li>
+		</ul>
+		</div>
+	</div>
+</div>
 </div>
 </div>
 
