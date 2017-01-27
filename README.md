@@ -1,5 +1,8 @@
 #LAGOLUPUS BALANCE
 
+[LAGOLUPUS LINK](https://thesoorae.github.io/resources_game/)
+
+
 ## Background
 
 LAGOLUPUS BALANCE is based on the real-time, multi-agent simulation "Rabbits and Wolves" and utilizes the **cellular automata** concept to illustrate the dynamics between predators (black), prey (pink), and plants (green/white) in an ecosystem. Each player on the board makes decisions based on a variety of variables and considerations, including the behavior of other players on the board, and updates its situation at every step of the "game". How it updates is determined by parameters that are set as defaults, but can also be altered by the client-side. Users have full control over almost every aspect of each player's behavior, determining their food consumption and usage, reproduction parameters, and mortality rates, as well as the growth rates for the plant-matter that feeds the prey.
@@ -96,4 +99,4 @@ Soon to be renamed to ```Predator```, ```Wolf``` holds the ability to ```eat()``
 
 Some testing code is available within the game to track the progress and behavior of individual players on the game board.
 
-Within the ```Board``` class, there are lines to identify one ```Rabbit``` and one ```Wolf``` based on an ```id``` that is given to each at time of constructor call, and follow it through each step. There is also a line that will color this player to better visualize it on the board as the game progresses. 
+Within the ```Board``` class, there are lines to identify one ```Rabbit``` and one ```Wolf``` based on an ```id``` that is given to each at time of constructor call, and follow it through each step. There is also a line that will color this player to better visualize it on the board as the game progresses.
