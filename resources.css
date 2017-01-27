@@ -1,6 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Alfa+Slab+One|Bangers|Sigmar+One');
+@import url('https://fonts.googleapis.com/css?family=Mada|Sigmar+One');
+
+
 html, body, ul, li, p, span, div, h1, h2, h3{
   font-family: sans-serif;
+  font-family: 'Mada', sans-serif;
+
 }
 h1{
   font-size: 40px;
@@ -81,7 +85,6 @@ div.controls{
   margin-right: 3%;
   height: 100%;
   border-radius: 5px;
-  font-size: 14px;
 
   /*overflow-y: scroll;*/
 
