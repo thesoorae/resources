@@ -45,7 +45,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	const Board = __webpack_require__(1);
-	const Control = __webpack_require__(2);
+	const Control = __webpack_require__(6);
 	
 	
 	document.addEventListener("DOMContentLoaded", function(){
@@ -182,10 +182,10 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const Cell = __webpack_require__(3);
-	const Rabbit = __webpack_require__(4);
-	const Wolf = __webpack_require__(6);
-	const Animal = __webpack_require__(5);
+	const Cell = __webpack_require__(2);
+	const Rabbit = __webpack_require__(3);
+	const Wolf = __webpack_require__(5);
+	const Animal = __webpack_require__(4);
 	
 	class Board{
 	  constructor(frame, ctx, speed, ratio, prey, predator, grass){
@@ -258,7 +258,7 @@
 	document.querySelector('.step-count').innerHTML = this.steps.toString();
 	
 	if(this.gameOver()){
-	  this.gameOverText.innerHTML = "All the Animals Are Dead!";
+	  this.gameOverText.innerHTML = `All the Animals Are Dead! ${this.steps} Steps Total`;
 	    this.toggleGame();
 	}
 	
@@ -520,6 +520,397 @@
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
+	const Rabbit = __webpack_require__(3);
+	const Wolf = __webpack_require__(5);
+	const Animal = __webpack_require__(4);
+	
+	const default_params = {
+	  'grass-rate': 1,
+	  'grass-start': 3,
+	  'grass-max':5
+	};
+	class Cell {
+	  constructor(params=default_params, board, x, y){
+	
+	    this.type = "grass";
+	    this.currentX = x;
+	    this.currentY = y;
+	    this.grassLevel = parseInt(params['grass-start']);
+	    this.grassGrowRate = parseInt(params['grass-rate']);
+	    this.grassMax = parseInt(params['grass-max'])
+	
+	    // this.animal = animal;
+	    this.board = board;
+	    this.animal = null;
+	    this.cell = this;
+	    this.previousAnimal = null;
+	    // if(animal !== null){
+	    //   this.type = animal.name;
+	    // }
+	
+	    this.updateGrass = this.updateGrass.bind(this);
+	    this.addAnimal = this.addAnimal.bind(this);
+	    this.neighbors = this.neighbors.bind(this);
+	    this.addNewRabbit = this.addNewRabbit.bind(this);
+	    this.addNewWolf = this.addNewWolf.bind(this);
+	    this.eatGrass = this.eatGrass.bind(this);
+	    this.empty = this.empty.bind(this);
+	  }
+	empty(){
+	  this.animal = null;
+	  this.type = "grass";
+	}
+	neighbors(){
+	  let neighbors = [];
+	  let x = this.currentX;
+	  let y = this.currentY;
+	  const spots = [
+	    [x-1 , y-1],
+	    [x-1 , y],
+	    [x-1 , y + 1 ],
+	    [x, y - 1],
+	    [x, y + 1],
+	    [x + 1 , y - 1],
+	    [x + 1 , y ],
+	    [x + 1 , y + 1]
+	  ];
+	  spots.forEach((coord) => {
+	    // let a = coord[0] % this.board.canvasWidth;
+	    // let b = coord[1] % this.board.canvasHeight;
+	
+	    let a = coord[0];
+	    let b = coord[1];
+	
+	    if(a >= this.board.canvasWidth){
+	      a = a - this.board.canvasWidth;
+	    }
+	
+	    if( b >= this.board.canvasHeight){
+	      b = b - this.board.canvasHeight;
+	    }
+	    if(a < 0){
+	      a = this.board.canvasWidth + a;
+	    }
+	    if(
+	        b < 0){
+	          b = this.board.canvasHeight + b;
+	        }
+	    neighbors.push(this.board.grid[a][b]);
+	
+	  });
+	  return neighbors;
+	  }
+	
+	  //
+	  // if(coord[0] >= 0 && coord[1] >= 0 ){
+	  // let a = coord[0] % this.board.canvasWidth;
+	  // let b = coord[1] % this.board.canvasHeight;
+	  // neighbors.push(this.board.grid[a][b]);
+	  // }
+	
+	
+	
+	addAnimal(animal){
+	  this.animal = animal;
+	  this.type = animal.name;
+	  this.animal.updateCell(this.cell);
+	}
+	//TESTING
+	addNewRabbit(params, id){
+	  this.animal = new Rabbit(this.cell, params, id);
+	  this.type = "rabbit";
+	  this.rabbitId ++;
+	}
+	//TESTING
+	addNewWolf(params, id){
+	  this.animal = new Wolf(this.cell, params, id);
+	  this.type = "wolf";
+	  this.wolfId ++;
+	}
+	
+	eatGrass(amt){
+	  this.grassLevel -= amt;
+	}
+	
+	updateGrass(){
+	//decreases grass level if there is a rabbit
+	    if(this.animal instanceof Animal){
+	      this.animal.mortality();}
+	
+	      if(this.type === "rabbit"){
+	        this.animal.eat();
+	      }
+	        else if(this.grassLevel < this.grassMax){
+	      this.grassLevel += this.grassGrowRate;
+	    }
+	
+	    if(this.grassLevel < 0) {
+	      this.grassLevel = 0;
+	    }
+	
+	    if(this.grassLevel > 5) {
+	      this.grassLevel = 5;
+	    }
+	    this.previousAnimal = this.animal;
+	    this.animal = null;
+	    this.type = "grass";
+	    return this.cell;
+	  }
+	
+	
+	
+	
+	}
+	
+	module.exports = Cell;
+
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	const Animal = __webpack_require__(4);
+	
+	
+	
+	class Rabbit extends Animal{
+	  constructor(cell, params=default_prey_params, id){
+	    super(cell, params, id);
+	    this.age = 0;
+	    this.alive = true;
+	    this.name = "rabbit";
+	
+	
+	
+	    this.cell = cell;
+	
+	
+	    this.eat = this.eat.bind(this);
+	    this.availableSpaces = this.availableSpaces.bind(this);
+	    // this.randomNeighbor = this.randomNeighbor.bind(this);
+	    this.mortality = this.mortality.bind(this);
+	    this.shouldReproduce = this.shouldReproduce.bind(this);
+	  }
+	  newCell(cell){
+	    this.cell = cell;
+	  }
+	
+	
+	  eat(){
+	
+	    let neededFood = this.maxFood - this.food;
+	    if(this.cell.grassLevel < neededFood){
+	    this.food += this.cell.grassLevel;
+	    this.cell.eatGrass(this.cell.grassLevel);
+	    this.food -= this.metabolicRate;
+	  } else{
+	    this.food += neededFood;
+	    this.cell.eatGrass(neededFood);
+	    this.food -= this.metabolicRate;
+	  }
+	
+	  }
+	
+	
+	
+	  mortality(){
+	    this.age ++;
+	    if(this.age > this.maxAge || this.food < 1){
+	      this.kill();
+	    }
+	
+	  //change parameters for reproduction
+	    // if(this.age > this.metabolicRate && (Math.random()*10) > 9 ){
+	    //   this.move(new Rabbit()));
+	    // }
+	
+	  }
+	
+	  availableSpaces(){
+	
+	    let spaces = [];
+	
+	    let neighbors = this.cell.neighbors();
+	    for(let g = 5; g > 0; g --){
+	      if(spaces.length > 0){
+	        break;
+	      } else {
+	        neighbors.forEach((neighbor) => {
+	// TEST
+	          if(neighbor.type === "grass" && neighbor.grassLevel === g){
+	            spaces.push([neighbor.currentX, neighbor.currentY]);
+	          }
+	        });
+	      }
+	    }
+	
+	      spaces = this.shuffle(spaces);
+	
+	      spaces.push([this.cell.currentX, this.cell.currentY]);
+	
+	    return spaces;
+	  }
+	
+	  // randomNeighbor(){
+	  //
+	  //  let openSpaces = this.openSpaces();
+	  //  let idx = Math.floor(Math.random() * openSpaces.length);
+	  //  let result = [this.cell.currentX, this.cell.currentY];
+	  //  if(openSpaces[idx] !== undefined){
+	  //    result = [openSpaces[idx][0], openSpaces[idx][1]];
+	  // }
+	  //   return result;
+	  // }
+	
+	  shouldReproduce(){
+	  return this.age > this.reproductiveAge && this.food > this.reproductiveFoodRequirement
+	
+	  }
+	    }
+	
+	module.exports = Rabbit;
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	class Animal{
+	  constructor(cell, params, id=200){
+	    this.cell = cell;
+	
+	//TESTING
+	    this.id = id;
+	    this.maxFood = params['max-food'];
+	    this.metabolicRate = params['m-rate'];
+	    this.maxAge = params['m-age'];
+	    this.reproductiveAge = params['r-age'];
+	    this.reproductiveFoodRequirement = params['r-food'];
+	    this.food = params['init-food'];
+	
+	
+	    this.alive = true;
+	    this.updateCell = this.updateCell.bind(this);
+	    this.kill = this.kill.bind(this);
+	    this.shuffle = this.shuffle.bind(this);
+	  }
+	
+	updateCell(cell){
+	  this.cell = cell;
+	}
+	kill(){
+	  this.alive = false;
+	}
+	
+	shuffle(a) {
+	    for (let i = a.length; i; i--) {
+	        let j = Math.floor(Math.random() * i);
+	        [a[i - 1], a[j]] = [a[j], a[i - 1]];
+	    }
+	    return a;
+	}
+	
+	
+	}
+	
+	module.exports = Animal;
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	const Animal = __webpack_require__(4);
+	
+	
+	
+	class Wolf extends Animal{
+	constructor(cell, params=default_predator_params, id){
+	  super(cell, params, id);
+	  this.age = 0;
+	  this.name = "wolf";
+	  this.alive = true;
+	
+	
+	
+	
+	  this.randomNeighbor = this.randomNeighbor.bind(this);
+	  this.availableSpaces = this.availableSpaces.bind(this);
+	  this.eat = this.eat.bind(this);
+	  this.shouldReproduce = this.shouldReproduce.bind(this);
+	  this.mortality = this.mortality.bind(this);
+	}
+	
+	
+	
+	mortality(){
+	  this.age ++;
+	  this.food -= this.metabolicRate;
+	  if(this.age > this.maxAge || this.food < 1){
+	    this.kill();
+	  }
+	
+	}
+	availableSpaces(){
+	  let neighbors = this.cell.neighbors();
+	
+	  let rabbitSpaces = [];
+	  let emptySpaces = [];
+	
+	  //TESTING
+	
+	
+	    neighbors.forEach((neighbor) => {
+	
+	    if(neighbor.type == "rabbit"){
+	      rabbitSpaces.push(neighbor);
+	    } else if(neighbor.type == "grass"){
+	      emptySpaces.push(neighbor);
+	    }
+	  });
+	  if(rabbitSpaces.length > 0){
+	  emptySpaces = rabbitSpaces;
+	  }
+	  return emptySpaces;
+	}
+	
+	randomNeighbor(){
+	
+	 let openSpaces = this.availableSpaces();
+	 let idx = Math.floor(Math.random() * openSpaces.length);
+	 let result = [this.cell.currentX, this.cell.currentY];
+	 if(openSpaces[idx] !== undefined){
+	  //  debugger
+	   let neighbor = openSpaces[idx];
+	   this.eat(neighbor.animal);
+	   result = [neighbor.currentX, neighbor.currentY];
+	}
+	  return result;
+	}
+	
+	eat(rabbit){
+	  if(rabbit !== null){
+	    if(this.food < this.maxFood){
+	      this.food += rabbit.food;
+	      rabbit.kill();
+	    }
+	  }
+	
+	}
+	
+	shouldReproduce(){
+	  return this.age > this.reproductiveAge && this.food > this.reproductiveFoodRequirement
+	}
+	
+	}
+	
+	module.exports = Wolf;
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
 	const Board = __webpack_require__(1);
 	
 	class Control{
@@ -689,397 +1080,6 @@
 	}
 	
 	module.exports = Control;
-
-
-/***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	const Rabbit = __webpack_require__(4);
-	const Wolf = __webpack_require__(6);
-	const Animal = __webpack_require__(5);
-	
-	const default_params = {
-	  'grass-rate': 1,
-	  'grass-start': 3,
-	  'grass-max':5
-	};
-	class Cell {
-	  constructor(params=default_params, board, x, y){
-	
-	    this.type = "grass";
-	    this.currentX = x;
-	    this.currentY = y;
-	    this.grassLevel = parseInt(params['grass-start']);
-	    this.grassGrowRate = parseInt(params['grass-rate']);
-	    this.grassMax = parseInt(params['grass-max'])
-	
-	    // this.animal = animal;
-	    this.board = board;
-	    this.animal = null;
-	    this.cell = this;
-	    this.previousAnimal = null;
-	    // if(animal !== null){
-	    //   this.type = animal.name;
-	    // }
-	
-	    this.updateGrass = this.updateGrass.bind(this);
-	    this.addAnimal = this.addAnimal.bind(this);
-	    this.neighbors = this.neighbors.bind(this);
-	    this.addNewRabbit = this.addNewRabbit.bind(this);
-	    this.addNewWolf = this.addNewWolf.bind(this);
-	    this.eatGrass = this.eatGrass.bind(this);
-	    this.empty = this.empty.bind(this);
-	  }
-	empty(){
-	  this.animal = null;
-	  this.type = "grass";
-	}
-	neighbors(){
-	  let neighbors = [];
-	  let x = this.currentX;
-	  let y = this.currentY;
-	  const spots = [
-	    [x-1 , y-1],
-	    [x-1 , y],
-	    [x-1 , y + 1 ],
-	    [x, y - 1],
-	    [x, y + 1],
-	    [x + 1 , y - 1],
-	    [x + 1 , y ],
-	    [x + 1 , y + 1]
-	  ];
-	  spots.forEach((coord) => {
-	    // let a = coord[0] % this.board.canvasWidth;
-	    // let b = coord[1] % this.board.canvasHeight;
-	
-	    let a = coord[0];
-	    let b = coord[1];
-	
-	    if(a >= this.board.canvasWidth){
-	      a = a - this.board.canvasWidth;
-	    }
-	
-	    if( b >= this.board.canvasHeight){
-	      b = b - this.board.canvasHeight;
-	    }
-	    if(a < 0){
-	      a = this.board.canvasWidth + a;
-	    }
-	    if(
-	        b < 0){
-	          b = this.board.canvasHeight + b;
-	        }
-	    neighbors.push(this.board.grid[a][b]);
-	
-	  });
-	  return neighbors;
-	  }
-	
-	  //
-	  // if(coord[0] >= 0 && coord[1] >= 0 ){
-	  // let a = coord[0] % this.board.canvasWidth;
-	  // let b = coord[1] % this.board.canvasHeight;
-	  // neighbors.push(this.board.grid[a][b]);
-	  // }
-	
-	
-	
-	addAnimal(animal){
-	  this.animal = animal;
-	  this.type = animal.name;
-	  this.animal.updateCell(this.cell);
-	}
-	//TESTING
-	addNewRabbit(params, id){
-	  this.animal = new Rabbit(this.cell, params, id);
-	  this.type = "rabbit";
-	  this.rabbitId ++;
-	}
-	//TESTING
-	addNewWolf(params, id){
-	  this.animal = new Wolf(this.cell, params, id);
-	  this.type = "wolf";
-	  this.wolfId ++;
-	}
-	
-	eatGrass(amt){
-	  this.grassLevel -= amt;
-	}
-	
-	updateGrass(){
-	//decreases grass level if there is a rabbit
-	    if(this.animal instanceof Animal){
-	      this.animal.mortality();}
-	
-	      if(this.type === "rabbit"){
-	        this.animal.eat();
-	      }
-	        else if(this.grassLevel < this.grassMax){
-	      this.grassLevel += this.grassGrowRate;
-	    }
-	
-	    if(this.grassLevel < 0) {
-	      this.grassLevel = 0;
-	    }
-	
-	    if(this.grassLevel > 5) {
-	      this.grassLevel = 5;
-	    }
-	    this.previousAnimal = this.animal;
-	    this.animal = null;
-	    this.type = "grass";
-	    return this.cell;
-	  }
-	
-	
-	
-	
-	}
-	
-	module.exports = Cell;
-
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	const Animal = __webpack_require__(5);
-	
-	
-	
-	class Rabbit extends Animal{
-	  constructor(cell, params=default_prey_params, id){
-	    super(cell, params, id);
-	    this.age = 0;
-	    this.alive = true;
-	    this.name = "rabbit";
-	
-	
-	
-	    this.cell = cell;
-	
-	
-	    this.eat = this.eat.bind(this);
-	    this.availableSpaces = this.availableSpaces.bind(this);
-	    // this.randomNeighbor = this.randomNeighbor.bind(this);
-	    this.mortality = this.mortality.bind(this);
-	    this.shouldReproduce = this.shouldReproduce.bind(this);
-	  }
-	  newCell(cell){
-	    this.cell = cell;
-	  }
-	
-	
-	  eat(){
-	
-	    let neededFood = this.maxFood - this.food;
-	    if(this.cell.grassLevel < neededFood){
-	    this.food += this.cell.grassLevel;
-	    this.cell.eatGrass(this.cell.grassLevel);
-	    this.food -= this.metabolicRate;
-	  } else{
-	    this.food += neededFood;
-	    this.cell.eatGrass(neededFood);
-	    this.food -= this.metabolicRate;
-	  }
-	
-	  }
-	
-	
-	
-	  mortality(){
-	    this.age ++;
-	    if(this.age > this.maxAge || this.food < 1){
-	      this.kill();
-	    }
-	
-	  //change parameters for reproduction
-	    // if(this.age > this.metabolicRate && (Math.random()*10) > 9 ){
-	    //   this.move(new Rabbit()));
-	    // }
-	
-	  }
-	
-	  availableSpaces(){
-	
-	    let spaces = [];
-	
-	    let neighbors = this.cell.neighbors();
-	    for(let g = 5; g > 0; g --){
-	      if(spaces.length > 0){
-	        break;
-	      } else {
-	        neighbors.forEach((neighbor) => {
-	// TEST
-	          if(neighbor.type === "grass" && neighbor.grassLevel === g){
-	            spaces.push([neighbor.currentX, neighbor.currentY]);
-	          }
-	        });
-	      }
-	    }
-	
-	      spaces = this.shuffle(spaces);
-	
-	      spaces.push([this.cell.currentX, this.cell.currentY]);
-	
-	    return spaces;
-	  }
-	
-	  // randomNeighbor(){
-	  //
-	  //  let openSpaces = this.openSpaces();
-	  //  let idx = Math.floor(Math.random() * openSpaces.length);
-	  //  let result = [this.cell.currentX, this.cell.currentY];
-	  //  if(openSpaces[idx] !== undefined){
-	  //    result = [openSpaces[idx][0], openSpaces[idx][1]];
-	  // }
-	  //   return result;
-	  // }
-	
-	  shouldReproduce(){
-	  return this.age > this.reproductiveAge && this.food > this.reproductiveFoodRequirement
-	
-	  }
-	    }
-	
-	module.exports = Rabbit;
-
-
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	class Animal{
-	  constructor(cell, params, id=200){
-	    this.cell = cell;
-	
-	//TESTING
-	    this.id = id;
-	    this.maxFood = params['max-food'];
-	    this.metabolicRate = params['m-rate'];
-	    this.maxAge = params['m-age'];
-	    this.reproductiveAge = params['r-age'];
-	    this.reproductiveFoodRequirement = params['r-food'];
-	    this.food = params['init-food'];
-	
-	
-	    this.alive = true;
-	    this.updateCell = this.updateCell.bind(this);
-	    this.kill = this.kill.bind(this);
-	    this.shuffle = this.shuffle.bind(this);
-	  }
-	
-	updateCell(cell){
-	  this.cell = cell;
-	}
-	kill(){
-	  this.alive = false;
-	}
-	
-	shuffle(a) {
-	    for (let i = a.length; i; i--) {
-	        let j = Math.floor(Math.random() * i);
-	        [a[i - 1], a[j]] = [a[j], a[i - 1]];
-	    }
-	    return a;
-	}
-	
-	
-	}
-	
-	module.exports = Animal;
-
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	const Animal = __webpack_require__(5);
-	
-	
-	
-	class Wolf extends Animal{
-	constructor(cell, params=default_predator_params, id){
-	  super(cell, params, id);
-	  this.age = 0;
-	  this.name = "wolf";
-	  this.alive = true;
-	
-	
-	
-	
-	  this.randomNeighbor = this.randomNeighbor.bind(this);
-	  this.availableSpaces = this.availableSpaces.bind(this);
-	  this.eat = this.eat.bind(this);
-	  this.shouldReproduce = this.shouldReproduce.bind(this);
-	  this.mortality = this.mortality.bind(this);
-	}
-	
-	
-	
-	mortality(){
-	  this.age ++;
-	  this.food -= this.metabolicRate;
-	  if(this.age > this.maxAge || this.food < 1){
-	    this.kill();
-	  }
-	
-	}
-	availableSpaces(){
-	  let neighbors = this.cell.neighbors();
-	
-	  let rabbitSpaces = [];
-	  let emptySpaces = [];
-	
-	  //TESTING
-	
-	
-	    neighbors.forEach((neighbor) => {
-	
-	    if(neighbor.type == "rabbit"){
-	      rabbitSpaces.push(neighbor);
-	    } else if(neighbor.type == "grass"){
-	      emptySpaces.push(neighbor);
-	    }
-	  });
-	  if(rabbitSpaces.length > 0){
-	  emptySpaces = rabbitSpaces;
-	  }
-	  return emptySpaces;
-	}
-	
-	randomNeighbor(){
-	
-	 let openSpaces = this.availableSpaces();
-	 let idx = Math.floor(Math.random() * openSpaces.length);
-	 let result = [this.cell.currentX, this.cell.currentY];
-	 if(openSpaces[idx] !== undefined){
-	  //  debugger
-	   let neighbor = openSpaces[idx];
-	   this.eat(neighbor.animal);
-	   result = [neighbor.currentX, neighbor.currentY];
-	}
-	  return result;
-	}
-	
-	eat(rabbit){
-	  if(rabbit !== null){
-	    if(this.food < this.maxFood){
-	      this.food += rabbit.food;
-	      rabbit.kill();
-	    }
-	  }
-	
-	}
-	
-	shouldReproduce(){
-	  return this.age > this.reproductiveAge && this.food > this.reproductiveFoodRequirement
-	}
-	
-	}
-	
-	module.exports = Wolf;
 
 
 /***/ }

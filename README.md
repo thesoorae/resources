@@ -98,8 +98,11 @@ Soon to be renamed to ```Predator```, ```Wolf``` holds the ability to ```eat()``
 
 Some testing code is available within the game to track the progress and behavior of individual players on the game board.
 
-<<<<<<< HEAD
+
 Within the ```Board``` class, there are lines to identify one ```Rabbit``` and one ```Wolf``` based on an ```id``` that is given to each at time of constructor call, and follow it through each step. There is also a line that will color this player to better visualize it on the board as the game progresses.
-=======
+
 Within the ```Board``` class, there are lines to identify one ```Rabbit``` and one ```Wolf``` based on an ```id``` that is given to each at time of constructor call, and follow it through each step by logging the player's information. There is also a line that will color this player to better visualize it on the board as the game progresses. These lines can be found on ```Board.js:20, 186, 199, 212```.
->>>>>>> master
+
+##References
+[Shodor Rabbits and Wolves Simulation](http://www.shodor.org/interactivate/activities/RabbitsAndWolves/)
+[Matveev Predator and Prey Cellular Automata](https://web.njit.edu/~matveev/Javascript/jjj.html)
