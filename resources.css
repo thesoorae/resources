@@ -28,8 +28,10 @@ div#game-over{
   vertical-align: middle;
   color: white;
   text-transform: uppercase;
+  font-size: 40px;
+  font-weight: bold;
 }
-.invisible h1{
+.invisible {
   visibility: hidden;
 }
 
@@ -72,6 +74,7 @@ div.controls{
   margin-right: 50px;
   height: 100%;
   border-radius: 5px;
+  overflow-y: scroll;
 
 }
 
@@ -125,7 +128,7 @@ div.button-bar {
   border-radius: 5px;
   background-color: green;
   text-transform: uppercase;
-  font-size: 20px;
+  font-size: 14px;
   color: white;
   padding: 5px;
 }

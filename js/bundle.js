@@ -196,6 +196,7 @@
 	    this.canvasHeight = 50;
 	
 	    this.board = this;
+	    this.gameOverText = document.querySelector('#game-over');
 	
 	    this.grid = [];
 	    this.nextGrid = [];
@@ -224,8 +225,8 @@
 	    this.preyParams = prey;
 	    this.predatorParams = predator;
 	    this.grassParams = grass;
-	    this.speed = speed * 20;
-	    this.ratio = (1 / parseInt(ratio))*100;
+	    this.speed = (1 / parseInt(speed)) * 1000;
+	    this.ratio = (1 / (parseInt(ratio)+1))*100;
 	
 	
 	    this.draw = this.draw.bind(this);
@@ -239,6 +240,7 @@
 	    this.toggleGame = this.toggleGame.bind(this);
 	    this.transitionBG = this.transitionBG.bind(this);
 	    this.updateStats = this.updateStats.bind(this);
+	    this.gameOver = this.gameOver.bind(this);
 	
 	  }
 	
@@ -255,8 +257,16 @@
 	document.querySelector('.avg-grass').innerHTML = this.avgGrass();
 	document.querySelector('.step-count').innerHTML = this.steps.toString();
 	
+	if(this.gameOver()){
+	  this.gameOverText.innerHTML = "All the Animals Are Dead!";
+	    this.toggleGame();
+	}
+	
 	};
 	
+	gameOver(){
+	  return this.rabbitCount == 0 && this.wolfCount == 0;
+	};
 	avgGrass(){
 	  return (parseInt(this.totalGrass / (this.canvasWidth * this.canvasHeight))).toString();
 	}
@@ -357,9 +367,9 @@
 	          this.rabbitCount ++;
 	          ctx.fillStyle = "#ee66aa";
 	//TESTING
-	          if(patch.animal.id == 1){
-	            ctx.fillStyle ="#FFFF00";
-	          }
+	          // if(patch.animal.id == 1){
+	          //   ctx.fillStyle ="#FFFF00";
+	          // }
 	          ctx.beginPath();
 	          ctx.arc(rad+gaps*x,rad+ gaps*y, rad, 0, Math.PI*2, true);
 	          ctx.closePath();
@@ -370,9 +380,9 @@
 	          this.wolfCount ++;
 	          ctx.fillStyle = "#383838";
 	//TESTING
-	      if(patch.animal.id == 1){
-	          ctx.fillStyle ="#FF0000";
-	            }
+	      // if(patch.animal.id == 1){
+	      //     ctx.fillStyle ="#FF0000";
+	      //       }
 	          ctx.beginPath();
 	          ctx.arc(wolfrad+gaps*x,wolfrad+ gaps*y, wolfrad, 0, Math.PI*2, true);
 	          ctx.closePath();
@@ -466,7 +476,7 @@
 	
 	        }
 	      }
-	  
+	
 	
 	
 	    this.grid = this.nextGrid;
@@ -491,10 +501,11 @@
 	
 	  toggleGame(){
 	    this.play = !this.play;
-	    const gameOverText = document.querySelector('#game-over');
 	    if(this.play){
-	      gameOverText.className="invisible";
+	      this.gameOverText.className="invisible";
 	      this.gameLoop();
+	    } else{
+	      this.gameOverText.className="";
 	    }
 	  }
 	}

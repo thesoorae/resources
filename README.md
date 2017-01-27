@@ -1,3 +1,11 @@
+if(patch.animal.id == 1){
+  ctx.fillStyle ="#FFFF00";
+}
+wolf
+if(patch.animal.id == 1){
+    ctx.fillStyle ="#FF0000";
+      }
+
 # Consumers and Producers Modeling
 ## Background
 
