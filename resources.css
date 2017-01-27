@@ -1,5 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Alfa+Slab+One|Bangers|Sigmar+One');
 html, body, ul, li, p, span, div, h1, h2, h3{
   font-family: sans-serif;
+}
+h1{
+  font-size: 40px;
+  font-family: 'Sigmar One', cursive;
+
+
 }
 .canvas{
   margin: 10px;
