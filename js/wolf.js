@@ -1,7 +1,7 @@
 const Animal = require('./animal.js');
 
 class Wolf extends Animal{
-constructor(cell){
+constructor(cell, params){
   super(cell);
   this.food = 50;
   this.age = 0;

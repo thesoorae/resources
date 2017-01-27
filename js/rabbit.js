@@ -1,18 +1,29 @@
 const Animal = require('./animal.js');
 
+const default_prey_params = {
+  'init-food': 1,
+    'm-rate': 2,
+    'm-age': 17,
+    'r-age': 5,
+    'r-food': 25,
+    'max-food':45
+  };
+
 class Rabbit extends Animal{
-  constructor(cell){
+  constructor(cell, params=default_prey_params){
     super(cell);
-    this.food = 1;
+    this.food = params['init-food'];
     this.age = 0;
     this.alive = true;
     this.name = "rabbit";
+    this.params = params;
 
-    this.maxFood = 45;
-    this.metabolicRate = 2;
-    this.maxAge = 17;
-    this.reproductiveAge = 5;
-    this.reproductiveFoodRequirement = 25;
+
+    // this.maxFood = params['max-food'];
+    // this.metabolicRate = params['m-rate'];
+    // this.maxAge = 17;
+    // this.reproductiveAge = 5;
+    // this.reproductiveFoodRequirement = 25;
 
     // this.currentX = x;
     // this.currentY = y;
@@ -32,6 +43,7 @@ class Rabbit extends Animal{
 
   eat(){
     console.log("in eat");
+
     let neededFood = this.maxFood - this.food;
     if(this.cell.grassLevel < neededFood){
     this.food += this.cell.grassLevel;
@@ -63,7 +75,7 @@ class Rabbit extends Animal{
   availableSpaces(){
 
     let spaces = [];
-    
+
     let neighbors = this.cell.neighbors();
 
     for(let g = 5; g > 0; g --){

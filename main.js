@@ -1,5 +1,5 @@
 const Board = require('./js/board');
-const Controls = require('./js/controls');
+const Control = require('./js/control');
 
 
 document.addEventListener("DOMContentLoaded", function(){
@@ -14,11 +14,12 @@ document.addEventListener("DOMContentLoaded", function(){
   canvas.style.width = canvas.width;
   canvas.style.height = canvas.height;
 
-  let controls = new Controls(frame, ctx);
-  controls.createControls();
+  let control = new Control(frame, ctx);
+  
+  control.createControls();
 
   canvas.onclick = function fun() {
-        controls.toggleGame();
+        control.toggleGame();
       };
     });
 // const createControls = (board) => {

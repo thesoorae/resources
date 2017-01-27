@@ -2,9 +2,14 @@ const Rabbit = require('./rabbit');
 const Wolf = require('./wolf');
 const Animal = require('./animal.js');
 
-
+const default_params = {
+  'grass-rate': 1,
+  'grass-start': 3,
+  'grass-max':5
+};
 class Cell {
-  constructor(params, board, x, y){
+  constructor(params=default_params, board, x, y){
+
     this.type = "grass";
     this.currentX = x;
     this.currentY = y;
@@ -64,13 +69,13 @@ addAnimal(animal){
   this.animal.updateCell(this.cell);
 }
 
-addNewRabbit(){
-  this.animal = new Rabbit(this.cell);
+addNewRabbit(params){
+  this.animal = new Rabbit(this.cell, params);
   this.type = "rabbit";
 }
 
-addNewWolf(){
-  this.animal = new Wolf(this.cell);
+addNewWolf(params){
+  this.animal = new Wolf(this.cell, params);
   this.type = "wolf";
 }
 

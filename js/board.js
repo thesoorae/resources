@@ -91,10 +91,10 @@ class Board{
         let rand = Math.random()*100;
         if(rand > 98){
           this.grid[x][y] = new Cell(this.grassParams, this.board, x,y);
-          this.grid[x][y].addNewWolf();
+          this.grid[x][y].addNewWolf(this.predatorParams);
         } else if(rand > 90 ){
           this.grid[x][y] = new Cell(this.grassParams, this.board, x,y);
-          this.grid[x][y].addNewRabbit();
+          this.grid[x][y].addNewRabbit(this.preyParams);
         } else {
           this.grid[x][y] = new Cell(this.grassParams, this.board, x,y, "grass");
         }
@@ -218,10 +218,10 @@ class Board{
 
             let currentCell = this.nextGrid[x][y];
             if(animal instanceof Rabbit){
-              currentCell.addNewRabbit();
+              currentCell.addNewRabbit(this.preyParams);
               this.birthedRabbits ++;
             } else{
-              currentCell.addNewWolf();
+              currentCell.addNewWolf(this.predatorParams);
             }
 
           }

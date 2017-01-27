@@ -1,6 +1,14 @@
 class Animal{
-  constructor(cell){
+  constructor(cell, params){
     this.cell = cell;
+
+    this.maxFood = params['max-food'];
+    this.metabolicRate = params['m-rate'];
+    this.maxAge = params['m-age'];
+    this.reproductiveAge = params['r-age'];
+    this.reproductiveFoodRequirement = params['r-food'];
+
+
     this.alive = true;
     this.updateCell = this.updateCell.bind(this);
     this.kill = this.kill.bind(this);
