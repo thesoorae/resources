@@ -396,7 +396,7 @@
 	
 	    this.transitionBG();
 	    //TESTING
-	    console.log("one rabbit", this.oneRabbit);
+	    // console.log("one rabbit", this.oneRabbit);
 	    // console.log("one wolf", this.oneWolf);
 	    this.updateStats();
 	
