@@ -65,7 +65,7 @@
 	
 	  control.createControls();
 	
-	  canvas.onclick = function fun() {
+	  canvasContainer.onclick = function fun() {
 	        control.toggleGame();
 	      };
 	    });
@@ -724,7 +724,6 @@
 	    this.neighbors = this.neighbors.bind(this);
 	    this.addNewRabbit = this.addNewRabbit.bind(this);
 	    this.addNewWolf = this.addNewWolf.bind(this);
-	    this.moveAnimal = this.moveAnimal.bind(this);
 	    this.eatGrass = this.eatGrass.bind(this);
 	    this.empty = this.empty.bind(this);
 	  }
@@ -830,12 +829,7 @@
 	  }
 	
 	
-	moveAnimal(){
-	  if(this.type === "rabbit"){
 	
-	  return this.animal.move();
-	  }
-	}
 	
 	}
 	
@@ -863,7 +857,6 @@
 	    this.age = 0;
 	    this.alive = true;
 	    this.name = "rabbit";
-	    this.params = params;
 	
 	
 	    // this.maxFood = params['max-food'];

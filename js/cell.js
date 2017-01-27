@@ -30,7 +30,6 @@ class Cell {
     this.neighbors = this.neighbors.bind(this);
     this.addNewRabbit = this.addNewRabbit.bind(this);
     this.addNewWolf = this.addNewWolf.bind(this);
-    this.moveAnimal = this.moveAnimal.bind(this);
     this.eatGrass = this.eatGrass.bind(this);
     this.empty = this.empty.bind(this);
   }
@@ -136,12 +135,7 @@ updateGrass(){
   }
 
 
-moveAnimal(){
-  if(this.type === "rabbit"){
 
-  return this.animal.move();
-  }
-}
 
 }
 

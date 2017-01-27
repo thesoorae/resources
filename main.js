@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
   control.createControls();
 
-  canvas.onclick = function fun() {
+  canvasContainer.onclick = function fun() {
         control.toggleGame();
       };
     });

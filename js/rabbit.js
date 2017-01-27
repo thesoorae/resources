@@ -15,7 +15,6 @@ class Rabbit extends Animal{
     this.age = 0;
     this.alive = true;
     this.name = "rabbit";
-    this.params = params;
 
 
     // this.maxFood = params['max-food'];
