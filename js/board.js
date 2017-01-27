@@ -74,7 +74,7 @@ document.querySelector('.avg-grass').innerHTML = this.avgGrass();
 document.querySelector('.step-count').innerHTML = this.steps.toString();
 
 if(this.gameOver()){
-  this.gameOverText.innerHTML = "All the Animals Are Dead!";
+  this.gameOverText.innerHTML = `All the Animals Are Dead! ${this.steps} Steps Total`;
     this.toggleGame();
 }
 
