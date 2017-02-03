@@ -1,7 +1,7 @@
 const Board = require('./board');
 
 class Control{
-  constructor(frame, ctx){
+  constructor(frame, ctx, width, height){
     this.frame = frame;
     this.ctx = ctx;
     this.board = null;
@@ -31,19 +31,28 @@ class Control{
     this.speed = 15;
     this.ratio = 5;
 
+    //TESTING
+    this.width = width;
+    this.height = height;
+
 
     this.createControls = this.createControls.bind(this);
     this.sendParams = this.sendParams.bind(this);
     this.toggleGame = this.toggleGame.bind(this);
     this.step = this.step.bind(this);
+
+
   }
 
   sendParams(){
-
-    let board = new Board(this.frame, this.ctx, this.speed, this.ratio, this.prey, this.predator, this.grass);
+//TESTING
+// console.log(this.width, this.height);
+    let board = new Board(this.frame, this.ctx, this.width, this.height, this.speed, this.ratio, this.prey, this.predator, this.grass);
 
     this.board = board;
     this.board.start();
+    // this.modal.style.display = "block";
+
   }
 
   toggleGame(){
@@ -61,6 +70,9 @@ class Control{
     this.sendParams();
   //prey hard code controls
   // debugger
+      document.getElementById('ready').onclick = () => {
+        document.getElementById('myModal').style.display = 'none';
+      };
       const initial_food = document.getElementById('initial-food-slider');
       const metabolism = document.getElementById('metabolism-slider');
       const max_age = document.getElementById('max-age-slider');
