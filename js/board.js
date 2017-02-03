@@ -4,12 +4,12 @@ const Wolf = require('./wolf');
 const Animal = require('./animal');
 
 class Board{
-  constructor(frame, ctx, speed, ratio, prey, predator, grass){
+  constructor(frame, ctx, width, height, speed, ratio, prey, predator, grass){
     this.frame = frame;
     this.ctx = ctx;
     this.width = 12;
-    this.canvasWidth = 70;
-    this.canvasHeight = 50;
+    this.canvasWidth = width;
+    this.canvasHeight = height;
 
     this.board = this;
     this.gameOverText = document.querySelector('#game-over');
@@ -113,6 +113,7 @@ avgGrass(){
 
     this.setupGrid();
     this.draw();
+
   }
   setupGrid(){
     for(let x=0; x < this.canvasWidth; x++){
