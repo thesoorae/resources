@@ -139,7 +139,7 @@ div#grass-stats{
   font-size: 18px;
   font-weight: bold;
 }
-ul, li {
+.no-list {
   list-style: none;
   padding: 10px;
 }
@@ -166,18 +166,24 @@ div.modal {
     z-index: 1; /* Sit on top */
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
+    width: 100vw; /* Full width */
+    height: 100vh; /* Full height */
+    overflow: scroll; /* Enable scroll if needed */
     background-color: #6E8B3D; /* Fallback color */
+
+    background-image: url("http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485406391/other/forest-07.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
     /*background-color: rgba(0,0,0,0.4); /* Black w/ opacity */*/
 }
 
 /* Modal Content/Box */
-.modal-content {
+div.modal-content {
     background-color: #C2D6A1;
-    margin: auto; /* 15% from the top and centered */
-    padding: 20px 70px;
+    background-color: rgba(194,214,161, 0.7);
+
+    margin: 5% auto; /* 15% from the top and centered */
+    padding: 70px;
     border: 1px solid #888;
     width: 80%; /* Could be more or less, depending on screen size */
     text-align: left;
