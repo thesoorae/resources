@@ -4,12 +4,17 @@
 html, body, ul, li, p, span, div, h1, h2, h3{
   font-family: sans-serif;
   font-family: 'Mada', sans-serif;
+  font-size: inherit;
+  margin: 0;
+  padding: 0;
 
 }
 h1{
   font-size: 40px;
   font-family: 'Sigmar One', cursive;
-
+}
+h2{
+  font-size: 20px;
 
 }
 .canvas{
@@ -190,7 +195,7 @@ div.modal-content {
 
 
 }
-.modal-content p{
+.modal-content > p{
   font-size: 20px;
 
 }
@@ -202,7 +207,7 @@ div.modal-content {
 }
 .modal-content h1, h2{
   text-align: center;
-  margin: 10px;
+  margin: 10px 0px;
 }
 button#ready {
   text-align: center;
