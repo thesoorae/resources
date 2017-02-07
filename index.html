@@ -17,15 +17,42 @@
 
 </head>
 <body>
+	<div class="whole-container">
+		<div id="myModal" class="modal">
+			<div class="modal-content">
+				<h1>Welcome to Lagolupus</h1>
+					<h2> A Game of Resources and Consumption 				<button id="ready">Start Game</button>
+</h2>
+
+					<h1> How to Play </h1>
+					<p>Click on the field to watch the populations grow and die. Then tweak the controls on the right to get the ecosystem
+					to achieve realistic harmony. How does changing one parameter affect populations? Monitor the stats panel at the bottom
+					to see how populations are growing and dying out.</p>
+				<h1> Rules </h1>
+				<ol>
+					<li>At every step of the game, Predators (black) and Prey (pink) burn energy and Grass level grows (0-5) </li>
+					<li>Predators eat Prey if they are next to them.
+					Prey eat the max amount of grass on each square. </li>
+					<li>As grass level for each square gets lower, green gets lighter.</li>
+					<li>Once animals reach reproductive rate and food level, they have a 50% chance of reproducing at each step </li>
+					<li> More detailed rules can be found on the <a href="http://github.com/thesoorae/resources_game">github page</a>. </li>
+				</ol>
+
+			</div>
+		</div>
+
 	<div id="frame">
+
 		<img id="img_1" src='http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485406390/other/overgrazed2.jpg' />
 		<img id="img_3" src='http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485406391/other/forest-07.jpg' />
 		<img id="img_4" src='http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485413482/other/overgrown2.jpg' />
 
+
 	<div class="game-container">
+
 	<div class="controls">
 		<h1>LAGOLUPUS</h1>
-		<p>A game of resources and consumption! Change the controls to see what happens
+		<p>Change the controls to see what happens
 			depending on different factors. See if you can achieve the optimal balance. (Default is unrealistic)</p>
 		<div id="game-controls">
 			<h2>Game Controls</h2>
@@ -130,7 +157,7 @@
 		</div>
 		<div class="button-bar">
 			<button id="step-game">One Step</button>
-			<button id="set-game">Set & Ready</button>
+			<button id="set-game">Set New Board</button>
 		</div>
 	</div>
 	<div class="game-and-stats" >
@@ -144,26 +171,27 @@
 
 	<div id="stats-panel">
 		<div id="prey-stats">
-			<ul>
-			<li>Prey Count <span class="rabbit-count"></span></li>
-			<li>Dead Prey <span class="dead-rabbits"></span></li>
-			<li>Birthed Prey <span class="birthed-rabbits"></span></li>
+			<ul class="no-list">
+			<li class="no-list">Prey Count <span class="rabbit-count"></span></li>
+			<li class="no-list">Dead Prey <span class="dead-rabbits"></span></li>
+			<li class="no-list">Birthed Prey <span class="birthed-rabbits"></span></li>
 			</ul>
 		</div>
 		<div id="predator-stats">
-			<ul>
-			<li>Predator Count <span class="wolf-count"></span></li>
-			<li>Dead Predator <span class="dead-wolves"></span></li>
-			<li>Birthed Predator <span class="birthed-wolves"></span></li>
+			<ul class="no-list">
+			<li class="no-list">Predator Count <span class="wolf-count"></span></li>
+			<li class="no-list">Dead Predator <span class="dead-wolves"></span></li>
+			<li class="no-list">Birthed Predator <span class="birthed-wolves"></span></li>
 			</ul>
 		</div>
 		<div id="grass-stats">
-			<ul>
-			<li>Average Grass Level <span class="avg-grass"></span></li>
-			<li>Steps <span class="step-count"></span></li>
+			<ul class="no-list">
+			<li class="no-list">Average Grass Level <span class="avg-grass"></span></li>
+			<li class="no-list">Steps <span class="step-count"></span></li>
 		</ul>
 		</div>
 	</div>
+</div>
 </div>
 </div>
 </div>
