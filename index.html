@@ -21,179 +21,198 @@
 		<div id="myModal" class="modal">
 			<div class="modal-content">
 				<h1>Welcome to Lagolupus</h1>
-					<h2> A Game of Resources and Consumption 				<button id="ready">Start Game</button>
-</h2>
+					<h2> A Game of Resources and Consumption
+						<button id="ready">Start Game</button>
+					</h2>
 
 					<h1> How to Play </h1>
 					<p>Click on the field to watch the populations grow and die. Then tweak the controls on the right to get the ecosystem
 					to achieve realistic harmony. How does changing one parameter affect populations? Monitor the stats panel at the bottom
 					to see how populations are growing and dying out.</p>
-				<h1> Rules </h1>
-				<ol>
-					<li>At every step of the game, Predators (black) and Prey (pink) burn energy and Grass level grows (0-5) </li>
-					<li>Predators eat Prey if they are next to them.
-					Prey eat the max amount of grass on each square. </li>
-					<li>As grass level for each square gets lower, green gets lighter.</li>
-					<li>Once animals reach reproductive rate and food level, they have a 50% chance of reproducing at each step </li>
-					<li> More detailed rules can be found on the <a href="http://github.com/thesoorae/resources_game">github page</a>. </li>
-				</ol>
-
+					<h1> Rules </h1>
+					<ol>
+						<li>At every step of the game, Predators (black) and Prey (pink) burn energy and Grass level grows (0-5) </li>
+						<li>Predators eat Prey if they are next to them.
+						Prey eat the max amount of grass on each square. </li>
+						<li>As grass level for each square gets lower, green gets lighter.</li>
+						<li>Once animals reach reproductive rate and food level, they have a 50% chance of reproducing at each step </li>
+						<li> More detailed rules can be found on the <a href="http://github.com/thesoorae/resources_game">github page</a>. </li>
+					</ol>
 			</div>
 		</div>
 
 	<div id="frame">
 
-		<img id="img_1" src='http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485406390/other/overgrazed2.jpg' />
-		<img id="img_3" src='http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485406391/other/forest-07.jpg' />
-		<img id="img_4" src='http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485413482/other/overgrown2.jpg' />
+			<img id="img_1" src='http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485406390/other/overgrazed2.jpg' />
+			<img id="img_3" src='http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485406391/other/forest-07.jpg' />
+			<img id="img_4" src='http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485413482/other/overgrown2.jpg' />
 
 
-	<div class="game-container">
+			<div class="game-container">
 
-	<div class="controls">
-		<h1>LAGOLUPUS</h1>
-		<p>Change the controls to see what happens
-			depending on different factors. See if you can achieve the optimal balance. (Default is unrealistic)</p>
-		<div id="game-controls">
-			<h2>Game Controls</h2>
+				<div class="controls">
+					<h1>LAGOLUPUS</h1>
+					<p>Change the controls to see what happens
+						depending on different factors. See if you can achieve the optimal balance. (Default is unrealistic)</p>
+					<div id="game-controls">
+						<h2>Game Controls</h2>
 
-			<label for="speed-slider">Speed
-			<input id="speed-slider"
-			type="range" min="1" max="20" step="1" value="15">
-			<output for="speed-level" id="speed-output">15</output></label>
+						<label for="speed-slider">Speed
+							<input id="speed-slider"
+							type="range" min="1" max="20" step="1" value="15">
+							<output for="speed-level" id="speed-output">15</output>
+						</label>
 
-			<label for="population-ratio-slider">Ratio Prey/Predator
-			<input id="population-ratio-slider"
-			type="range" min="0" max="20" step="1" value="5">
-			<output for="ratio" id="ratio">5</output></label>
+						<label for="population-ratio-slider">Ratio Prey/Predator
+							<input id="population-ratio-slider"
+							type="range" min="0" max="20" step="1" value="5">
+							<output for="ratio" id="ratio">5</output>
+						</label>
+				</div>
+
+				<div id="prey-controls">
+					<h2>Prey</h2>
+
+					<label for="initial-food-slider">Initial Food Level
+						<input id="initial-food-slider"
+						type="range" min="0" max="100" step="1" value="1">
+						<output for="initial-food" id="init-food">1</output>
+					</label>
+
+					<label for="metabolism-slider">Metabolic Rate
+						<input id="metabolism-slider"
+						type="range" min="0" max="10" step="1" value="1">
+						<output for="metabolism" id="m-rate">1</output>
+					</label>
+
+					<label for="max-age-slider">Max Age
+						<input id="max-age-slider"
+						type="range" min="0" max="30" step="1" value="17">
+						<output for="max-age" id="m-age">17</output>
+					</label>
+
+					<label for="repro-age-slider">Min. Reproductive Age
+						<input id="repro-age-slider"
+						type="range" min="3" max="30" step="1" value="3">
+						<output for="repro-age" id="r-age">3</output>
+					</label>
+
+
+					<label for="repro-food-slider">Min. Reproduction Food
+						<input id="repro-food-slider"
+						type="range" min="1" max="50" step="1" value="5">
+						<output for="repro-food" id="r-food">5</output>
+					</label>
+
+					<label for="max-food-slider">Max Food Capacity
+						<input id="max-food-slider"
+						type="range" min="1" max="50" step="1" value="25">
+						<output for="max-food" id="max-food">25</output>
+					</label>
+
+				</div>
+				<div id="predator-controls">
+					<h2>Predator</h2>
+
+					<label for="initial-food-slider">Initial Food Level
+						<input id="pred-initial-food-slider"
+						type="range" min="0" max="100" step="1" value="50">
+						<output for="initial-food" id="pred-init-food">50</output>
+					</label>
+
+					<label for="metabolism-slider">Metabolic Rate
+						<input id="pred-metabolism-slider"
+						type="range" min="0" max="20" step="1" value="5">
+						<output for="metabolism" id="pred-m-rate">5</output>
+					</label>
+
+					<label for="max-age-slider">Max Age
+						<input id="pred-max-age-slider"
+						type="range" min="0" max="100" step="1" value="50">
+						<output for="max-age" id="pred-m-age">50</output>
+					</label>
+
+					<label for="repro-age-slider">Min. Reproductive Age
+						<input id="pred-repro-age-slider"
+						type="range" min="3" max="30" step="1" value="10">
+						<output for="repro-age" id="pred-r-age">10</output>
+					</label>
+
+
+					<label for="repro-food-slider">Min. Reproduction Food
+						<input id="pred-repro-food-slider"
+						type="range" min="1" max="50" step="1" value="40">
+						<output for="repro-food" id="pred-r-food">40</output>
+					</label>
+
+					<label for="max-food-slider">Max Food Capacity
+						<input id="pred-max-food-slider"
+						type="range" min="1" max="300" step="1" value="100">
+						<output for="max-food" id="pred-max-food">100</output>
+					</label>
+				</div>
+
+				<div id="grass-controls">
+					<h2>Grass</h2>
+					<label for="grass-slider">Grass Grow Rate
+						<input id="grass-slider"
+						type="range" min="0" max="3" step=".1" value="1">
+						<output for="grass-level" id="grass-rate">1</output>
+					</label>
+
+					<label for="grass-start-slider">Grass Start Length
+						<input id="grass-start-slider"
+						type="range" min="0" max="5" step="1" value="3">
+						<output for="grass-start-level" id="grass-start">3</output>
+					</label>
+
+					<label for="grass-max-slider">Grass Max Length
+						<input id="grass-max-slider"
+						type="range" min="0" max="10" step="1" value="5">
+						<output for="grass-max-level" id="grass-max">5</output>
+					</label>
+
+				</div>
+
+				<div class="button-bar">
+					<button id="step-game">One Step</button>
+					<button id="set-game">Set New Board</button>
+				</div>
+			</div>
+			<div class="game-and-stats" >
+
+				<div id="canvas-container" class="canvas">
+					<canvas id="gameCanvas">
+					</canvas>
+					<div id="game-over">Click to Start or Pause</div>
+				</div>
+
+
+				<div id="stats-panel">
+					<div id="prey-stats">
+						<ul class="no-list">
+						<li class="no-list">Prey Count <span class="rabbit-count"></span></li>
+						<li class="no-list">Dead Prey <span class="dead-rabbits"></span></li>
+						<li class="no-list">Birthed Prey <span class="birthed-rabbits"></span></li>
+						</ul>
+					</div>
+					<div id="predator-stats">
+						<ul class="no-list">
+						<li class="no-list">Predator Count <span class="wolf-count"></span></li>
+						<li class="no-list">Dead Predator <span class="dead-wolves"></span></li>
+						<li class="no-list">Birthed Predator <span class="birthed-wolves"></span></li>
+						</ul>
+					</div>
+					<div id="grass-stats">
+						<ul class="no-list">
+						<li class="no-list">Average Grass Level <span class="avg-grass"></span></li>
+						<li class="no-list">Steps <span class="step-count"></span></li>
+					</ul>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-
-		<div id="prey-controls">
-			<h2>Prey</h2>
-
-			<label for="initial-food-slider">Initial Food Level
-			<input id="initial-food-slider"
-			type="range" min="0" max="100" step="1" value="1">
-			<output for="initial-food" id="init-food">1</output></label>
-
-			<label for="metabolism-slider">Metabolic Rate
-			<input id="metabolism-slider"
-			type="range" min="0" max="10" step="1" value="1">
-			<output for="metabolism" id="m-rate">1</output></label>
-
-			<label for="max-age-slider">Max Age
-			<input id="max-age-slider"
-			type="range" min="0" max="30" step="1" value="17">
-			<output for="max-age" id="m-age">17</output></label>
-
-			<label for="repro-age-slider">Min. Reproductive Age
-			<input id="repro-age-slider"
-			type="range" min="3" max="30" step="1" value="3">
-			<output for="repro-age" id="r-age">3</output></label>
-
-
-			<label for="repro-food-slider">Min. Reproduction Food
-			<input id="repro-food-slider"
-			type="range" min="1" max="50" step="1" value="5">
-			<output for="repro-food" id="r-food">5</output></label>
-
-			<label for="max-food-slider">Max Food Capacity
-			<input id="max-food-slider"
-			type="range" min="1" max="50" step="1" value="25">
-			<output for="max-food" id="max-food">25</output></label>
-
-		</div>
-		<div id="predator-controls">
-			<h2>Predator</h2>
-			<label for="initial-food-slider">Initial Food Level
-			<input id="pred-initial-food-slider"
-			type="range" min="0" max="100" step="1" value="50">
-			<output for="initial-food" id="pred-init-food">50</output></label>
-
-			<label for="metabolism-slider">Metabolic Rate
-			<input id="pred-metabolism-slider"
-			type="range" min="0" max="20" step="1" value="5">
-			<output for="metabolism" id="pred-m-rate">5</output></label>
-
-			<label for="max-age-slider">Max Age
-			<input id="pred-max-age-slider"
-			type="range" min="0" max="100" step="1" value="50">
-			<output for="max-age" id="pred-m-age">50</output></label>
-
-			<label for="repro-age-slider">Min. Reproductive Age
-			<input id="pred-repro-age-slider"
-			type="range" min="3" max="30" step="1" value="10">
-			<output for="repro-age" id="pred-r-age">10</output></label>
-
-
-			<label for="repro-food-slider">Min. Reproduction Food
-			<input id="pred-repro-food-slider"
-			type="range" min="1" max="50" step="1" value="40">
-			<output for="repro-food" id="pred-r-food">40</output></label>
-
-			<label for="max-food-slider">Max Food Capacity
-			<input id="pred-max-food-slider"
-			type="range" min="1" max="300" step="1" value="100">
-			<output for="max-food" id="pred-max-food">100</output></label>
-		</div>
-
-		<div id="grass-controls">
-			<h2>Grass</h2>
-			<label for="grass-slider">Grass Grow Rate
-			<input id="grass-slider"
-			type="range" min="0" max="3" step=".1" value="1">
-			<output for="grass-level" id="grass-rate">1</output></label>
-
-			<label for="grass-start-slider">Grass Start Length
-			<input id="grass-start-slider"
-			type="range" min="0" max="5" step="1" value="3">
-			<output for="grass-start-level" id="grass-start">3</output></label>
-
-			<label for="grass-max-slider">Grass Max Length
-			<input id="grass-max-slider"
-			type="range" min="0" max="10" step="1" value="5">
-			<output for="grass-max-level" id="grass-max">5</output></label>
-
-		</div>
-		<div class="button-bar">
-			<button id="step-game">One Step</button>
-			<button id="set-game">Set New Board</button>
-		</div>
-	</div>
-	<div class="game-and-stats" >
-
-<div id="canvas-container" class="canvas">
-	<canvas id="gameCanvas">
-	</canvas>
-	<div id="game-over">Click to Start or Pause</div>
-</div>
-
-
-	<div id="stats-panel">
-		<div id="prey-stats">
-			<ul class="no-list">
-			<li class="no-list">Prey Count <span class="rabbit-count"></span></li>
-			<li class="no-list">Dead Prey <span class="dead-rabbits"></span></li>
-			<li class="no-list">Birthed Prey <span class="birthed-rabbits"></span></li>
-			</ul>
-		</div>
-		<div id="predator-stats">
-			<ul class="no-list">
-			<li class="no-list">Predator Count <span class="wolf-count"></span></li>
-			<li class="no-list">Dead Predator <span class="dead-wolves"></span></li>
-			<li class="no-list">Birthed Predator <span class="birthed-wolves"></span></li>
-			</ul>
-		</div>
-		<div id="grass-stats">
-			<ul class="no-list">
-			<li class="no-list">Average Grass Level <span class="avg-grass"></span></li>
-			<li class="no-list">Steps <span class="step-count"></span></li>
-		</ul>
-		</div>
-	</div>
-</div>
-</div>
-</div>
 </div>
 
 </body>

@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function(){
   const ctx = canvas.getContext('2d');
   const frame = document.getElementById('frame');
   const canvasContainer = document.getElementById('canvas-container');
-  //TESTING
+
   const x = window.innerWidth || document.documentElement.clientWidth;
   const y = window.innerHeight || document.documentElement.clientHeight;
   const width = parseInt(x * .05);
@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", function(){
   window.width = width;
   window.height = height;
 
-  //TESTING
   canvas.width = 12 * width;
   canvas.height = 12 * height;
   frame.style.width = x;
