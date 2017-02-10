@@ -190,7 +190,8 @@ class Board{
           // ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
         } else if (patch.type == "wolf"){
           this.wolfCount ++;
-          ctx.fillStyle = "#858585";
+          ctx.fillStyle = "#FFAA00";
+
 //TESTING
       // if(patch.animal.id == 1){
       //     ctx.fillStyle ="#FF0000";
