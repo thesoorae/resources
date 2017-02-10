@@ -313,17 +313,12 @@
 	      for( let y = 0; y < this.canvasHeight; y++){
 	        this.updateCell(x,y);
 	        let animal = this.grid[x][y].previousAnimal;
-	
-	
-	
-	
 	        if(animal instanceof Animal && animal.alive){
 	          if(animal instanceof Rabbit){
 	            if(animal.id == 1){
 	              this.oneRabbit = animal;
 	            }
 	            let availableSpaces = animal.availableSpaces();
-	
 	            for(let i = 0; i < availableSpaces.length ; i++){
 	              let newCoords = availableSpaces[i]
 	              let newX = newCoords[0];
@@ -347,19 +342,15 @@
 	          }
 	
 	          if(animal.shouldReproduce()){
-	
 	            const chance = Math.random()*2 > 1;
-	
 	            let currentCell = this.nextGrid[x][y];
 	            if(animal instanceof Rabbit && chance){
 	              currentCell.addNewRabbit(this.preyParams);
 	              this.birthedRabbits ++;
 	            } else if(animal instanceof Wolf && chance){
-	
 	              currentCell.addNewWolf(this.predatorParams);
 	              this.birthedWolves ++;
 	            }
-	
 	          }
 	        } else if(animal instanceof Animal && !animal.alive){
 	          if(animal instanceof Rabbit){
@@ -367,12 +358,9 @@
 	          } else if(animal instanceof Wolf){
 	            this.deadWolves ++;
 	          }
-	
-	        }
-	        // }
-	
 	        }
 	      }
+	    }
 	
 	
 	
@@ -389,12 +377,11 @@
 	    if(this.play){
 	      let now = Date.now();
 	      let dt = (now - this.lastTime) / 1000.0;
-	
 	      this.step(dt);
-	
 	      this.lastTime = now;
 	  	window.setTimeout(this.gameLoop, this.speed);
-	  }}
+	    }
+	  }
 	
 	  toggleGame(){
 	    this.play = !this.play;

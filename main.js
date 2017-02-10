@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
   const x = window.innerWidth || document.documentElement.clientWidth;
   const y = window.innerHeight || document.documentElement.clientHeight;
-  const width = parseInt(x * .05);
+  const width = parseInt(x * .07);
   const height = parseInt(y * .06);
   window.width = width;
   window.height = height;
