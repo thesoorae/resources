@@ -279,7 +279,8 @@
 	          // ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
 	        } else if (patch.type == "wolf"){
 	          this.wolfCount ++;
-	          ctx.fillStyle = "#383838";
+	          ctx.fillStyle = "#FFAA00";
+	
 	//TESTING
 	      // if(patch.animal.id == 1){
 	      //     ctx.fillStyle ="#FF0000";
