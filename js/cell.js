@@ -53,8 +53,6 @@ neighbors(){
     [x + 1 , y + 1]
   ];
   spots.forEach((coord) => {
-    // let a = coord[0] % this.board.canvasWidth;
-    // let b = coord[1] % this.board.canvasHeight;
 
     let a = coord[0];
     let b = coord[1];
@@ -78,15 +76,6 @@ neighbors(){
   });
   return neighbors;
   }
-
-  //
-  // if(coord[0] >= 0 && coord[1] >= 0 ){
-  // let a = coord[0] % this.board.canvasWidth;
-  // let b = coord[1] % this.board.canvasHeight;
-  // neighbors.push(this.board.grid[a][b]);
-  // }
-
-
 
 addAnimal(animal){
   this.animal = animal;
@@ -134,10 +123,6 @@ updateGrass(){
     this.type = "grass";
     return this.cell;
   }
-
-
-
-
 }
 
 module.exports = Cell;

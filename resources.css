@@ -4,21 +4,30 @@
 html, body, ul, li, p, span, div, h1, h2, h3{
   font-family: sans-serif;
   font-family: 'Mada', sans-serif;
+  font-size: inherit;
+  margin: 0;
+  padding: 0;
 
 }
 h1{
   font-size: 40px;
   font-family: 'Sigmar One', cursive;
-
+}
+h2{
+  font-size: 20px;
 
 }
 .canvas{
   margin: 10px;
   position: relative;
-  margin-top: 5%;
+  margin-top: 3%;
+display: flex;
+flex-direction: row;
+justify-content: flex-start;
 
 }
 canvas{
+  margin:10px;
   z-index: 300;
 
 }
@@ -79,10 +88,9 @@ div.game-container {
 }
 
 div.controls{
-  margin: 20px;
+  margin: 3%;
   background-color: rgba(255, 255, 255, 0.7);
-  margin-top: 2.5%;
-  margin-right: 3%;
+
   height: 100%;
   border-radius: 5px;
   width: 25%;
@@ -90,6 +98,13 @@ div.controls{
 
   /*overflow-y: scroll;*/
 
+}
+
+div.control{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
 }
 
 
@@ -106,7 +121,7 @@ div#prey-controls, #predator-controls, #grass-controls, #game-controls{
 div#stats-panel {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: flex-start;
   font-size: 16px;
   text-transform: uppercase;
 }
@@ -120,7 +135,7 @@ div.game-and-stats {
 #stats-panel div{
   color: white;
   border-radius: 5px;
-  margin: 20px;
+  margin: 10px;
   padding: 10px;
 }
 
@@ -188,9 +203,8 @@ div.modal-content {
     width: 80%; /* Could be more or less, depending on screen size */
     text-align: left;
 
-
 }
-.modal-content p{
+.modal-content > p{
   font-size: 20px;
 
 }
@@ -202,11 +216,22 @@ div.modal-content {
 }
 .modal-content h1, h2{
   text-align: center;
-  margin: 10px;
+  margin: 10px 0px;
 }
 button#ready {
   text-align: center;
   margin: 10px;
 
 
+}
+.title{
+  background-color: #C2D6A1;
+  background-color: rgba(194,214,161, 0.7);
+  width: 30%;
+  margin: 0 auto;
+  margin-top: 20px;
+  color: black !important;
+}
+.title p{
+  margin: 10px;
 }

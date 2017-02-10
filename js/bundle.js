@@ -53,7 +53,7 @@
 	  const ctx = canvas.getContext('2d');
 	  const frame = document.getElementById('frame');
 	  const canvasContainer = document.getElementById('canvas-container');
-	  //TESTING
+	
 	  const x = window.innerWidth || document.documentElement.clientWidth;
 	  const y = window.innerHeight || document.documentElement.clientHeight;
 	  const width = parseInt(x * .05);
@@ -61,7 +61,6 @@
 	  window.width = width;
 	  window.height = height;
 	
-	  //TESTING
 	  canvas.width = 12 * width;
 	  canvas.height = 12 * height;
 	  frame.style.width = x;
@@ -145,32 +144,33 @@
 	
 	  }
 	
-	updateStats(){
+	  updateStats(){
 	
-	document.querySelector('.rabbit-count').innerHTML = this.rabbitCount.toString();
-	document.querySelector('.dead-rabbits').innerHTML = this.deadRabbits.toString();
-	document.querySelector('.birthed-rabbits').innerHTML = this.birthedRabbits.toString();
+	    document.querySelector('.rabbit-count').innerHTML = this.rabbitCount.toString();
+	    document.querySelector('.dead-rabbits').innerHTML = this.deadRabbits.toString();
+	    document.querySelector('.birthed-rabbits').innerHTML = this.birthedRabbits.toString();
 	
-	document.querySelector('.wolf-count').innerHTML = this.wolfCount.toString();
-	document.querySelector('.dead-wolves').innerHTML = this.deadWolves.toString();
-	document.querySelector('.birthed-wolves').innerHTML = this.birthedWolves.toString();
+	    document.querySelector('.wolf-count').innerHTML = this.wolfCount.toString();
+	    document.querySelector('.dead-wolves').innerHTML = this.deadWolves.toString();
+	    document.querySelector('.birthed-wolves').innerHTML = this.birthedWolves.toString();
 	
-	document.querySelector('.avg-grass').innerHTML = this.avgGrass();
-	document.querySelector('.step-count').innerHTML = this.steps.toString();
+	    document.querySelector('.avg-grass').innerHTML = this.avgGrass();
+	    document.querySelector('.step-count').innerHTML = this.steps.toString();
 	
-	if(this.gameOver()){
-	  this.gameOverText.innerHTML = `All the Animals Are Dead! ${this.steps} Steps Total`;
-	    this.toggleGame();
-	}
+	    if(this.gameOver()){
+	      this.gameOverText.innerHTML = `All the Animals Are Dead! ${this.steps} Steps Total`;
+	        this.toggleGame();
+	    }
+	  };
 	
-	};
+	  gameOver(){
+	    return this.rabbitCount == 0 && this.wolfCount == 0;
+	  }
 	
-	gameOver(){
-	  return this.rabbitCount == 0 && this.wolfCount == 0;
-	};
-	avgGrass(){
-	  return (parseInt(this.totalGrass / (this.canvasWidth * this.canvasHeight))).toString();
-	}
+	  avgGrass(){
+	    return (parseInt(this.totalGrass / (this.canvasWidth * this.canvasHeight))).toString();
+	  }
+	
 	  transitionBG(){
 	    let bg_images = this.frame.childNodes;
 	
@@ -195,11 +195,10 @@
 	
 	  start(){
 	    this.gameOverText.innerHTML = "Click to Start or Pause";
-	
 	    this.setupGrid();
 	    this.draw();
-	
 	  }
+	
 	  setupGrid(){
 	    for(let x=0; x < this.canvasWidth; x++){
 	      this.grid[x] = [];
@@ -207,11 +206,7 @@
 	      for( let y = 0; y< this.canvasHeight; y++ ){
 	        this.grid[x][y] = [];
 	        this.nextGrid[x][y] = new Cell(this.grassParams, this.board, x,y, "grass");
-	
-	  //EDIT
-	
 	        let rand = Math.random()*1000;
-	
 	        if(rand > (1000 - this.ratio)){
 	          this.grid[x][y] = new Cell(this.grassParams, this.board, x,y);
 	          this.grid[x][y].addNewWolf(this.predatorParams, this.wolfId);
@@ -265,9 +260,7 @@
 	          ctx.fillStyle = grassColor;
 	          ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
 	
-	
 	        if (patch.type == "rabbit") {
-	
 	          this.rabbitCount ++;
 	          ctx.fillStyle = "#ee66aa";
 	//TESTING
@@ -278,7 +271,6 @@
 	          ctx.arc(rad+gaps*x,rad+ gaps*y, rad, 0, Math.PI*2, true);
 	          ctx.closePath();
 	          ctx.fill();
-	
 	          // ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
 	        } else if (patch.type == "wolf"){
 	          this.wolfCount ++;
@@ -321,17 +313,12 @@
 	      for( let y = 0; y < this.canvasHeight; y++){
 	        this.updateCell(x,y);
 	        let animal = this.grid[x][y].previousAnimal;
-	
-	
-	
-	
 	        if(animal instanceof Animal && animal.alive){
 	          if(animal instanceof Rabbit){
 	            if(animal.id == 1){
 	              this.oneRabbit = animal;
 	            }
 	            let availableSpaces = animal.availableSpaces();
-	
 	            for(let i = 0; i < availableSpaces.length ; i++){
 	              let newCoords = availableSpaces[i]
 	              let newX = newCoords[0];
@@ -355,19 +342,15 @@
 	          }
 	
 	          if(animal.shouldReproduce()){
-	
 	            const chance = Math.random()*2 > 1;
-	
 	            let currentCell = this.nextGrid[x][y];
 	            if(animal instanceof Rabbit && chance){
 	              currentCell.addNewRabbit(this.preyParams);
 	              this.birthedRabbits ++;
 	            } else if(animal instanceof Wolf && chance){
-	
 	              currentCell.addNewWolf(this.predatorParams);
 	              this.birthedWolves ++;
 	            }
-	
 	          }
 	        } else if(animal instanceof Animal && !animal.alive){
 	          if(animal instanceof Rabbit){
@@ -375,12 +358,9 @@
 	          } else if(animal instanceof Wolf){
 	            this.deadWolves ++;
 	          }
-	
-	        }
-	        // }
-	
 	        }
 	      }
+	    }
 	
 	
 	
@@ -397,12 +377,11 @@
 	    if(this.play){
 	      let now = Date.now();
 	      let dt = (now - this.lastTime) / 1000.0;
-	
 	      this.step(dt);
-	
 	      this.lastTime = now;
 	  	window.setTimeout(this.gameLoop, this.speed);
-	  }}
+	    }
+	  }
 	
 	  toggleGame(){
 	    this.play = !this.play;
@@ -477,8 +456,6 @@
 	    [x + 1 , y + 1]
 	  ];
 	  spots.forEach((coord) => {
-	    // let a = coord[0] % this.board.canvasWidth;
-	    // let b = coord[1] % this.board.canvasHeight;
 	
 	    let a = coord[0];
 	    let b = coord[1];
@@ -502,15 +479,6 @@
 	  });
 	  return neighbors;
 	  }
-	
-	  //
-	  // if(coord[0] >= 0 && coord[1] >= 0 ){
-	  // let a = coord[0] % this.board.canvasWidth;
-	  // let b = coord[1] % this.board.canvasHeight;
-	  // neighbors.push(this.board.grid[a][b]);
-	  // }
-	
-	
 	
 	addAnimal(animal){
 	  this.animal = animal;
@@ -558,10 +526,6 @@
 	    this.type = "grass";
 	    return this.cell;
 	  }
-	
-	
-	
-	
 	}
 	
 	module.exports = Cell;
@@ -581,36 +545,28 @@
 	    this.age = 0;
 	    this.alive = true;
 	    this.name = "rabbit";
-	
-	
-	
 	    this.cell = cell;
-	
-	
 	    this.eat = this.eat.bind(this);
 	    this.availableSpaces = this.availableSpaces.bind(this);
-	    // this.randomNeighbor = this.randomNeighbor.bind(this);
 	    this.mortality = this.mortality.bind(this);
 	    this.shouldReproduce = this.shouldReproduce.bind(this);
 	  }
+	
 	  newCell(cell){
 	    this.cell = cell;
 	  }
 	
-	
 	  eat(){
-	
 	    let neededFood = this.maxFood - this.food;
 	    if(this.cell.grassLevel < neededFood){
-	    this.food += this.cell.grassLevel;
-	    this.cell.eatGrass(this.cell.grassLevel);
-	    this.food -= this.metabolicRate;
-	  } else{
-	    this.food += neededFood;
-	    this.cell.eatGrass(neededFood);
-	    this.food -= this.metabolicRate;
-	  }
-	
+	      this.food += this.cell.grassLevel;
+	      this.cell.eatGrass(this.cell.grassLevel);
+	      this.food -= this.metabolicRate;
+	    } else{
+	      this.food += neededFood;
+	      this.cell.eatGrass(neededFood);
+	      this.food -= this.metabolicRate;
+	    }
 	  }
 	
 	
@@ -620,18 +576,10 @@
 	    if(this.age > this.maxAge || this.food < 1){
 	      this.kill();
 	    }
-	
-	  //change parameters for reproduction
-	    // if(this.age > this.metabolicRate && (Math.random()*10) > 9 ){
-	    //   this.move(new Rabbit()));
-	    // }
-	
 	  }
 	
 	  availableSpaces(){
-	
 	    let spaces = [];
-	
 	    let neighbors = this.cell.neighbors();
 	    for(let g = 5; g > 0; g --){
 	      if(spaces.length > 0){
@@ -645,30 +593,15 @@
 	        });
 	      }
 	    }
-	
-	      spaces = this.shuffle(spaces);
-	
-	      spaces.push([this.cell.currentX, this.cell.currentY]);
-	
+	    spaces = this.shuffle(spaces);
+	    spaces.push([this.cell.currentX, this.cell.currentY]);
 	    return spaces;
 	  }
 	
-	  // randomNeighbor(){
-	  //
-	  //  let openSpaces = this.openSpaces();
-	  //  let idx = Math.floor(Math.random() * openSpaces.length);
-	  //  let result = [this.cell.currentX, this.cell.currentY];
-	  //  if(openSpaces[idx] !== undefined){
-	  //    result = [openSpaces[idx][0], openSpaces[idx][1]];
-	  // }
-	  //   return result;
-	  // }
-	
 	  shouldReproduce(){
-	  return this.age > this.reproductiveAge && this.food > this.reproductiveFoodRequirement
-	
+	    return this.age > this.reproductiveAge && this.food > this.reproductiveFoodRequirement
 	  }
-	    }
+	}
 	
 	module.exports = Rabbit;
 
@@ -727,83 +660,72 @@
 	
 	
 	class Wolf extends Animal{
-	constructor(cell, params=default_predator_params, id){
-	  super(cell, params, id);
-	  this.age = 0;
-	  this.name = "wolf";
-	  this.alive = true;
-	
-	
-	
-	
-	  this.randomNeighbor = this.randomNeighbor.bind(this);
-	  this.availableSpaces = this.availableSpaces.bind(this);
-	  this.eat = this.eat.bind(this);
-	  this.shouldReproduce = this.shouldReproduce.bind(this);
-	  this.mortality = this.mortality.bind(this);
-	}
-	
-	
-	
-	mortality(){
-	  this.age ++;
-	  this.food -= this.metabolicRate;
-	  if(this.age > this.maxAge || this.food < 1){
-	    this.kill();
+	  constructor(cell, params=default_predator_params, id){
+	    super(cell, params, id);
+	    this.age = 0;
+	    this.name = "wolf";
+	    this.alive = true;
+	    this.randomNeighbor = this.randomNeighbor.bind(this);
+	    this.availableSpaces = this.availableSpaces.bind(this);
+	    this.eat = this.eat.bind(this);
+	    this.shouldReproduce = this.shouldReproduce.bind(this);
+	    this.mortality = this.mortality.bind(this);
 	  }
 	
-	}
-	availableSpaces(){
-	  let neighbors = this.cell.neighbors();
+	  mortality(){
+	    this.age ++;
+	    this.food -= this.metabolicRate;
+	    if(this.age > this.maxAge || this.food < 1){
+	      this.kill();
+	    }
+	  }
 	
-	  let rabbitSpaces = [];
-	  let emptySpaces = [];
+	  availableSpaces(){
+	    let neighbors = this.cell.neighbors();
 	
-	  //TESTING
-	
+	    let rabbitSpaces = [];
+	    let emptySpaces = [];
 	
 	    neighbors.forEach((neighbor) => {
 	
-	    if(neighbor.type == "rabbit"){
-	      rabbitSpaces.push(neighbor);
-	    } else if(neighbor.type == "grass"){
-	      emptySpaces.push(neighbor);
+	      if(neighbor.type == "rabbit"){
+	        rabbitSpaces.push(neighbor);
+	      } else if(neighbor.type == "grass"){
+	        emptySpaces.push(neighbor);
+	      }
+	    });
+	
+	    if(rabbitSpaces.length > 0){
+	    emptySpaces = rabbitSpaces;
 	    }
-	  });
-	  if(rabbitSpaces.length > 0){
-	  emptySpaces = rabbitSpaces;
-	  }
-	  return emptySpaces;
-	}
-	
-	randomNeighbor(){
-	
-	 let openSpaces = this.availableSpaces();
-	 let idx = Math.floor(Math.random() * openSpaces.length);
-	 let result = [this.cell.currentX, this.cell.currentY];
-	 if(openSpaces[idx] !== undefined){
-	  //  debugger
-	   let neighbor = openSpaces[idx];
-	   this.eat(neighbor.animal);
-	   result = [neighbor.currentX, neighbor.currentY];
-	}
-	  return result;
-	}
-	
-	eat(rabbit){
-	  if(rabbit !== null){
-	    if(this.food < this.maxFood){
-	      this.food += rabbit.food;
-	      rabbit.kill();
-	    }
+	    return emptySpaces;
 	  }
 	
-	}
+	  randomNeighbor(){
 	
-	shouldReproduce(){
-	  return this.age > this.reproductiveAge && this.food > this.reproductiveFoodRequirement
-	}
+	   let openSpaces = this.availableSpaces();
+	   let idx = Math.floor(Math.random() * openSpaces.length);
+	   let result = [this.cell.currentX, this.cell.currentY];
+	   if(openSpaces[idx] !== undefined){
+	     let neighbor = openSpaces[idx];
+	     this.eat(neighbor.animal);
+	     result = [neighbor.currentX, neighbor.currentY];
+	   }
+	    return result;
+	  }
 	
+	  eat(rabbit){
+	    if(rabbit !== null){
+	      if(this.food < this.maxFood){
+	        this.food += rabbit.food;
+	        rabbit.kill();
+	      }
+	    }
+	  }
+	
+	  shouldReproduce(){
+	    return this.age > this.reproductiveAge && this.food > this.reproductiveFoodRequirement
+	  }
 	}
 	
 	module.exports = Wolf;
@@ -850,30 +772,24 @@
 	    this.width = width;
 	    this.height = height;
 	
-	
 	    this.createControls = this.createControls.bind(this);
 	    this.sendParams = this.sendParams.bind(this);
 	    this.toggleGame = this.toggleGame.bind(this);
 	    this.step = this.step.bind(this);
-	
-	
 	  }
 	
 	  sendParams(){
 	//TESTING
 	// console.log(this.width, this.height);
 	    let board = new Board(this.frame, this.ctx, this.width, this.height, this.speed, this.ratio, this.prey, this.predator, this.grass);
-	
 	    this.board = board;
 	    this.board.start();
-	    // this.modal.style.display = "block";
-	
 	  }
 	
 	  toggleGame(){
 	    if(this.board !== null){
 	        this.board.toggleGame();
-	      }
+	    }
 	  }
 	  step(){
 	    if(this.board !== null){
@@ -885,64 +801,64 @@
 	    this.sendParams();
 	  //prey hard code controls
 	  // debugger
-	      document.getElementById('ready').onclick = () => {
-	        document.getElementById('myModal').style.display = 'none';
+	    document.getElementById('ready').onclick = () => {
+	      document.getElementById('myModal').style.display = 'none';
 	      };
-	      const initial_food = document.getElementById('initial-food-slider');
-	      const metabolism = document.getElementById('metabolism-slider');
-	      const max_age = document.getElementById('max-age-slider');
-	      const repro_age = document.getElementById('repro-age-slider');
-	      const repro_food = document.getElementById('repro-food-slider');
-	      const max_food = document.getElementById('max-food-slider');
+	    const initial_food = document.getElementById('initial-food-slider');
+	    const metabolism = document.getElementById('metabolism-slider');
+	    const max_age = document.getElementById('max-age-slider');
+	    const repro_age = document.getElementById('repro-age-slider');
+	    const repro_food = document.getElementById('repro-food-slider');
+	    const max_food = document.getElementById('max-food-slider');
 	
-	      initial_food.oninput = () => {
-	        outputUpdate('init-food', initial_food.value);};
+	    initial_food.oninput = () => {
+	      outputUpdate('init-food', initial_food.value);};
 	
-	      metabolism.oninput = () => {
-	        outputUpdate('m-rate', metabolism.value);};
+	    metabolism.oninput = () => {
+	      outputUpdate('m-rate', metabolism.value);};
 	
-	      max_age.oninput = () => {
-	        outputUpdate('m-age', max_age.value);};
+	    max_age.oninput = () => {
+	      outputUpdate('m-age', max_age.value);};
 	
-	      repro_age.oninput = () => {
-	        outputUpdate('r-age', repro_age.value);};
+	    repro_age.oninput = () => {
+	      outputUpdate('r-age', repro_age.value);};
 	
-	      repro_food.oninput = () => {
-	        outputUpdate('r-food', repro_food.value);};
+	    repro_food.oninput = () => {
+	      outputUpdate('r-food', repro_food.value);};
 	
-	      max_food.oninput = () => {
-	        outputUpdate('max-food', max_food.value);};
+	    max_food.oninput = () => {
+	      outputUpdate('max-food', max_food.value);};
 	
-	        const outputUpdate = (output_id, val) => {
-	          this.prey[output_id] = val;
-	          document.querySelector(`#${output_id}`).value = val;
-	        };
+	      const outputUpdate = (output_id, val) => {
+	        this.prey[output_id] = val;
+	        document.querySelector(`#${output_id}`).value = val;
+	      };
 	
-	        const pred_initial_food = document.getElementById('pred-initial-food-slider');
-	        const pred_metabolism = document.getElementById('pred-metabolism-slider');
-	        const pred_max_age = document.getElementById('pred-max-age-slider');
-	        const pred_repro_age = document.getElementById('pred-repro-age-slider');
-	        const pred_repro_food = document.getElementById('pred-repro-food-slider');
-	        const pred_max_food = document.getElementById('pred-max-food-slider');
+	      const pred_initial_food = document.getElementById('pred-initial-food-slider');
+	      const pred_metabolism = document.getElementById('pred-metabolism-slider');
+	      const pred_max_age = document.getElementById('pred-max-age-slider');
+	      const pred_repro_age = document.getElementById('pred-repro-age-slider');
+	      const pred_repro_food = document.getElementById('pred-repro-food-slider');
+	      const pred_max_food = document.getElementById('pred-max-food-slider');
 	
 	
-	        pred_initial_food.oninput = () => {
-	          predOutputUpdate('init-food', pred_initial_food.value);};
+	      pred_initial_food.oninput = () => {
+	        predOutputUpdate('init-food', pred_initial_food.value);};
 	
-	        pred_metabolism.oninput = () => {
-	          predOutputUpdate('m-rate', pred_metabolism.value);};
+	      pred_metabolism.oninput = () => {
+	        predOutputUpdate('m-rate', pred_metabolism.value);};
 	
-	        pred_max_age.oninput = () => {
-	          predOutputUpdate('m-age', pred_max_age.value);};
+	      pred_max_age.oninput = () => {
+	        predOutputUpdate('m-age', pred_max_age.value);};
 	
-	        pred_repro_age.oninput = () => {
-	          predOutputUpdate('r-age', pred_repro_age.value);};
+	      pred_repro_age.oninput = () => {
+	        predOutputUpdate('r-age', pred_repro_age.value);};
 	
-	        pred_repro_food.oninput = () => {
-	          predOutputUpdate('r-food', pred_repro_food.value);};
+	      pred_repro_food.oninput = () => {
+	        predOutputUpdate('r-food', pred_repro_food.value);};
 	
-	        pred_max_food.oninput = () => {
-	          predOutputUpdate('max-food', pred_max_food.value);};
+	      pred_max_food.oninput = () => {
+	        predOutputUpdate('max-food', pred_max_food.value);};
 	
 	      const predOutputUpdate = (output_id, val) => {
 	        this.predator[output_id] = val;
@@ -984,13 +900,8 @@
 	      populationRatio.oninput = () => {
 	        this.ratio = populationRatio.value;
 	        document.querySelector(`#ratio`).value = populationRatio.value;
-	
 	    };
-	
-	
 	  }
-	
-	
 	}
 	
 	module.exports = Control;
