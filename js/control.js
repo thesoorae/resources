@@ -64,6 +64,18 @@ class Control{
     this.sendParams();
   //prey hard code controls
   // debugger
+    document.getElementById('show-game').onclick=()=>{
+      document.getElementById('game-controls').classList.toggle('hidden');
+    };
+    document.getElementById('show-prey').onclick=()=>{
+      document.getElementById('prey-controls').classList.toggle('hidden');
+    };
+    document.getElementById('show-pred').onclick=()=>{
+      document.getElementById('pred-controls').classList.toggle('hidden');
+    };
+    document.getElementById('show-grass').onclick=()=>{
+      document.getElementById('grass-controls').classList.toggle('hidden');
+    };
     document.getElementById('ready').onclick = () => {
       document.getElementById('myModal').style.display = 'none';
       };

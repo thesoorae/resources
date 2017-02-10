@@ -18,23 +18,24 @@ h2{
 
 }
 .canvas{
-  margin: 10px;
+  margin: 0 10px;
   position: relative;
-  margin-top: 3%;
+  /*margin-top: 3%;*/
 display: flex;
 flex-direction: row;
 justify-content: flex-start;
 
 }
 canvas{
-  margin:10px;
+  /*margin: 0 10px;*/
   z-index: 300;
 
 }
 div#frame {
   position:relative;
-  background-size: cover;
-  overflow: hidden;
+  /*background-size: cover;*/
+  /*overflow: hidden;*/
+  background-color: "#f1f1f1";
 
 }
 
@@ -55,7 +56,7 @@ div#game-over{
   visibility: hidden;
 }
 
-#frame img {
+/*#frame img {
   z-index: -100;
   position:absolute;
   left:0;
@@ -67,7 +68,7 @@ div#game-over{
   transition: opacity 3s ease-in;
   animation-duration: 1.5s;
 
-}
+}*/
 
 .visible {
   opacity: 1;
@@ -83,13 +84,13 @@ div.game-container {
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   vertical-align: middle;
 }
 
 div.controls{
-  margin: 3%;
-  background-color: rgba(255, 255, 255, 0.7);
+  margin: 10px;
+  /*background-color: rgba(255, 255, 255, 0.7);*/
 
   height: 100%;
   border-radius: 5px;
@@ -111,6 +112,9 @@ div.control{
 .controls, #stats-panel div{
   padding: 20px;
 }
+title{
+  padding: 0;
+}
 
 div#prey-controls, #predator-controls, #grass-controls, #game-controls{
   display: flex;
@@ -121,9 +125,10 @@ div#prey-controls, #predator-controls, #grass-controls, #game-controls{
 div#stats-panel {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
-  font-size: 16px;
-  text-transform: uppercase;
+  justify-content: space-around;
+  font-size: 20px;
+  font-weight: bold;
+  /*text-transform: uppercase;*/
 }
 
 div.game-and-stats {
@@ -133,27 +138,27 @@ div.game-and-stats {
 }
 
 #stats-panel div{
-  color: white;
-  border-radius: 5px;
-  margin: 10px;
+
+  /*border-radius: 5px;*/
+  /*margin: 10px;*/
   padding: 10px;
 }
 
-div#prey-stats{
-  background-color: rgba(243, 84, 120,  0.7);
+#prey-stats {
+  color: #ee66aa;
 }
-div#predator-stats{
-  background-color: rgba(0, 0, 0, 0.7);
+#predator-stats{
+  color: #383838;
 }
-div#grass-stats{
-  background-color: rgba(159, 217, 138, 0.7);
+#grass-stats {
+  color: #397D02;
 }
 
-
+/*
 #stats-panel span{
   font-size: 18px;
   font-weight: bold;
-}
+}*/
 .no-list {
   list-style: none;
   padding: 10px;
@@ -162,18 +167,19 @@ div#grass-stats{
 div.button-bar {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: center;
 }
 button{
   margin: 20px;
   margin-top: 30px;
-  height: 40px;
+  height: auto;
+  width: auto;
   border-radius: 5px;
   background-color: green;
   text-transform: uppercase;
   font-size: 14px;
   color: white;
-  padding: 5px;
+  padding: 10px;
 }
 div.modal {
     /*display: none; /* Hidden by default */*/
@@ -225,13 +231,32 @@ button#ready {
 
 }
 .title{
-  background-color: #C2D6A1;
-  background-color: rgba(194,214,161, 0.7);
-  width: 30%;
+  /*background-color: #C2D6A1;
+  background-color: rgba(194,214,161, 0.7);*/
+  /*width: 25%;*/
   margin: 0 auto;
   margin-top: 20px;
-  color: black !important;
+  color: black;
 }
 .title p{
   margin: 10px;
+}
+
+.hidden div{
+  display: none;
+}
+.control-title{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.control-title p{
+  margin-top: 15px;
+}
+.clickable {
+  color: #ee66aa;
+  cursor: pointer;
+}
+.clickable:hover{
+  color: green;
 }

@@ -53,13 +53,14 @@
 	  const ctx = canvas.getContext('2d');
 	  const frame = document.getElementById('frame');
 	  const canvasContainer = document.getElementById('canvas-container');
+	  const stats_panel = document.getElementById('stats-panel');
+	
 	
 	  const x = window.innerWidth || document.documentElement.clientWidth;
 	  const y = window.innerHeight || document.documentElement.clientHeight;
-	  const width = parseInt(x * .05);
-	  const height = parseInt(y * .06);
-	  window.width = width;
-	  window.height = height;
+	  const width = parseInt(x * .055);
+	  const height = parseInt(y * .065);
+	
 	
 	  canvas.width = 12 * width;
 	  canvas.height = 12 * height;
@@ -67,6 +68,10 @@
 	  frame.style.height = y;
 	  canvas.style.width = canvas.width;
 	  canvas.style.height = canvas.height;
+	  stats_panel.style.width = canvas.width;
+	  stats_panel.style.height = canvas.height;
+	  canvasContainer.style.width = canvas.width;
+	  canvasContainer.style.height = canvas.height;
 	
 	  let control = new Control(frame, ctx, width, height);
 	
@@ -138,7 +143,7 @@
 	    this.gameLoop = this.gameLoop.bind(this);
 	    this.updateCell = this.updateCell.bind(this);
 	    this.toggleGame = this.toggleGame.bind(this);
-	    this.transitionBG = this.transitionBG.bind(this);
+	    // this.transitionBG = this.transitionBG.bind(this);
 	    this.updateStats = this.updateStats.bind(this);
 	    this.gameOver = this.gameOver.bind(this);
 	
@@ -171,23 +176,23 @@
 	    return (parseInt(this.totalGrass / (this.canvasWidth * this.canvasHeight))).toString();
 	  }
 	
-	  transitionBG(){
-	    let bg_images = this.frame.childNodes;
-	
-	    if(this.avgGrass() < 3){
-	      bg_images[1].className = "visible";
-	      bg_images[3].className = "transparent";
-	      bg_images[5].className = "transparent";
-	    } else if(this.avgGrass() < 5){
-	      bg_images[1].className = "transparent";
-	      bg_images[3].className = "visible";
-	      bg_images[5].className = "transparent";
-	    } else {
-	      bg_images[1].className = "transparent";
-	      bg_images[3].className = "transparent";
-	      bg_images[5].className = "visible";
-	    }
-	  }
+	  // transitionBG(){
+	  //   let bg_images = this.frame.childNodes;
+	  //
+	  //   if(this.avgGrass() < 3){
+	  //     bg_images[1].className = "visible";
+	  //     bg_images[3].className = "transparent";
+	  //     bg_images[5].className = "transparent";
+	  //   } else if(this.avgGrass() < 5){
+	  //     bg_images[1].className = "transparent";
+	  //     bg_images[3].className = "visible";
+	  //     bg_images[5].className = "transparent";
+	  //   } else {
+	  //     bg_images[1].className = "transparent";
+	  //     bg_images[3].className = "transparent";
+	  //     bg_images[5].className = "visible";
+	  //   }
+	  // }
 	
 	  patch(x,y){
 	    return this.grid[x][y];
@@ -237,25 +242,25 @@
 	
 	          switch(patch.grassLevel){
 	            case 0:
-	            grassColor = "#D5CBB8";
+	            grassColor = "#F2F3F1";
 	            break;
 	            case 1:
-	            grassColor = "#C9DAAB";
+	            grassColor = "#BAE4AD	";
 	            break;
 	            case 2:
-	            grassColor = "#C2D6A1";
+	            grassColor = "#84CF6E		";
 	            break;
 	            case 3:
-	            grassColor = "#91B454";
+	            grassColor = "#55AE3A";
 	            break;
 	            case 4:
-	            grassColor = "#6E8B3D";
+	            grassColor = "#008000	";
 	            break;
 	            case 5:
-	            grassColor = "#556B2F";
+	            grassColor = "#004F00		";
 	            break;
 	            default:
-	            grassColor = "#556B2F";
+	            grassColor = "#397D02	";
 	          }
 	          ctx.fillStyle = grassColor;
 	          ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
@@ -288,7 +293,7 @@
 	  		}
 	  	}
 	
-	    this.transitionBG();
+	    // this.transitionBG();
 	    //TESTING
 	    // console.log("one rabbit", this.oneRabbit);
 	    // console.log("one wolf", this.oneWolf);
@@ -801,6 +806,18 @@
 	    this.sendParams();
 	  //prey hard code controls
 	  // debugger
+	    document.getElementById('show-game').onclick=()=>{
+	      document.getElementById('game-controls').classList.toggle('hidden');
+	    };
+	    document.getElementById('show-prey').onclick=()=>{
+	      document.getElementById('prey-controls').classList.toggle('hidden');
+	    };
+	    document.getElementById('show-pred').onclick=()=>{
+	      document.getElementById('pred-controls').classList.toggle('hidden');
+	    };
+	    document.getElementById('show-grass').onclick=()=>{
+	      document.getElementById('grass-controls').classList.toggle('hidden');
+	    };
 	    document.getElementById('ready').onclick = () => {
 	      document.getElementById('myModal').style.display = 'none';
 	      };

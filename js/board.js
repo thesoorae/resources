@@ -54,7 +54,7 @@ class Board{
     this.gameLoop = this.gameLoop.bind(this);
     this.updateCell = this.updateCell.bind(this);
     this.toggleGame = this.toggleGame.bind(this);
-    this.transitionBG = this.transitionBG.bind(this);
+    // this.transitionBG = this.transitionBG.bind(this);
     this.updateStats = this.updateStats.bind(this);
     this.gameOver = this.gameOver.bind(this);
 
@@ -87,23 +87,23 @@ class Board{
     return (parseInt(this.totalGrass / (this.canvasWidth * this.canvasHeight))).toString();
   }
 
-  transitionBG(){
-    let bg_images = this.frame.childNodes;
-
-    if(this.avgGrass() < 3){
-      bg_images[1].className = "visible";
-      bg_images[3].className = "transparent";
-      bg_images[5].className = "transparent";
-    } else if(this.avgGrass() < 5){
-      bg_images[1].className = "transparent";
-      bg_images[3].className = "visible";
-      bg_images[5].className = "transparent";
-    } else {
-      bg_images[1].className = "transparent";
-      bg_images[3].className = "transparent";
-      bg_images[5].className = "visible";
-    }
-  }
+  // transitionBG(){
+  //   let bg_images = this.frame.childNodes;
+  //
+  //   if(this.avgGrass() < 3){
+  //     bg_images[1].className = "visible";
+  //     bg_images[3].className = "transparent";
+  //     bg_images[5].className = "transparent";
+  //   } else if(this.avgGrass() < 5){
+  //     bg_images[1].className = "transparent";
+  //     bg_images[3].className = "visible";
+  //     bg_images[5].className = "transparent";
+  //   } else {
+  //     bg_images[1].className = "transparent";
+  //     bg_images[3].className = "transparent";
+  //     bg_images[5].className = "visible";
+  //   }
+  // }
 
   patch(x,y){
     return this.grid[x][y];
@@ -153,25 +153,25 @@ class Board{
 
           switch(patch.grassLevel){
             case 0:
-            grassColor = "#D5CBB8";
+            grassColor = "#F2F3F1";
             break;
             case 1:
-            grassColor = "#C9DAAB";
+            grassColor = "#BAE4AD	";
             break;
             case 2:
-            grassColor = "#C2D6A1";
+            grassColor = "#84CF6E		";
             break;
             case 3:
-            grassColor = "#91B454";
+            grassColor = "#55AE3A";
             break;
             case 4:
-            grassColor = "#6E8B3D";
+            grassColor = "#008000	";
             break;
             case 5:
-            grassColor = "#556B2F";
+            grassColor = "#004F00		";
             break;
             default:
-            grassColor = "#556B2F";
+            grassColor = "#397D02	";
           }
           ctx.fillStyle = grassColor;
           ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
@@ -204,7 +204,7 @@ class Board{
   		}
   	}
 
-    this.transitionBG();
+    // this.transitionBG();
     //TESTING
     // console.log("one rabbit", this.oneRabbit);
     // console.log("one wolf", this.oneWolf);
