@@ -54,55 +54,56 @@ class Board{
     this.gameLoop = this.gameLoop.bind(this);
     this.updateCell = this.updateCell.bind(this);
     this.toggleGame = this.toggleGame.bind(this);
-    this.transitionBG = this.transitionBG.bind(this);
+    // this.transitionBG = this.transitionBG.bind(this);
     this.updateStats = this.updateStats.bind(this);
     this.gameOver = this.gameOver.bind(this);
 
   }
 
-updateStats(){
+  updateStats(){
 
-document.querySelector('.rabbit-count').innerHTML = this.rabbitCount.toString();
-document.querySelector('.dead-rabbits').innerHTML = this.deadRabbits.toString();
-document.querySelector('.birthed-rabbits').innerHTML = this.birthedRabbits.toString();
+    document.querySelector('.rabbit-count').innerHTML = this.rabbitCount.toString();
+    document.querySelector('.dead-rabbits').innerHTML = this.deadRabbits.toString();
+    document.querySelector('.birthed-rabbits').innerHTML = this.birthedRabbits.toString();
 
-document.querySelector('.wolf-count').innerHTML = this.wolfCount.toString();
-document.querySelector('.dead-wolves').innerHTML = this.deadWolves.toString();
-document.querySelector('.birthed-wolves').innerHTML = this.birthedWolves.toString();
+    document.querySelector('.wolf-count').innerHTML = this.wolfCount.toString();
+    document.querySelector('.dead-wolves').innerHTML = this.deadWolves.toString();
+    document.querySelector('.birthed-wolves').innerHTML = this.birthedWolves.toString();
 
-document.querySelector('.avg-grass').innerHTML = this.avgGrass();
-document.querySelector('.step-count').innerHTML = this.steps.toString();
+    document.querySelector('.avg-grass').innerHTML = this.avgGrass();
+    document.querySelector('.step-count').innerHTML = this.steps.toString();
 
-if(this.gameOver()){
-  this.gameOverText.innerHTML = `All the Animals Are Dead! ${this.steps} Steps Total`;
-    this.toggleGame();
-}
-
-};
-
-gameOver(){
-  return this.rabbitCount == 0 && this.wolfCount == 0;
-};
-avgGrass(){
-  return (parseInt(this.totalGrass / (this.canvasWidth * this.canvasHeight))).toString();
-}
-  transitionBG(){
-    let bg_images = this.frame.childNodes;
-
-    if(this.avgGrass() < 3){
-      bg_images[1].className = "visible";
-      bg_images[3].className = "transparent";
-      bg_images[5].className = "transparent";
-    } else if(this.avgGrass() < 5){
-      bg_images[1].className = "transparent";
-      bg_images[3].className = "visible";
-      bg_images[5].className = "transparent";
-    } else {
-      bg_images[1].className = "transparent";
-      bg_images[3].className = "transparent";
-      bg_images[5].className = "visible";
+    if(this.gameOver()){
+      this.gameOverText.innerHTML = `All the Animals Are Dead! ${this.steps} Steps Total`;
+        this.toggleGame();
     }
+  };
+
+  gameOver(){
+    return this.rabbitCount == 0 && this.wolfCount == 0;
   }
+
+  avgGrass(){
+    return (parseInt(this.totalGrass / (this.canvasWidth * this.canvasHeight))).toString();
+  }
+
+  // transitionBG(){
+  //   let bg_images = this.frame.childNodes;
+  //
+  //   if(this.avgGrass() < 3){
+  //     bg_images[1].className = "visible";
+  //     bg_images[3].className = "transparent";
+  //     bg_images[5].className = "transparent";
+  //   } else if(this.avgGrass() < 5){
+  //     bg_images[1].className = "transparent";
+  //     bg_images[3].className = "visible";
+  //     bg_images[5].className = "transparent";
+  //   } else {
+  //     bg_images[1].className = "transparent";
+  //     bg_images[3].className = "transparent";
+  //     bg_images[5].className = "visible";
+  //   }
+  // }
 
   patch(x,y){
     return this.grid[x][y];
@@ -110,11 +111,10 @@ avgGrass(){
 
   start(){
     this.gameOverText.innerHTML = "Click to Start or Pause";
-
     this.setupGrid();
     this.draw();
-
   }
+
   setupGrid(){
     for(let x=0; x < this.canvasWidth; x++){
       this.grid[x] = [];
@@ -122,11 +122,7 @@ avgGrass(){
       for( let y = 0; y< this.canvasHeight; y++ ){
         this.grid[x][y] = [];
         this.nextGrid[x][y] = new Cell(this.grassParams, this.board, x,y, "grass");
-
-  //EDIT
-
         let rand = Math.random()*1000;
-
         if(rand > (1000 - this.ratio)){
           this.grid[x][y] = new Cell(this.grassParams, this.board, x,y);
           this.grid[x][y].addNewWolf(this.predatorParams, this.wolfId);
@@ -157,32 +153,30 @@ avgGrass(){
 
           switch(patch.grassLevel){
             case 0:
-            grassColor = "#D5CBB8";
+            grassColor = "#F2F3F1";
             break;
             case 1:
-            grassColor = "#C9DAAB";
+            grassColor = "#BAE4AD	";
             break;
             case 2:
-            grassColor = "#C2D6A1";
+            grassColor = "#84CF6E		";
             break;
             case 3:
-            grassColor = "#91B454";
+            grassColor = "#55AE3A";
             break;
             case 4:
-            grassColor = "#6E8B3D";
+            grassColor = "#008000	";
             break;
             case 5:
-            grassColor = "#556B2F";
+            grassColor = "#004F00		";
             break;
             default:
-            grassColor = "#556B2F";
+            grassColor = "#397D02	";
           }
           ctx.fillStyle = grassColor;
           ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
 
-
         if (patch.type == "rabbit") {
-
           this.rabbitCount ++;
           ctx.fillStyle = "#ee66aa";
 //TESTING
@@ -193,7 +187,6 @@ avgGrass(){
           ctx.arc(rad+gaps*x,rad+ gaps*y, rad, 0, Math.PI*2, true);
           ctx.closePath();
           ctx.fill();
-
           // ctx.fillRect(x * gridSquareWidth, y * gridSquareWidth, gridSquareWidth, gridSquareWidth);
         } else if (patch.type == "wolf"){
           this.wolfCount ++;
@@ -211,7 +204,7 @@ avgGrass(){
   		}
   	}
 
-    this.transitionBG();
+    // this.transitionBG();
     //TESTING
     // console.log("one rabbit", this.oneRabbit);
     // console.log("one wolf", this.oneWolf);
@@ -236,17 +229,12 @@ avgGrass(){
       for( let y = 0; y < this.canvasHeight; y++){
         this.updateCell(x,y);
         let animal = this.grid[x][y].previousAnimal;
-
-
-
-
         if(animal instanceof Animal && animal.alive){
           if(animal instanceof Rabbit){
             if(animal.id == 1){
               this.oneRabbit = animal;
             }
             let availableSpaces = animal.availableSpaces();
-
             for(let i = 0; i < availableSpaces.length ; i++){
               let newCoords = availableSpaces[i]
               let newX = newCoords[0];
@@ -270,19 +258,15 @@ avgGrass(){
           }
 
           if(animal.shouldReproduce()){
-
             const chance = Math.random()*2 > 1;
-
             let currentCell = this.nextGrid[x][y];
             if(animal instanceof Rabbit && chance){
               currentCell.addNewRabbit(this.preyParams);
               this.birthedRabbits ++;
             } else if(animal instanceof Wolf && chance){
-
               currentCell.addNewWolf(this.predatorParams);
               this.birthedWolves ++;
             }
-
           }
         } else if(animal instanceof Animal && !animal.alive){
           if(animal instanceof Rabbit){
@@ -290,12 +274,9 @@ avgGrass(){
           } else if(animal instanceof Wolf){
             this.deadWolves ++;
           }
-
-        }
-        // }
-
         }
       }
+    }
 
 
 
@@ -312,12 +293,11 @@ avgGrass(){
     if(this.play){
       let now = Date.now();
       let dt = (now - this.lastTime) / 1000.0;
-
       this.step(dt);
-
       this.lastTime = now;
   	window.setTimeout(this.gameLoop, this.speed);
-  }}
+    }
+  }
 
   toggleGame(){
     this.play = !this.play;

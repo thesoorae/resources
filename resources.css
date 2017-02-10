@@ -4,28 +4,38 @@
 html, body, ul, li, p, span, div, h1, h2, h3{
   font-family: sans-serif;
   font-family: 'Mada', sans-serif;
+  font-size: inherit;
+  margin: 0;
+  padding: 0;
 
 }
 h1{
   font-size: 40px;
   font-family: 'Sigmar One', cursive;
-
+}
+h2{
+  font-size: 20px;
 
 }
 .canvas{
-  margin: 10px;
+  margin: 0 10px;
   position: relative;
-  margin-top: 5%;
+  /*margin-top: 3%;*/
+display: flex;
+flex-direction: row;
+justify-content: flex-start;
 
 }
 canvas{
+  /*margin: 0 10px;*/
   z-index: 300;
 
 }
 div#frame {
   position:relative;
-  background-size: cover;
-  overflow: hidden;
+  /*background-size: cover;*/
+  /*overflow: hidden;*/
+  background-color: "#f1f1f1";
 
 }
 
@@ -46,7 +56,7 @@ div#game-over{
   visibility: hidden;
 }
 
-#frame img {
+/*#frame img {
   z-index: -100;
   position:absolute;
   left:0;
@@ -58,7 +68,7 @@ div#game-over{
   transition: opacity 3s ease-in;
   animation-duration: 1.5s;
 
-}
+}*/
 
 .visible {
   opacity: 1;
@@ -74,15 +84,14 @@ div.game-container {
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   vertical-align: middle;
 }
 
 div.controls{
-  margin: 20px;
-  background-color: rgba(255, 255, 255, 0.7);
-  margin-top: 2.5%;
-  margin-right: 3%;
+  margin: 10px;
+  /*background-color: rgba(255, 255, 255, 0.7);*/
+
   height: 100%;
   border-radius: 5px;
   width: 25%;
@@ -92,9 +101,19 @@ div.controls{
 
 }
 
+div.control{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
 
 .controls, #stats-panel div{
   padding: 20px;
+}
+title{
+  padding: 0;
 }
 
 div#prey-controls, #predator-controls, #grass-controls, #game-controls{
@@ -107,8 +126,9 @@ div#stats-panel {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  font-size: 16px;
-  text-transform: uppercase;
+  font-size: 20px;
+  font-weight: bold;
+  /*text-transform: uppercase;*/
 }
 
 div.game-and-stats {
@@ -118,28 +138,28 @@ div.game-and-stats {
 }
 
 #stats-panel div{
-  color: white;
-  border-radius: 5px;
-  margin: 20px;
+
+  /*border-radius: 5px;*/
+  /*margin: 10px;*/
   padding: 10px;
 }
 
-div#prey-stats{
-  background-color: rgba(243, 84, 120,  0.7);
+#prey-stats {
+  color: #ee66aa;
 }
-div#predator-stats{
-  background-color: rgba(0, 0, 0, 0.7);
+#predator-stats{
+  color: #383838;
 }
-div#grass-stats{
-  background-color: rgba(159, 217, 138, 0.7);
+#grass-stats {
+  color: #397D02;
 }
 
-
+/*
 #stats-panel span{
   font-size: 18px;
   font-weight: bold;
-}
-ul, li {
+}*/
+.no-list {
   list-style: none;
   padding: 10px;
 }
@@ -147,18 +167,19 @@ ul, li {
 div.button-bar {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: center;
 }
 button{
   margin: 20px;
   margin-top: 30px;
-  height: 40px;
+  height: auto;
+  width: auto;
   border-radius: 5px;
   background-color: green;
   text-transform: uppercase;
   font-size: 14px;
   color: white;
-  padding: 5px;
+  padding: 10px;
 }
 div.modal {
     /*display: none; /* Hidden by default */*/
@@ -166,25 +187,30 @@ div.modal {
     z-index: 1; /* Sit on top */
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
+    width: 100vw; /* Full width */
+    height: 100vh; /* Full height */
+    overflow: scroll; /* Enable scroll if needed */
     background-color: #6E8B3D; /* Fallback color */
+
+    background-image: url("http://res.cloudinary.com/indiemomo/image/upload/c_fill,h_400,w_800/v1485406391/other/forest-07.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
     /*background-color: rgba(0,0,0,0.4); /* Black w/ opacity */*/
 }
 
 /* Modal Content/Box */
-.modal-content {
+div.modal-content {
     background-color: #C2D6A1;
-    margin: auto; /* 15% from the top and centered */
-    padding: 20px 70px;
+    background-color: rgba(194,214,161, 0.7);
+
+    margin: 5% auto; /* 15% from the top and centered */
+    padding: 70px;
     border: 1px solid #888;
     width: 80%; /* Could be more or less, depending on screen size */
     text-align: left;
 
-
 }
-.modal-content p{
+.modal-content > p{
   font-size: 20px;
 
 }
@@ -196,11 +222,41 @@ div.modal {
 }
 .modal-content h1, h2{
   text-align: center;
-  margin: 10px;
+  margin: 10px 0px;
 }
 button#ready {
   text-align: center;
   margin: 10px;
 
 
+}
+.title{
+  /*background-color: #C2D6A1;
+  background-color: rgba(194,214,161, 0.7);*/
+  /*width: 25%;*/
+  margin: 0 auto;
+  margin-top: 20px;
+  color: black;
+}
+.title p{
+  margin: 10px;
+}
+
+.hidden div{
+  display: none;
+}
+.control-title{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.control-title p{
+  margin-top: 15px;
+}
+.clickable {
+  color: #ee66aa;
+  cursor: pointer;
+}
+.clickable:hover{
+  color: green;
 }
