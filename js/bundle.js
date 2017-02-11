@@ -251,7 +251,7 @@
 	            grassColor = "#84CF6E		";
 	            break;
 	            case 3:
-	            grassColor = "#55AE3A";
+	            grassColor = "#659D32";
 	            break;
 	            case 4:
 	            grassColor = "#008000	";
